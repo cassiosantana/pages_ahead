@@ -56,6 +56,8 @@ group :development, :test do
 
   gem 'ffaker', '~> 2.21'
 
+  gem 'rubocop-rails', '~> 2.19', '>= 2.19.1', require: false
+
   gem 'rspec-rails', '~> 6.0', '>= 6.0.2'
 end
 
