@@ -18,7 +18,7 @@
 
   <div>
     <%= form.label :author_id, style: "display: block" %>
-    <%= form.text_field :author_id %>
+    <%= form.collection_select :author_id, Author.all, :id, :name, prompt: true %>
   </div>
 
   <div>
