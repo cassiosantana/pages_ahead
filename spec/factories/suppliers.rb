@@ -2,6 +2,6 @@
 
 FactoryBot.define do
   factory :supplier do
-    name { 'MyString' }
+    name { FFaker::Name.name }
   end
 end
