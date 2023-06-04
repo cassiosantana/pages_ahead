@@ -12,10 +12,6 @@ Supplier.destroy_all
 Author.destroy_all
 
 5.times do
-  Supplier.create(name: FFaker::Name.name)
-end
-
-5.times do
   Author.create(name: FFaker::Name.name)
 end
 
@@ -25,8 +21,13 @@ end
 end
 
 5.times do
-  random_supplier_id = Supplier.pluck(:id).sample
+  Supplier.create(name: FFaker::Name.name)
+end
+
+suppliers_ids = Supplier.pluck(:id)
+
+suppliers_ids.each do |supplier_id|
   account_number = "#{FFaker::Random.rand(1..99_999).to_s.rjust(5, '0')}-#{FFaker::Random.rand(1..9)}"
-  Account.create(account_number: account_number, supplier_id: random_supplier_id)
+  Account.create(account_number: account_number, supplier_id: supplier_id)
 end
 
