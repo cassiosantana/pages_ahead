@@ -24,3 +24,9 @@ end
   Book.create(published_at: FFaker::Time.between(DateTime.now - 1.year, DateTime.now), author_id: random_author_id)
 end
 
+5.times do
+  random_supplier_id = Supplier.pluck(:id).sample
+  account_number = "#{FFaker::Random.rand(1..99_999).to_s.rjust(5, '0')}-#{FFaker::Random.rand(1..9)}"
+  Account.create(account_number: account_number, supplier_id: random_supplier_id)
+end
+
