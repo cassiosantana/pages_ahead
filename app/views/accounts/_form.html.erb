@@ -13,7 +13,7 @@
 
   <div>
     <%= form.label :supplier_id, style: "display: block" %>
-    <%= form.collection_select :supplier_id, Supplier.where.not(id: Account.select('supplier_id')), :id, :name, prompt: true %>
+    <%= form.collection_select :supplier_id, suppliers_without_account, :id, :name, prompt: true %>
 
   </div>
 
