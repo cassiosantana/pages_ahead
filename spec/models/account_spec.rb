@@ -21,5 +21,14 @@ RSpec.describe Account, type: :model do
         expect(account).to be_invalid
       end
     end
+
+    context "when the supplier tries to create two accounts" do
+      let(:account) { create(:account, supplier_id: supplier.id) }
+
+      it "creation of the second account is not valid" do
+        expect(account).to be_invalid
+        expect(account.errors[:supplier]).to include("already has an associated account")
+      end
+    end
   end
 end
