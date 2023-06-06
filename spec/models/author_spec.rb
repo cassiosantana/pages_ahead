@@ -3,5 +3,14 @@
 require 'rails_helper'
 
 RSpec.describe Author, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "validations" do
+    let(:author) { create(:author) }
+
+    context "when name is present" do
+
+      it "author is created" do
+        expect(author).to be_valid
+      end
+    end
+  end
 end
