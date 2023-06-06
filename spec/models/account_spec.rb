@@ -17,8 +17,9 @@ RSpec.describe Account, type: :model do
     context "when account_number is NOT present" do
       let(:account) { build(:account, supplier_id: supplier.id, account_number: nil) }
 
-      it "requires account_number to be valid" do
+      it "sem número de conta a criação não é valida" do
         expect(account).to be_invalid
+        expect(account.errors[:account_number]).to include("can't be blank")
       end
     end
 
