@@ -3,5 +3,33 @@
 require "rails_helper"
 
 RSpec.describe Account, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "validations" do
+    let(:supplier) { create(:supplier) }
+
+    context "when account_number is present" do
+      let(:account) { build(:account, supplier_id: supplier.id) }
+
+      it "requires account_number to be valid" do
+        expect(account).to be_valid
+      end
+    end
+
+    context "when account_number is NOT present" do
+      let(:account) { build(:account, supplier_id: supplier.id, account_number: nil) }
+
+      it "sem número de conta a criação não é valida" do
+        expect(account).to be_invalid
+        expect(account.errors[:account_number]).to include("can't be blank")
+      end
+    end
+
+    context "when the supplier tries to create two accounts" do
+      let(:account) { create(:account, supplier_id: supplier.id) }
+
+      it "creation of the second account is not valid" do
+        expect(account).to be_invalid
+        expect(account.errors[:supplier]).to include("already has an associated account")
+      end
+    end
+  end
 end
