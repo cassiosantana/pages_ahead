@@ -21,5 +21,13 @@ RSpec.describe Book, type: :model do
         expect(book).to be_invalid
       end
     end
+
+    context "when author is NOT present" do
+      let(:book) { build(:book, author_id: nil) }
+
+      it "book creation is invalid" do
+        expect(book).to be_invalid
+      end
+    end
   end
 end
