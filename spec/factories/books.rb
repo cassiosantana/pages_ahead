@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :book do
-    published_at { '2023-05-31 19:27:53' }
+    published_at { FFaker::Time.date }
     author { nil }
   end
 end
