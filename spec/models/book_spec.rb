@@ -13,5 +13,13 @@ RSpec.describe Book, type: :model do
         expect(book).to be_valid
       end
     end
+
+    context "when publication date is NOT present" do
+      let(:book) { build(:book, author_id: author.id, published_at: nil) }
+
+      it "book creation is invalid" do
+        expect(book).to be_invalid
+      end
+    end
   end
 end
