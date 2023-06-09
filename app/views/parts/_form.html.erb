@@ -18,7 +18,7 @@
 
   <div>
     <%= form.label :supplier_id, style: "display: block" %>
-    <%= form.text_field :supplier_id %>
+    <%= form.collection_select :supplier_id, Supplier.all, :id, :name, prompt: true %>
   </div>
 
   <div>
