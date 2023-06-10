@@ -3,5 +3,15 @@
 require "rails_helper"
 
 RSpec.describe Part, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "validations" do
+    let(:supplier) { create(:supplier) }
+
+    context "when part_number is present" do
+      it "parts creation is valid" do
+        parts = create_list(:part, 3, supplier_id: supplier.id)
+
+        parts.each { |part| expect(part).to be_valid }
+      end
+    end
+  end
 end
