@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Part, type: :model do
   describe "validations" do
     let(:supplier) { create(:supplier) }
-    let(:parts) { create_list(:part, 3, supplier_id: supplier.id) }
+    let(:parts) { build_list(:part, 3, supplier_id: supplier.id) }
 
     context "when part_number is present" do
       it "parts creation is valid" do
@@ -19,6 +19,14 @@ RSpec.describe Part, type: :model do
           part.part_number = nil
           expect(part).to be_invalid
         end
+      end
+    end
+
+    context "when supplier is NOT present" do
+      let(:part) { build(:part, supplier_id: nil) }
+
+      it "part creation is invalid" do
+        expect(part).to be_invalid
       end
     end
   end
