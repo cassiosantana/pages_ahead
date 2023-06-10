@@ -7,9 +7,9 @@ RSpec.describe Part, type: :model do
     let(:supplier) { create(:supplier) }
 
     context "when part_number is present" do
-      it "parts creation is valid" do
-        parts = create_list(:part, 3, supplier_id: supplier.id)
+      let(:parts) { create_list(:part, 3, supplier_id: supplier.id) }
 
+      it "parts creation is valid" do
         parts.each { |part| expect(part).to be_valid }
       end
     end
