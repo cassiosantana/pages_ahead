@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Assemblies</h1>
+
+<div id="assemblies">
+  <% @assemblies.each do |assembly| %>
+    <%= render assembly %>
+    <p>
+      <%= link_to "Show this assembly", assembly %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New assembly", new_assembly_path %>
