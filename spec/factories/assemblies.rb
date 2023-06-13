@@ -2,6 +2,6 @@
 
 FactoryBot.define do
   factory :assembly do
-    name { "MyString" }
+    name { FFaker::Lorem.word }
   end
 end
