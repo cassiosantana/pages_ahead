@@ -3,5 +3,13 @@
 require "rails_helper"
 
 RSpec.describe Assembly, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "validations" do
+    let(:assembly) { build(:assembly) }
+
+    context "when name is present" do
+      it "assembly creation is valid" do
+        expect(assembly).to be_valid
+      end
+    end
+  end
 end
