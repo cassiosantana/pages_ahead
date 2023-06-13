@@ -11,5 +11,12 @@ RSpec.describe Assembly, type: :model do
         expect(assembly).to be_valid
       end
     end
+
+    context "when name is not present" do
+      let(:assembly) { build(:assembly, name: nil) }
+      it "assembly creation is invalid" do
+        expect(assembly).to be_invalid
+      end
+    end
   end
 end
