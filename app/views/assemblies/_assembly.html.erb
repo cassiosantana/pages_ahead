@@ -5,4 +5,14 @@
       <%= assembly.name %>
     </p>
   </div>
+
+  <div>
+    <p><strong>Parts:</strong></p>
+    <% assembly.parts.each do |part| %>
+      <p>
+        <strong>Part number:</strong>
+        <%= part.part_number %>
+      </p>
+    <% end %>
+  </div>
 </div>
