@@ -17,6 +17,20 @@
   </div>
 
   <div>
+    <p><%= form.label :part_ids, 'Select the parts:' %></p>
+    <% Part.all.each do |part| %>
+      <% if @assembly.parts.exists?(part.id) %>
+        <%= form.check_box :part_ids, { multiple: true, checked: true }, part.id, nil %>
+      <% else %>
+        <%= form.check_box :part_ids, { multiple: true }, part.id, nil %>
+      <% end %>
+      <%= form.label :part_ids, part.part_number %><br>
+    <% end %>
+  </div>
+
+  <br>
+
+  <div>
     <%= form.submit %>
   </div>
 <% end %>
