@@ -9,4 +9,13 @@
     <%= part.supplier.name %>
   </p>
 
+  <div>
+    <p><strong>Assemblies:</strong></p>
+    <% part.assemblies.each do |assembly| %>
+      <p>
+        <strong>Assembly name:</strong>
+        <%= assembly.name %>
+      </p>
+    <% end %>
+  </div>
 </div>
