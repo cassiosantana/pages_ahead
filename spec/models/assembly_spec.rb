@@ -19,5 +19,19 @@ RSpec.describe Assembly, type: :model do
         expect(assembly).to be_invalid
       end
     end
+
+    context "when adding multiple parts" do
+      let(:supplier) { create(:supplier) }
+      let(:parts) { create_list(:part, 3, supplier_id: supplier.id) }
+      let(:assembly) { create(:assembly) }
+
+      it "assembly creation is valid" do
+        parts.each do |part|
+          assembly.parts << part
+          expect(assembly).to be_valid
+        end
+        expect(assembly.parts.count).to eq(3)
+      end
+    end
   end
 end
