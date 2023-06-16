@@ -45,10 +45,13 @@ RSpec.describe Part, type: :model do
     end
 
     context "when editing associations" do
-      it "all associations are removed" do
+      before do
         assemblies.each do |assembly|
           part.assemblies << assembly
         end
+      end
+
+      it "all associations are removed" do
         part.assemblies.clear
         expect(part.assemblies.count).to eq(0)
       end
