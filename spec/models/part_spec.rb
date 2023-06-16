@@ -35,21 +35,19 @@ RSpec.describe Part, type: :model do
   end
 
   describe "associations" do
+    before do
+      assemblies.each do |assembly|
+        part.assemblies << assembly
+      end
+    end
+
     context "when adding multiple assemblies" do
       it "part has all associations" do
-        assemblies.each do |assembly|
-          part.assemblies << assembly
-        end
         expect(part.assemblies.count).to eq(5)
       end
     end
 
     context "when editing associations" do
-      before do
-        assemblies.each do |assembly|
-          part.assemblies << assembly
-        end
-      end
 
       it "all associations are removed" do
         part.assemblies.clear
