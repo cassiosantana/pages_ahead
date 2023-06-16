@@ -3,9 +3,12 @@
 require "rails_helper"
 
 RSpec.describe Part, type: :model do
+  let(:supplier) { create(:supplier) }
+  let(:parts) { build_list(:part, 3, supplier_id: supplier.id) }
+  let(:assemblies) { create_list(:assembly, 5) }
+  let(:part) { create(:part, supplier_id: supplier.id) }
+
   describe "validations" do
-    let(:supplier) { create(:supplier) }
-    let(:parts) { build_list(:part, 3, supplier_id: supplier.id) }
 
     context "when part_number is present" do
       it "parts creation is valid" do
@@ -29,17 +32,25 @@ RSpec.describe Part, type: :model do
         expect(part).to be_invalid
       end
     end
+  end
 
+  describe "associations" do
     context "when adding multiple assemblies" do
-      let(:assemblies) { create_list(:assembly, 5) }
-      let(:part) { create(:part, supplier_id: supplier.id) }
-
-      it "part creation is valid" do
+      it "part has all associations" do
         assemblies.each do |assembly|
           part.assemblies << assembly
-          expect(part).to be_valid
         end
         expect(part.assemblies.count).to eq(5)
+      end
+    end
+
+    context "when editing associations" do
+      it "all associations are removed" do
+        assemblies.each do |assembly|
+          part.assemblies << assembly
+        end
+        part.assemblies.clear
+        expect(part.assemblies.count).to eq(0)
       end
     end
   end
