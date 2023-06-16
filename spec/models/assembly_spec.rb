@@ -19,7 +19,9 @@ RSpec.describe Assembly, type: :model do
         expect(assembly).to be_invalid
       end
     end
+  end
 
+  describe "associations" do
     context "when adding multiple parts" do
       let(:supplier) { create(:supplier) }
       let(:parts) { create_list(:part, 3, supplier_id: supplier.id) }
