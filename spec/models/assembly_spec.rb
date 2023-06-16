@@ -37,5 +37,13 @@ RSpec.describe Assembly, type: :model do
         expect(assembly.parts.count).to eq(3)
       end
     end
+
+    context "when editing associations" do
+
+      it "all associations are removed" do
+        assembly.parts.clear
+        expect(assembly.parts.count).to eq(0)
+      end
+    end
   end
 end
