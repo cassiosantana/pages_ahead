@@ -38,6 +38,12 @@ class AssembliesController < ApplicationController
   def update
     respond_to do |format|
       if @assembly.update(assembly_params)
+
+        @assembly.parts.clear
+
+        part_ids = Array(params[:assembly][:part_ids]).select(&:present?)
+        @assembly.part_ids = part_ids
+
         format.html { redirect_to assembly_url(@assembly), notice: "Assembly was successfully updated." }
         format.json { render :show, status: :ok, location: @assembly }
       else
