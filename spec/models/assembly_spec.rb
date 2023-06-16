@@ -22,15 +22,18 @@ RSpec.describe Assembly, type: :model do
   end
 
   describe "associations" do
-    context "when adding multiple parts" do
-      let(:supplier) { create(:supplier) }
-      let(:parts) { create_list(:part, 3, supplier_id: supplier.id) }
-      let(:assembly) { create(:assembly) }
+    let(:supplier) { create(:supplier) }
+    let(:parts) { create_list(:part, 3, supplier_id: supplier.id) }
+    let(:assembly) { create(:assembly) }
 
-      it "assembly creation is valid" do
-        parts.each do |part|
-          assembly.parts << part
-        end
+    before do
+      parts.each do |part|
+        assembly.parts << part
+      end
+    end
+
+    context "when adding multiple parts" do
+      it "assembly has all associations" do
         expect(assembly.parts.count).to eq(3)
       end
     end
