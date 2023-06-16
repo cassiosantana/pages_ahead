@@ -42,7 +42,7 @@ class PartsController < ApplicationController
         @part.assemblies.clear
 
         # Adiciona as novas associações selecionadas
-        assembly_ids = Array(params[:part][:assembly_ids]).reject(&:blank?)
+        assembly_ids = Array(params[:part][:assembly_ids]).select(&:present?)
         @part.assembly_ids = assembly_ids
 
         format.html { redirect_to part_url(@part), notice: "Part was successfully updated." }
