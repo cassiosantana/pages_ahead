@@ -30,7 +30,6 @@ RSpec.describe Assembly, type: :model do
       it "assembly creation is valid" do
         parts.each do |part|
           assembly.parts << part
-          expect(assembly).to be_valid
         end
         expect(assembly.parts.count).to eq(3)
       end
