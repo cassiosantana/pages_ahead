@@ -55,6 +55,16 @@ RSpec.describe Part, type: :model do
         part.assemblies.clear
         expect(part.assemblies.count).to eq(0)
       end
+
+      it "only two were kept" do
+        part.assemblies.clear
+
+        assemblies[0..1].each do |assembly|
+          part.assemblies << assembly
+        end
+
+        expect(part.assemblies.count).to eq(2)
+      end
     end
   end
 end
