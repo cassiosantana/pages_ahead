@@ -3,8 +3,9 @@
 require "rails_helper"
 
 RSpec.describe Assembly, type: :model do
+  let(:assembly) { create(:assembly) }
+
   describe "validations" do
-    let(:assembly) { build(:assembly) }
 
     context "when name is present" do
       it "assembly creation is valid" do
@@ -21,10 +22,9 @@ RSpec.describe Assembly, type: :model do
     end
   end
 
-  describe "associations" do
+  describe "associations with parts" do
     let(:supplier) { create(:supplier) }
     let(:parts) { create_list(:part, 3, supplier_id: supplier.id) }
-    let(:assembly) { create(:assembly) }
 
     before do
       parts.each do |part|
@@ -53,6 +53,23 @@ RSpec.describe Assembly, type: :model do
         end
 
         expect(assembly.parts.count).to eq(2)
+      end
+    end
+  end
+
+  describe "associations with books" do
+    let(:author) { create(:author) }
+    let(:books) { create_list(:book, 5, author_id: author.id) }
+
+    before do
+      books.each do |book|
+        assembly.books << book
+      end
+    end
+
+    context "when adding multiple books" do
+      it "assembly has all associations" do
+        expect(assembly.books.count).to eq(5)
       end
     end
   end
