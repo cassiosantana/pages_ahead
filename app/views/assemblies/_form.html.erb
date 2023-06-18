@@ -28,6 +28,19 @@
     <% end %>
   </div>
 
+  <div>
+    <p><%= form.label :book_ids, 'Select the books:' %></p>
+    <% Book.all.each do |book| %>
+      <% if @assembly.parts.exists?(book.id) %>
+        <%= form.check_box :book_ids, { multiple: true, checked: true }, book.id, nil %>
+      <% else %>
+        <%= form.check_box :book_ids, { multiple: true }, book.id, nil %>
+      <% end %>
+      Published at:
+      <%= form.label :book_ids, book.published_at %><br>
+    <% end %>
+  </div>
+
   <br>
 
   <div>
