@@ -15,4 +15,17 @@
       </p>
     <% end %>
   </div>
+
+  <div>
+    <p><strong>Books:</strong></p>
+    <% assembly.books.each do |book| %>
+      <p>
+        <strong>Published at:</strong>
+        <%= book.published_at %>,
+
+        <strong>Author:</strong>
+        <%= book.author.name %>
+      </p>
+    <% end %>
+  </div>
 </div>
