@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_11_144844) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_18_024503) do
   create_table "accounts", force: :cascade do |t|
     t.integer "supplier_id", null: false
     t.string "account_number"
@@ -23,6 +23,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_11_144844) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "assemblies_books", force: :cascade do |t|
+    t.integer "assembly_id", null: false
+    t.integer "book_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["assembly_id"], name: "index_assemblies_books_on_assembly_id"
+    t.index ["book_id"], name: "index_assemblies_books_on_book_id"
   end
 
   create_table "assemblies_parts", force: :cascade do |t|
@@ -63,6 +72,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_11_144844) do
   end
 
   add_foreign_key "accounts", "suppliers"
+  add_foreign_key "assemblies_books", "assemblies"
+  add_foreign_key "assemblies_books", "books"
   add_foreign_key "assemblies_parts", "assemblies"
   add_foreign_key "assemblies_parts", "parts"
   add_foreign_key "books", "authors"
