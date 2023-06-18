@@ -79,5 +79,16 @@ RSpec.describe Assembly, type: :model do
         expect(assembly.books.count).to eq(0)
       end
     end
+
+    context "when editing associations" do
+      it "only two were kept" do
+        assembly.books.clear
+
+        books[0..1].each do |book|
+          assembly.books << book
+        end
+        expect(assembly.books.count).to eq(2)
+      end
+    end
   end
 end
