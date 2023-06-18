@@ -4,11 +4,14 @@
 
 <div id="assemblies">
   <% @assemblies.each do |assembly| %>
-    <%= render assembly %>
     <p>
-      <%= link_to "Show this assembly", assembly %>
+      <strong>Assembly name: </strong>
+      <%= assembly.name %>
+      | <%= link_to "Show this assembly", assembly %>
     </p>
   <% end %>
 </div>
+
+<br>
 
 <%= link_to "New assembly", new_assembly_path %>
