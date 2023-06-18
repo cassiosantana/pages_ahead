@@ -39,10 +39,12 @@ class AssembliesController < ApplicationController
     respond_to do |format|
       if @assembly.update(assembly_params)
 
-        @assembly.parts.clear
+        %i[part book].each do |attribute|
+          @assembly.send(attribute.to_s.pluralize).clear
 
-        part_ids = Array(params[:assembly][:part_ids]).select(&:present?)
-        @assembly.part_ids = part_ids
+          attribute_ids = Array(params[:assembly][:"#{attribute}_ids"]).select(&:present?)
+          @assembly.send("#{attribute}_ids=", attribute_ids)
+        end
 
         format.html { redirect_to assembly_url(@assembly), notice: "Assembly was successfully updated." }
         format.json { render :show, status: :ok, location: @assembly }
@@ -72,6 +74,6 @@ class AssembliesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def assembly_params
-    params.require(:assembly).permit(:name, part_ids: [])
+    params.require(:assembly).permit(:name, part_ids: [], book_ids: [])
   end
 end
