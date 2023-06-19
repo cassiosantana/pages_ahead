@@ -8,24 +8,27 @@
 
   <div>
     <p><strong>Parts:</strong></p>
-    <% assembly.parts.each do |part| %>
-      <p>
-        <strong>Part number:</strong>
-        <%= part.part_number %>
-      </p>
-    <% end %>
+      <ul>
+        <% assembly.parts.each do |part| %>
+          <li>
+            <strong>Part number:</strong>
+            <%= part.part_number %>
+          </li>
+        <% end %>
+      </ul>
   </div>
 
   <div>
     <p><strong>Books:</strong></p>
-    <% assembly.books.each do |book| %>
-      <p>
-        <strong>Published at:</strong>
-        <%= book.published_at %>,
-
-        <strong>Author:</strong>
-        <%= book.author.name %>
-      </p>
-    <% end %>
+      <ul>
+        <% assembly.books.each do |book| %>
+          <li>
+            <strong>Published at:</strong>
+            <%= book.published_at %>,
+            <strong>Author:</strong>
+            <%= book.author.name %>
+          </li>
+        <% end %>
+      </ul>
   </div>
 </div>
