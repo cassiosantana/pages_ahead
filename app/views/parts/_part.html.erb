@@ -15,11 +15,10 @@
 
   <div>
     <p><strong>Assemblies:</strong></p>
-    <% part.assemblies.each do |assembly| %>
-      <p>
-        <strong>Assembly name:</strong>
-        <%= assembly.name %>
-      </p>
-    <% end %>
+    <ul>
+      <% part.assemblies.each do |assembly| %>
+        <li><%= assembly.name %></li>
+      <% end %>
+    </ul>
   </div>
 </div>
