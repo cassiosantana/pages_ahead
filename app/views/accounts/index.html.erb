@@ -4,8 +4,9 @@
 
 <div id="accounts">
   <% @accounts.each do |account| %>
-    <%= render account %>
     <p>
+      <strong>Account number:</strong>
+      <%= account.account_number %> |
       <%= link_to "Show this account", account %>
     </p>
   <% end %>
