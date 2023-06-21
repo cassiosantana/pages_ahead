@@ -11,6 +11,23 @@
   </head>
 
   <body>
-    <%= yield %>
+    <nav class="navbar">
+      <ul>
+        <li><%= link_to "Home", root_path %></li>
+        <li><%= link_to "Authors", authors_path %></li>
+        <li><%= link_to "Accounts", accounts_path %></li>
+        <li><%= link_to "Assemblies", assemblies_path %></li>
+        <li><%= link_to "Parts", parts_path %></li>
+        <li><%= link_to "Books", books_path %></li>
+        <li><%= link_to "Suppliers", suppliers_path %></li>
+      </ul>
+    </nav>
+    <div class="content">
+      <%= yield %>
+    </div>
+    <footer>
+      <p>Ruby version: <%= RUBY_VERSION %></p>
+      <p>Rails version: <%= Rails.version %></p>
+    </footer>
   </body>
 </html>
