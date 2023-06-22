@@ -4,4 +4,12 @@
     <%= supplier.name %>
   </p>
 
+  <div>
+    <p><strong>Parts:</strong></p>
+    <ul>
+      <% supplier.parts.each do |part| %>
+        <li><%= part.part_number %></li>
+      <% end %>
+    </ul>
+  </div>
 </div>
