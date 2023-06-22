@@ -52,6 +52,16 @@ RSpec.describe Book, type: :model do
         book.assemblies.clear
         expect(book.assemblies.count).to eq(0)
       end
+
+      it "only two were kept" do
+        book.assemblies.clear
+
+        assemblies[0..1].each do |assembly|
+          book.assemblies << assembly
+        end
+
+        expect(book.assemblies.count).to eq(2)
+      end
     end
   end
 end
