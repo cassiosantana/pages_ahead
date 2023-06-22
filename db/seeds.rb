@@ -32,11 +32,9 @@ suppliers_ids.each do |supplier_id|
   Account.create(account_number: account_number, supplier_id: supplier_id)
 end
 
-parts = []
-5.times do
-  part = Part.create(part_number: FFaker::Random.rand(1..99_999).to_s.rjust(5, '0'),
+parts = 20.times.map do
+  Part.create(part_number: FFaker::Random.rand(1..99_999).to_s.rjust(5, '0'),
               supplier_id: Supplier.pluck(:id).sample)
-  parts << part
 end
 
 assemblies = ["paperback", "hardcover", "deluxe edition", "collector's edition", "limited edition"].map do |name|
