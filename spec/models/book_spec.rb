@@ -46,5 +46,12 @@ RSpec.describe Book, type: :model do
         expect(book.assemblies.count).to eq(3)
       end
     end
+
+    context "when editing associations" do
+      it "all associations are removed" do
+        book.assemblies.clear
+        expect(book.assemblies.count).to eq(0)
+      end
+    end
   end
 end
