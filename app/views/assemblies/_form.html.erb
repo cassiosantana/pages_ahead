@@ -1,0 +1,49 @@
+<%= form_with(model: assembly) do |form| %>
+  <% if assembly.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(assembly.errors.count, "error") %> prohibited this assembly from being saved:</h2>
+
+      <ul>
+        <% assembly.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <p><%= form.label :part_ids, 'Select the parts:' %></p>
+    <% Part.all.each do |part| %>
+      <% if @assembly.parts.exists?(part.id) %>
+        <%= form.check_box :part_ids, { multiple: true, checked: true }, part.id, nil %>
+      <% else %>
+        <%= form.check_box :part_ids, { multiple: true }, part.id, nil %>
+      <% end %>
+      <%= form.label :part_ids, part.part_number %><br>
+    <% end %>
+  </div>
+
+  <div>
+    <p><%= form.label :book_ids, 'Select the books:' %></p>
+    <% Book.all.each do |book| %>
+      <% if @assembly.parts.exists?(book.id) %>
+        <%= form.check_box :book_ids, { multiple: true, checked: true }, book.id, nil %>
+      <% else %>
+        <%= form.check_box :book_ids, { multiple: true }, book.id, nil %>
+      <% end %>
+      Published at:
+      <%= form.label :book_ids, book.published_at %><br>
+    <% end %>
+  </div>
+
+  <br>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

@@ -9,4 +9,12 @@
     <%= book.author.name %>
   </p>
 
+  <div>
+    <p><strong>Assemblies:</strong></p>
+      <ul>
+        <% book.assemblies.each do |assembly| %>
+          <li><%= assembly.name %></li>
+        <% end %>
+      </ul>
+  </div>
 </div>

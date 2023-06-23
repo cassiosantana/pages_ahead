@@ -4,8 +4,9 @@
 
 <div id="suppliers">
   <% @suppliers.each do |supplier| %>
-    <%= render supplier %>
     <p>
+      <strong>Supplier:</strong>
+      <%= supplier.name %> |
       <%= link_to "Show this supplier", supplier %>
     </p>
   <% end %>

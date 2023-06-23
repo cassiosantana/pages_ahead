@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @assembly %>
+
+<div>
+  <%= link_to "Edit this assembly", edit_assembly_path(@assembly) %> |
+  <%= link_to "Back to assemblies", assemblies_path %>
+
+  <%= button_to "Destroy this assembly", @assembly, method: :delete %>
+</div>

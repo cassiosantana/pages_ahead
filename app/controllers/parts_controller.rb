@@ -38,6 +38,13 @@ class PartsController < ApplicationController
   def update
     respond_to do |format|
       if @part.update(part_params)
+        # Remove todas as associações existentes
+        @part.assemblies.clear
+
+        # Adiciona as novas associações selecionadas
+        assembly_ids = Array(params[:part][:assembly_ids]).select(&:present?)
+        @part.assembly_ids = assembly_ids
+
         format.html { redirect_to part_url(@part), notice: "Part was successfully updated." }
         format.json { render :show, status: :ok, location: @part }
       else
@@ -66,6 +73,6 @@ class PartsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def part_params
-    params.require(:part).permit(:part_number, :supplier_id)
+    params.require(:part).permit(:part_number, :supplier_id, assembly_ids: [])
   end
 end
