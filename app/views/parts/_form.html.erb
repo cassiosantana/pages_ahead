@@ -16,10 +16,24 @@
     <%= form.text_field :part_number %>
   </div>
 
-  <div>
-    <%= form.label :supplier_id, style: "display: block" %>
-    <%= form.collection_select :supplier_id, Supplier.all, :id, :name, prompt: true %>
-  </div>
+  <br>
+
+  <% if @part.persisted? %>
+    <div>
+      <div>
+        <strong>Supplier:</strong>
+        <%= @part.supplier.name %>
+      </div>
+      <div>
+        <em>It is not possible to change the supplier of this part.</em>
+      </div>
+    </div>
+  <% else %>
+    <div>
+      <%= form.label :supplier_id, style: "display: block" %>
+      <%= form.collection_select :supplier_id, Supplier.all, :id, :name, prompt: true %>
+    </div>
+  <% end %>
 
   <div>
     <p><%= form.label :assembly_ids, 'Select the assemblies:' %></p>
