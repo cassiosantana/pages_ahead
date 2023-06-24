@@ -34,6 +34,13 @@ RSpec.describe Author, type: :model do
           author.reload
         end.to change { author.name }.to("another full name")
       end
+
+      it "does not allow an empty name" do
+
+        author.name = nil
+        author.save
+        expect(author.errors[:name]).to include("can't be blank")
+      end
     end
   end
 end
