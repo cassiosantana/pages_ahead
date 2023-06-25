@@ -3,14 +3,16 @@
 class Account < ApplicationRecord
   belongs_to :supplier
 
-  validate :validate_single_account
-  validates :account_number, presence: true
+  validates :account_number, presence: true, unless: -> { supplier.account.present? }
+  validate :account_number_immutable, on: :update
+
+  validates :supplier_id, uniqueness: { message: "already has an associated account" }
 
   private
 
-  def validate_single_account
-    if supplier_id && Account.exists?(supplier_id: supplier_id)
-      errors.add(:supplier, "already has an associated account")
+  def account_number_immutable
+    if account_number_changed?
+      errors.add(:account_number, "cannot be changed")
     end
   end
 end
