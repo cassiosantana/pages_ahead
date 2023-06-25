@@ -33,4 +33,20 @@ RSpec.describe Account, type: :model do
       end
     end
   end
+
+  describe "editing" do
+    let!(:supplier) { create(:supplier) }
+
+    context "when attempting to update account_number" do
+      let!(:account) { create(:account, supplier: supplier) }
+
+      it "does not change the account_number" do
+        original_account_number = account.account_number
+        account.account_number = "new_account_number"
+        account.save
+
+        expect(account.reload.account_number).to eq(original_account_number)
+      end
+    end
+  end
 end
