@@ -22,7 +22,7 @@ RSpec.describe Assembly, type: :model do
     end
   end
 
-  describe "associations with parts" do
+  describe "editing associations with parts" do
     let(:supplier) { create(:supplier) }
     let(:parts) { create_list(:part, 3, supplier_id: supplier.id) }
 
@@ -57,7 +57,7 @@ RSpec.describe Assembly, type: :model do
     end
   end
 
-  describe "associations with books" do
+  describe "editing associations with books" do
     let(:author) { create(:author) }
     let(:books) { create_list(:book, 5, author_id: author.id) }
 
@@ -88,6 +88,20 @@ RSpec.describe Assembly, type: :model do
           assembly.books << book
         end
         expect(assembly.books.count).to eq(2)
+      end
+    end
+  end
+
+  describe "editing attributes" do
+    context "when attempting to update assembly name" do
+      let!(:assembly) { create(:assembly) }
+
+      it "the assembly name is modified" do
+        original_name = assembly.name
+        assembly.name = "new assembly name"
+        assembly.save
+
+        expect(assembly.reload.name).not_to eq(original_name)
       end
     end
   end
