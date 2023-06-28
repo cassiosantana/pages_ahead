@@ -94,8 +94,6 @@ RSpec.describe Assembly, type: :model do
 
   describe "editing attributes" do
     context "when attempting to update assembly name" do
-      let!(:assembly) { create(:assembly) }
-
       it "the assembly name is modified" do
         original_name = assembly.name
         assembly.name = "new assembly name"
