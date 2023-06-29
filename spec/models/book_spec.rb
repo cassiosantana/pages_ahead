@@ -32,7 +32,7 @@ RSpec.describe Book, type: :model do
     end
   end
 
-  describe "associations with assemblies" do
+  describe "edit associations with assemblies" do
     let(:assemblies) { create_list(:assembly, 3) }
 
     before do
@@ -61,6 +61,21 @@ RSpec.describe Book, type: :model do
         end
 
         expect(book.assemblies.count).to eq(2)
+      end
+    end
+  end
+
+  describe "edit association with author" do
+    let(:new_author) { create(:author) }
+
+    context "when trying to change the author" do
+
+      it "the author has been changed" do
+        original_author = book.author
+        book.author = new_author
+        book.save
+
+        expect(book.author).not_to eq(original_author)
       end
     end
   end
