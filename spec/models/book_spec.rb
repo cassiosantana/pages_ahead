@@ -75,7 +75,20 @@ RSpec.describe Book, type: :model do
         book.author = new_author
         book.save
 
-        expect(book.author).not_to eq(original_author)
+        expect(book.reload.author).not_to eq(original_author)
+      end
+    end
+  end
+
+  describe "edit attributes" do
+
+    context "when trying to change the publication date" do
+      it "the date is changed" do
+        previous_date = book.published_at
+        book.published_at = previous_date + 1
+        book.save
+
+        expect(book.reload.published_at).not_to eq(previous_date)
       end
     end
   end
