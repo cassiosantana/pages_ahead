@@ -16,6 +16,20 @@
     <%= form.text_field :name %>
   </div>
 
+  <br>
+
+  <% if @supplier.persisted? %>
+    <div>
+      <div>
+        <strong>Account:</strong>
+        <%= @supplier.account.account_number %>
+      </div>
+      <div>
+        <em>It is not possible to change the account.</em>
+      </div>
+    </div>
+  <% end %>
+
   <div>
     <%= form.submit %>
   </div>
