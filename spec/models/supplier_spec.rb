@@ -3,8 +3,8 @@
 require "rails_helper"
 
 RSpec.describe Supplier, type: :model do
+  let(:supplier) { create(:supplier) }
   describe "validations" do
-    let(:supplier) { build(:supplier) }
 
     it "is valid with a name" do
       expect(supplier).to be_valid
@@ -14,6 +14,18 @@ RSpec.describe Supplier, type: :model do
       supplier.name = nil
       expect(supplier).to be_invalid
       expect(supplier.errors[:name]).to include("can't be blank")
+    end
+  end
+
+  describe "editing" do
+    context "when editing supplier name" do
+      it "the name is changed" do
+        original_name = supplier.name
+        supplier.name = "#{original_name} new_name"
+        supplier.save
+
+        expect(supplier.reload.name).to_not eq(original_name)
+      end
     end
   end
 end
