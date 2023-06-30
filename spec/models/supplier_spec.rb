@@ -26,6 +26,13 @@ RSpec.describe Supplier, type: :model do
 
         expect(supplier.reload.name).to_not eq(original_name)
       end
+
+      it "the name is not changed" do
+        supplier.name = ""
+        supplier.save
+
+        expect(supplier.reload.name).not_to eq("")
+      end
     end
   end
 end
