@@ -31,6 +31,18 @@
   <% end %>
 
   <div>
+    <p><strong>Parts:</strong></p>
+    <div>
+      <em>It is not possible to change the parts.</em>
+    </div>
+    <ul>
+      <% supplier.parts.each do |part| %>
+        <li><%= part.part_number %></li>
+      <% end %>
+    </ul>
+  </div>
+
+  <div>
     <%= form.submit %>
   </div>
 <% end %>
