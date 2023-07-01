@@ -65,4 +65,16 @@ RSpec.describe Part, type: :model do
       end
     end
   end
+
+  describe "editing attributes" do
+    context "when editing part number" do
+      it "part number is modified" do
+        original_number = part.part_number
+        part.part_number = original_number + 1.to_s
+        part.save
+
+        expect(part.reload.part_number).not_to eq(original_number)
+      end
+    end
+  end
 end
