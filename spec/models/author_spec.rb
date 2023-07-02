@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Author, type: :model do
-  let(:author) { create(:author) }
+  let!(:author) { create(:author) }
 
   describe "validations" do
 
@@ -40,6 +40,14 @@ RSpec.describe Author, type: :model do
         author.name = nil
         author.save
         expect(author.errors[:name]).to include("can't be blank")
+      end
+    end
+  end
+
+  describe "destroy" do
+    context "when trying to delete an author no associated books" do
+      it "author has been deleted" do
+        expect { author.destroy }.to change(Author, :count).by(-1)
       end
     end
   end
