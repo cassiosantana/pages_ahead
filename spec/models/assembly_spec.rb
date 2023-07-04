@@ -3,7 +3,11 @@
 require "rails_helper"
 
 RSpec.describe Assembly, type: :model do
-  let(:assembly) { create(:assembly) }
+  let!(:assembly) { create(:assembly) }
+  let(:supplier) { create(:supplier) }
+  let(:parts) { create_list(:part, 3, supplier_id: supplier.id) }
+  let(:author) { create(:author) }
+  let(:books) { create_list(:book, 5, author_id: author.id) }
 
   describe "validations" do
 
@@ -23,17 +27,9 @@ RSpec.describe Assembly, type: :model do
   end
 
   describe "editing associations with parts" do
-    let(:supplier) { create(:supplier) }
-    let(:parts) { create_list(:part, 3, supplier_id: supplier.id) }
-
-    before do
-      parts.each do |part|
-        assembly.parts << part
-      end
-    end
-
     context "when adding multiple parts" do
       it "assembly has all associations" do
+        assembly.parts << parts
         expect(assembly.parts.count).to eq(3)
       end
     end
@@ -47,10 +43,7 @@ RSpec.describe Assembly, type: :model do
 
       it "only two were kept" do
         assembly.parts.clear
-
-        parts[0..1].each do |part|
-          assembly.parts << part
-        end
+        assembly.parts << parts.take(2)
 
         expect(assembly.parts.count).to eq(2)
       end
@@ -58,17 +51,9 @@ RSpec.describe Assembly, type: :model do
   end
 
   describe "editing associations with books" do
-    let(:author) { create(:author) }
-    let(:books) { create_list(:book, 5, author_id: author.id) }
-
-    before do
-      books.each do |book|
-        assembly.books << book
-      end
-    end
-
     context "when adding multiple books" do
       it "assembly has all associations" do
+        assembly.books << books
         expect(assembly.books.count).to eq(5)
       end
     end
@@ -83,10 +68,8 @@ RSpec.describe Assembly, type: :model do
     context "when editing associations" do
       it "only two were kept" do
         assembly.books.clear
+        assembly.books << books.take(2)
 
-        books[0..1].each do |book|
-          assembly.books << book
-        end
         expect(assembly.books.count).to eq(2)
       end
     end
