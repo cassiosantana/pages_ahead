@@ -86,5 +86,15 @@ RSpec.describe Part, type: :model do
         expect(supplier.parts.include?(part.id)).to be_falsey
       end
     end
+
+    context "when the part has associated assemblies" do
+      it "the part is deleted and the assemblies remain intact" do
+        part.assemblies << assemblies
+        part.save
+
+        expect { part.destroy }.to change(Part, :count).by(-1).and change(Assembly, :count).by(0)
+        expect(Assembly.where(id: assemblies.pluck(:id)).count).to eq(5)
+      end
+    end
   end
 end
