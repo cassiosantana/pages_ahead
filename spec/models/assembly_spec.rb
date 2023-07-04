@@ -94,5 +94,20 @@ RSpec.describe Assembly, type: :model do
         expect(Assembly.exists?(assembly.id)).to be_falsey
       end
     end
+
+    context "when the assembly has associations" do
+      it "deletes only the assembly" do
+        assembly.parts << parts
+        assembly.books << books
+
+        expect do
+          expect do
+            expect do
+              expect { assembly.destroy }.to change(Assembly, :count).by(-1)
+            end.to_not change(Part, :count)
+          end.to_not change(Book, :count)
+        end.to_not change(Supplier, :count)
+      end
+    end
   end
 end
