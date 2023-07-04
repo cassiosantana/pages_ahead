@@ -6,7 +6,7 @@ RSpec.describe Part, type: :model do
   let(:supplier) { create(:supplier) }
   let(:parts) { build_list(:part, 3, supplier_id: supplier.id) }
   let(:assemblies) { create_list(:assembly, 5) }
-  let(:part) { create(:part, supplier_id: supplier.id) }
+  let!(:part) { create(:part, supplier_id: supplier.id) }
 
   describe "validations" do
 
@@ -74,6 +74,16 @@ RSpec.describe Part, type: :model do
         part.save
 
         expect(part.reload.part_number).not_to eq(original_number)
+      end
+    end
+  end
+
+  describe "destroy" do
+    context "when the part has no associated assemblies" do
+      it "the part is deleted" do
+        expect { part.destroy }.to change(Part, :count).by(-1).and change(Supplier, :count).by(0)
+        expect(Part.exists?(part.id)).to be_falsey
+        expect(supplier.parts.include?(part.id)).to be_falsey
       end
     end
   end
