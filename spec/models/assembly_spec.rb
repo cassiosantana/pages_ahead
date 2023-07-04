@@ -86,4 +86,13 @@ RSpec.describe Assembly, type: :model do
       end
     end
   end
+
+  describe "destroy" do
+    context "when the assembly has no associations" do
+      it "the assembly is deleted" do
+        expect { assembly.destroy }.to change(Assembly, :count).by(-1)
+        expect(Assembly.exists?(assembly.id)).to be_falsey
+      end
+    end
+  end
 end
