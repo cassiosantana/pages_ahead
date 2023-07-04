@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Book, type: :model do
   let(:author) { create(:author) }
-  let(:book) { create(:book, author_id: author.id) }
+  let!(:book) { create(:book, author_id: author.id) }
 
   describe "validations" do
 
@@ -89,6 +89,16 @@ RSpec.describe Book, type: :model do
         book.save
 
         expect(book.reload.published_at).not_to eq(previous_date)
+      end
+    end
+  end
+
+  describe "destroy" do
+    context "when the book has no associated assemblies" do
+      it "the book is deleted" do
+        expect { book.destroy }.to change(Book, :count).by(-1).and change(Author, :count).by(0)
+        expect(Book.exists?(book.id)).to be_falsey
+        expect(author.books.include?(book.id)).to be_falsey
       end
     end
   end
