@@ -101,5 +101,19 @@ RSpec.describe Book, type: :model do
         expect(author.books.include?(book.id)).to be_falsey
       end
     end
+
+    context "when the book has associated assemblies" do
+      let(:assemblies) { create_list(:assembly, 5) }
+
+      it "the book is deleted and the assemblies remain intact" do
+        book.assemblies << assemblies
+        book.save
+
+        expect do
+          book.destroy
+        end.to change(Book, :count).by(-1).and change(Assembly, :count).by(0)
+        expect(Assembly.where(id: assemblies.pluck(:id)).count).to eq(5)
+      end
+    end
   end
 end
