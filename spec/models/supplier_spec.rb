@@ -42,5 +42,11 @@ RSpec.describe Supplier, type: :model do
         expect { supplier.destroy }.to change(Supplier, :count).by(-1)
       end
     end
+
+    it "fails to delete the supplier" do
+      allow(supplier).to receive(:destroy).and_return(false)
+
+      expect { supplier.destroy }.not_to change(Supplier, :count)
+    end
   end
 end
