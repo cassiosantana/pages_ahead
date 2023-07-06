@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Supplier, type: :model do
-  let(:supplier) { create(:supplier) }
+  let!(:supplier) { create(:supplier) }
   describe "validations" do
 
     it "is valid with a name" do
@@ -32,6 +32,14 @@ RSpec.describe Supplier, type: :model do
         supplier.save
 
         expect(supplier.reload.name).not_to eq("")
+      end
+    end
+  end
+
+  describe "destroy" do
+    context "when trying to delete an supplier no associated account" do
+      it "supplier has been deleted" do
+        expect { supplier.destroy }.to change(Supplier, :count).by(-1)
       end
     end
   end
