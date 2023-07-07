@@ -4,6 +4,7 @@ require "rails_helper"
 
 RSpec.describe Supplier, type: :model do
   let!(:supplier) { create(:supplier) }
+
   describe "validations" do
 
     it "is valid with a name" do
@@ -41,12 +42,20 @@ RSpec.describe Supplier, type: :model do
       it "supplier has been deleted" do
         expect { supplier.destroy }.to change(Supplier, :count).by(-1)
       end
+
+      it "fails to delete the supplier" do
+        allow(supplier).to receive(:destroy).and_return(false)
+
+        expect { supplier.destroy }.not_to change(Supplier, :count)
+      end
     end
 
-    it "fails to delete the supplier" do
-      allow(supplier).to receive(:destroy).and_return(false)
+    context "when trying to delete an supplier with associated account" do
+      let!(:account) { create(:account, supplier: supplier) }
 
-      expect { supplier.destroy }.not_to change(Supplier, :count)
+      it "supplier and your account have been deleted" do
+        expect { supplier.destroy }.to change(Supplier, :count).by(-1).and change(Account, :count).by(-1)
+      end
     end
   end
 end
