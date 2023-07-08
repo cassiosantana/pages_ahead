@@ -21,4 +21,8 @@ RSpec.describe "authors/show", type: :view do
       expect(rendered).to have_selector("ul li", text: book.published_at)
     end
   end
+
+  it "renders the link to edit author" do
+    expect(rendered).to have_link("Edit this author", href: edit_author_path(author))
+  end
 end
