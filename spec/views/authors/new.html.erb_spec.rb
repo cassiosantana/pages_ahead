@@ -18,4 +18,8 @@ RSpec.describe "authors/new", type: :view do
   it "renders the page title" do
     expect(rendered).to have_selector("h1", text: "New author")
   end
+
+  it "renders the back link" do
+    expect(rendered).to have_link("Back to authors", href: authors_path)
+  end
 end
