@@ -3,11 +3,11 @@
 require "rails_helper"
 
 RSpec.describe Account, type: :model do
-  describe "validations" do
-    let(:supplier) { create(:supplier) }
+  let!(:supplier) { create(:supplier) }
+  let!(:account) { create(:account, supplier: supplier) }
 
+  describe "validations" do
     context "when account_number is present" do
-      let(:account) { build(:account, supplier_id: supplier.id) }
 
       it "requires account_number to be valid" do
         expect(account).to be_valid
@@ -24,7 +24,6 @@ RSpec.describe Account, type: :model do
     end
 
     context "when the supplier tries to create two accounts" do
-      let!(:existing_account) { create(:account, supplier_id: supplier.id) }
       let(:second_account) { build(:account, supplier_id: supplier.id) }
 
       it "creation of the second account is not valid" do
@@ -58,6 +57,14 @@ RSpec.describe Account, type: :model do
         account.save
 
         expect(account.reload.supplier).to eq(original_supplier)
+      end
+    end
+  end
+
+  describe "destroy" do
+    context "when trying to delete an account" do
+      it "account has been deleted" do
+        expect { account.destroy }.to change(Account, :count).by(-1).and change(Supplier, :count).by(0)
       end
     end
   end
