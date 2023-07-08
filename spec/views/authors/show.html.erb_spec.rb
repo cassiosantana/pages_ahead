@@ -1,16 +1,24 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'authors/show', type: :view do
+RSpec.describe "authors/show", type: :view do
+  let(:author) { create(:author) }
+  let(:books) { create_list(:book, 3, author: author) }
+
   before(:each) do
-    assign(:author, Author.create!(
-                      name: 'Name'
-                    ))
+    assign(:author, author)
+    render
   end
 
-  it 'renders attributes in <p>' do
-    render
-    expect(rendered).to match(/Name/)
+  it "renders the author name" do
+    expect(rendered).to have_text("Name: #{author.name}")
+  end
+
+  it "renders the author's books" do
+    expect(rendered).to have_selector("p strong", text: "Books:")
+    author.books.each do |book|
+      expect(rendered).to have_selector("ul li", text: book.published_at)
+    end
   end
 end
