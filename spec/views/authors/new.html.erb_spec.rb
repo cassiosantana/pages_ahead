@@ -1,19 +1,21 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'authors/new', type: :view do
+RSpec.describe "authors/new", type: :view do
   before(:each) do
-    assign(:author, Author.new(
-                      name: 'MyString'
-                    ))
+    assign(:author, build(:author))
+    render
   end
 
-  it 'renders new author form' do
-    render
+  it "renders new author form" do
 
-    assert_select 'form[action=?][method=?]', authors_path, 'post' do
-      assert_select 'input[name=?]', 'author[name]'
+    expect(rendered).to have_selector("form[action='#{authors_path}'][method='post']") do
+      expect(rendered).to have_selector("input[name='author[name]']")
     end
+  end
+
+  it "renders the page title" do
+    expect(rendered).to have_selector("h1", text: "New author")
   end
 end
