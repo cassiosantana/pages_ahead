@@ -13,4 +13,8 @@ RSpec.describe "authors/index", type: :view do
   it "renders the page title" do
     assert_select "h1", text: "Authors"
   end
+
+  it "renders the link to create a new author" do
+    assert_select "a[href=?]", new_author_path, text: "New author"
+  end
 end
