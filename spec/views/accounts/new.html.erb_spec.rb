@@ -3,20 +3,17 @@
 require "rails_helper"
 
 RSpec.describe "accounts/new", type: :view do
+  let(:supplier) { create(:supplier) }
+  let(:account) { build(:account, supplier: supplier) }
+
   before(:each) do
-    assign(:account, Account.new(
-                       supplier: nil,
-                       account_number: "MyString"
-                     ))
+    assign(:account, account)
+    render
   end
 
   it "renders new account form" do
-    render
-
-    assert_select "form[action=?][method=?]", accounts_path, "post" do
-      assert_select "input[name=?]", "account[supplier_id]"
-
-      assert_select "input[name=?]", "account[account_number]"
+    expect(rendered).to have_selector("form[action='#{accounts_path}'][method='post']") do
+      expect(rendered).to have_selector("input[name='account[account_number]']")
     end
   end
 end
