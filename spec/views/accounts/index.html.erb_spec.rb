@@ -26,4 +26,8 @@ RSpec.describe "accounts/index", type: :view do
   it "renders the page title" do
     expect(rendered).to have_selector("h1", text: "Accounts")
   end
+
+  it "renders the link to create a new account" do
+    expect(rendered).to have_link("New account", href: new_account_path)
+  end
 end
