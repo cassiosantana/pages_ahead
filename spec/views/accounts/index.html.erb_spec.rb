@@ -22,4 +22,8 @@ RSpec.describe "accounts/index", type: :view do
       end
     end
   end
+
+  it "renders the page title" do
+    expect(rendered).to have_selector("h1", text: "Accounts")
+  end
 end
