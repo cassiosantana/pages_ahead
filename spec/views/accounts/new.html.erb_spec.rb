@@ -20,4 +20,8 @@ RSpec.describe "accounts/new", type: :view do
   it "renders the page title" do
     expect(rendered).to have_selector("h1", text: "New account")
   end
+
+  it "renders the back link" do
+    expect(rendered).to have_link("Back to accounts", href: accounts_path)
+  end
 end
