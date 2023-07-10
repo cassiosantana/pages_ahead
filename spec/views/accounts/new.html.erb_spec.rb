@@ -25,6 +25,10 @@ RSpec.describe "accounts/new", type: :view do
     expect(rendered).to have_link("Back to accounts", href: accounts_path)
   end
 
+  it "renders the create account button" do
+    expect(rendered).to have_button("Create Account")
+  end
+
   it "displays the supplier dropdown" do
     assign(:account, Account.new)
     assign(:suppliers_without_account, [
