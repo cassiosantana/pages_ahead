@@ -24,4 +24,16 @@ RSpec.describe "accounts/new", type: :view do
   it "renders the back link" do
     expect(rendered).to have_link("Back to accounts", href: accounts_path)
   end
+
+  it "displays the supplier dropdown" do
+    assign(:account, Account.new)
+    assign(:suppliers_without_account, [
+             Supplier.create(name: "Supplier 1"),
+             Supplier.create(name: "Supplier 2")
+           ])
+
+    render
+
+    expect(rendered).to have_select("account_supplier_id", with_options: ["Supplier 1", "Supplier 2"])
+  end
 end
