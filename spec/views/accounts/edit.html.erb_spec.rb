@@ -25,5 +25,9 @@ RSpec.describe "accounts/edit", type: :view do
     it "render account number message" do
       expect(rendered).to have_selector("em", text: "It is not possible to change the account number.")
     end
+
+    it "render supplier message" do
+      expect(rendered).to have_selector("em", text: "It is not possible to change the supplier.")
+    end
   end
 end
