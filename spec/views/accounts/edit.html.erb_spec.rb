@@ -20,4 +20,10 @@ RSpec.describe "accounts/edit", type: :view do
       expect(rendered).to have_selector("div", text: "Supplier:\n        #{account.supplier.name}")
     end
   end
+
+  context "message that it is not possible to edit the attribute" do
+    it "render account number message" do
+      expect(rendered).to have_selector("em", text: "It is not possible to change the account number.")
+    end
+  end
 end
