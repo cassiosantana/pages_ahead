@@ -11,6 +11,10 @@ RSpec.describe "accounts/edit", type: :view do
     render
   end
 
+  it "render the page title" do
+    expect(rendered).to have_selector("h1", text: "Editing account")
+  end
+
   context "account attribute rendering" do
     it "render account number" do
       expect(rendered).to have_selector("div", text: "Account number:\n        #{account.account_number}")
