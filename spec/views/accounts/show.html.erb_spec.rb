@@ -11,8 +11,16 @@ RSpec.describe "accounts/show", type: :view do
     render
   end
 
-  it "renders account attributes" do
-    expect(rendered).to have_selector("p", text: "Supplier:\n    #{account.supplier.name}")
-    expect(rendered).to have_selector("p", text: "Account number:\n    #{account.account_number}")
+  context "account attribute rendering" do
+    it "renders supplier and account number" do
+      expect(rendered).to have_selector("p", text: "Supplier:\n    #{account.supplier.name}")
+      expect(rendered).to have_selector("p", text: "Account number:\n    #{account.account_number}")
+    end
+  end
+
+  context "link rendering" do
+    it "render edit account link" do
+      expect(rendered).to have_link("Edit this account", href: edit_account_path(account))
+    end
   end
 end
