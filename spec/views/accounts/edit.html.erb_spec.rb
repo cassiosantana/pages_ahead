@@ -30,4 +30,10 @@ RSpec.describe "accounts/edit", type: :view do
       expect(rendered).to have_selector("em", text: "It is not possible to change the supplier.")
     end
   end
+
+  context "rendering links and button" do
+    it "renders the link to show account" do
+      expect(rendered).to have_link("Show this account", href: account_path(account))
+    end
+  end
 end
