@@ -26,5 +26,9 @@ RSpec.describe "accounts/show", type: :view do
     it "render back to accounts link" do
       expect(rendered).to have_link("Back to accounts", href: accounts_path)
     end
+
+    it "render the button to destroy account" do
+      expect(rendered).to have_button("Destroy this account")
+    end
   end
 end
