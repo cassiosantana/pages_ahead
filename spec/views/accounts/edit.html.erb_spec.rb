@@ -15,5 +15,9 @@ RSpec.describe "accounts/edit", type: :view do
     it "render account number" do
       expect(rendered).to have_selector("div", text: "Account number:\n        #{account.account_number}")
     end
+
+    it "render supplier name" do
+      expect(rendered).to have_selector("div", text: "Supplier:\n        #{account.supplier.name}")
+    end
   end
 end
