@@ -3,16 +3,16 @@
 require "rails_helper"
 
 RSpec.describe "accounts/show", type: :view do
+  let(:supplier) { create(:supplier) }
+  let(:account) { create(:account, supplier: supplier) }
+
   before(:each) do
-    assign(:account, Account.create!(
-                       supplier: nil,
-                       account_number: "Account Number"
-                     ))
+    assign(:account, account)
+    render
   end
 
-  it "renders attributes in <p>" do
-    render
-    expect(rendered).to match(//)
-    expect(rendered).to match(/Account Number/)
+  it "renders account attributes" do
+    expect(rendered).to have_selector("p", text: "Supplier:\n    #{account.supplier.name}")
+    expect(rendered).to have_selector("p", text: "Account number:\n    #{account.account_number}")
   end
 end
