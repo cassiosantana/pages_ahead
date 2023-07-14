@@ -18,9 +18,13 @@ RSpec.describe "accounts/show", type: :view do
     end
   end
 
-  context "link rendering" do
+  context "link and button rendering" do
     it "render edit account link" do
       expect(rendered).to have_link("Edit this account", href: edit_account_path(account))
+    end
+
+    it "render back to accounts link" do
+      expect(rendered).to have_link("Back to accounts", href: accounts_path)
     end
   end
 end
