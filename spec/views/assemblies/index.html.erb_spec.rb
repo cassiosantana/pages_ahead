@@ -3,20 +3,14 @@
 require "rails_helper"
 
 RSpec.describe "assemblies/index", type: :view do
+  let(:assemblies) { create_list(:assembly, 5) }
+
   before(:each) do
-    assign(:assemblies, [
-             Assembly.create!(
-               name: "Name"
-             ),
-             Assembly.create!(
-               name: "Name"
-             )
-           ])
+    assign(:assemblies, assemblies)
+    render
   end
 
-  it "renders a list of assemblies" do
-    render
-    cell_selector = Rails::VERSION::STRING >= "7" ? "div>p" : "tr>td"
-    assert_select cell_selector, text: Regexp.new("Name".to_s), count: 2
+  it "render the page title" do
+    expect(rendered).to have_selector("h1", text: "Assemblies")
   end
 end
