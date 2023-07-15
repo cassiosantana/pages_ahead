@@ -3,7 +3,9 @@ module ViewTestHelper
     selector = get_selector(entities.first)
     expect(rendered).to have_selector(selector) do
       entities.each do |entity|
-        expect(rendered).to have_selector("p", text: entity.class.to_s)
+        entity_name = entity.class.to_s.downcase
+        expect(rendered).to have_selector("p")
+        expect(rendered).to have_link("Show this #{entity_name}", href: send("#{entity_name}_path", entity))
       end
     end
     expect(rendered).to have_selector("div p", count: entities.count)
