@@ -5,7 +5,9 @@
 <div id="accounts">
   <% @accounts.each do |account| %>
     <p>
-      <strong>Account number:</strong> <%= account.account_number %> | <%= link_to "Show this account", account %>
+      <strong>Number:</strong>
+      <%= account.account_number %> |
+      <%= link_to "Show this account", account %>
     </p>
   <% end %>
 </div>
