@@ -15,4 +15,8 @@ RSpec.describe "assemblies/index", type: :view do
   it "render the page title" do
     expect_page_title("Assemblies")
   end
+
+  it "render a list of assemblies" do
+    expect_entity_list(assemblies)
+  end
 end
