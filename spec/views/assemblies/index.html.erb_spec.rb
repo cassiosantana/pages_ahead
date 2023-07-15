@@ -19,4 +19,8 @@ RSpec.describe "assemblies/index", type: :view do
   it "render a list of assemblies" do
     expect_entity_list(assemblies)
   end
+
+  it "render a link to new assembly" do
+    expect_link_to_new("assembly")
+  end
 end
