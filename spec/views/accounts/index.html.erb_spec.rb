@@ -16,7 +16,7 @@ RSpec.describe "accounts/index", type: :view do
   end
 
   it "renders a list of accounts" do
-    expect_entity_list(accounts)
+    expect_object_list(accounts)
   end
 
   it "renders the page title" do

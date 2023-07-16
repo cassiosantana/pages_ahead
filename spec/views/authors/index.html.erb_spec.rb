@@ -19,6 +19,6 @@ RSpec.describe "authors/index", type: :view do
   end
 
   it "renders the list of authors" do
-    expect_entity_list(authors)
+    expect_object_list(authors)
   end
 end
