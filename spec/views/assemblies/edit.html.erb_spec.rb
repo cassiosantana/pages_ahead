@@ -30,4 +30,8 @@ RSpec.describe "assemblies/edit", type: :view do
   it "render the show link" do
     expect_link_to_show(assembly)
   end
+
+  it "render the back link" do
+    expect_link_back_to("assemblies")
+  end
 end
