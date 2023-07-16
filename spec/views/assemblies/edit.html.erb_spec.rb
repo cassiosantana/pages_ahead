@@ -26,4 +26,8 @@ RSpec.describe "assemblies/edit", type: :view do
       expect_submit_button("Update Assembly")
     end
   end
+
+  it "render the show link" do
+    expect_link_to_show(assembly)
+  end
 end

@@ -1,22 +1,27 @@
 module ViewTestHelper
-  def expect_entity_list(entities)
-    selector = get_selector(entities.first)
+  def expect_object_list(objects)
+    selector = get_selector(objects.first)
     expect(rendered).to have_selector(selector) do
-      entities.each do |entity|
-        entity_name = entity.class.to_s.downcase
+      objects.each do |object|
+        object_name = object.class.to_s.downcase
         expect(rendered).to have_selector("p")
-        expect(rendered).to have_link("Show this #{entity_name}", href: send("#{entity_name}_path", entity))
+        expect(rendered).to have_link("Show this #{object_name}", href: send("#{object_name}_path", object))
       end
     end
-    expect(rendered).to have_selector("div p", count: entities.count)
+    expect(rendered).to have_selector("div p", count: objects.count)
   end
 
   def expect_page_title(title)
     expect(rendered).to have_selector("h1", text: title)
   end
 
-  def expect_link_to_new(record_name)
-    expect(rendered).to have_link("New #{record_name}", href: send("new_#{record_name}_path"))
+  def expect_link_to_new(object_name)
+    expect(rendered).to have_link("New #{object_name}", href: send("new_#{object_name}_path"))
+  end
+
+  def expect_link_to_show(object)
+    object_name = object.class.to_s.downcase
+    expect(rendered).to have_link("Show this #{object_name}", href: send("#{object_name}_path", object))
   end
 
   def expect_submit_button(button_name)
@@ -25,7 +30,7 @@ module ViewTestHelper
 
   private
 
-  def get_selector(entity)
-    "##{entity.class.to_s.downcase.pluralize}"
+  def get_selector(object)
+    "##{object.class.to_s.downcase.pluralize}"
   end
 end
