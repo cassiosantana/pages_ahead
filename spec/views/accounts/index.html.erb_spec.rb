@@ -16,18 +16,14 @@ RSpec.describe "accounts/index", type: :view do
   end
 
   it "renders a list of accounts" do
-    expect(rendered).to have_selector("#accounts") do
-      accounts.each do |account|
-        expect(rendered).to have_selector("p", text: "Account number: #{account.account_number} | Show this account")
-      end
-    end
+    expect_entity_list(accounts)
   end
 
   it "renders the page title" do
-    expect(rendered).to have_selector("h1", text: "Accounts")
+    expect_page_title("Accounts")
   end
 
   it "renders the link to create a new account" do
-    expect(rendered).to have_link("New account", href: new_account_path)
+    expect_link_to_new("account")
   end
 end
