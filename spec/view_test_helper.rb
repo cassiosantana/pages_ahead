@@ -19,6 +19,10 @@ module ViewTestHelper
     expect(rendered).to have_link("New #{record_name}", href: send("new_#{record_name}_path"))
   end
 
+  def expect_submit_button(button_name)
+    expect(rendered).to have_button(button_name)
+  end
+
   private
 
   def get_selector(entity)
