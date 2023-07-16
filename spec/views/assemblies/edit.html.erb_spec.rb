@@ -14,6 +14,10 @@ RSpec.describe "assemblies/edit", type: :view do
     render
   end
 
+  it " renders the page title" do
+    expect_page_title("Editing assembly")
+  end
+
   it "renders the edit assembly form" do
     expect(rendered).to have_selector("form[action='#{assembly_path(assembly)}'][method='post']") do
       expect(rendered).to have_selector("input[name='assembly[name]']")
