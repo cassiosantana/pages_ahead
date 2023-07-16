@@ -3,8 +3,6 @@
 require "rails_helper"
 
 RSpec.describe "assemblies/index", type: :view do
-  include ViewTestHelper
-
   let(:assemblies) { create_list(:assembly, 5) }
 
   before(:each) do
