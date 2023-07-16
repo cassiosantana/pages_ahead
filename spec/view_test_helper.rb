@@ -1,11 +1,11 @@
 module ViewTestHelper
   def expect_object_list(objects)
-    selector = get_selector(objects.first)
+    selector = generate_selector(objects.first)
     expect(rendered).to have_selector(selector) do
       objects.each do |object|
-        object_name = object.class.to_s.downcase
+        name = object_name(object)
         expect(rendered).to have_selector("p")
-        expect(rendered).to have_link("Show this #{object_name}", href: send("#{object_name}_path", object))
+        expect(rendered).to have_link("Show this #{name}", href: send("#{name}_path", object))
       end
     end
     expect(rendered).to have_selector("div p", count: objects.count)
@@ -20,8 +20,12 @@ module ViewTestHelper
   end
 
   def expect_link_to_show(object)
-    object_name = object.class.to_s.downcase
-    expect(rendered).to have_link("Show this #{object_name}", href: send("#{object_name}_path", object))
+    name = object_name(object)
+    expect(rendered).to have_link("Show this #{name}", href: send("#{name}_path", object))
+  end
+
+  def expect_link_back_to(index_name)
+    expect(rendered).to have_link("Back to #{index_name}", href: send("#{index_name}_path"))
   end
 
   def expect_submit_button(button_name)
@@ -30,7 +34,11 @@ module ViewTestHelper
 
   private
 
-  def get_selector(object)
+  def generate_selector(object)
     "##{object.class.to_s.downcase.pluralize}"
+  end
+
+  def object_name(object)
+    object.class.to_s.downcase
   end
 end
