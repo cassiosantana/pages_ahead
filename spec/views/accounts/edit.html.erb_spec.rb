@@ -12,16 +12,16 @@ RSpec.describe "accounts/edit", type: :view do
   end
 
   it "render the page title" do
-    expect(rendered).to have_selector("h1", text: "Editing account")
+    expect_page_title("Editing account")
   end
 
-  context "account attribute rendering" do
-    it "render account number" do
-      expect(rendered).to have_selector("div", text: "Account number:\n        #{account.account_number}")
-    end
-
-    it "render supplier name" do
-      expect(rendered).to have_selector("div", text: "Supplier:\n        #{account.supplier.name}")
+  context "editing the account" do
+    it "not render the edit assembly form" do
+      expect(rendered).to have_selector("form[action='#{account_path(account)}'][method='post']") do
+        expect(rendered).not_to have_selector("input[name='account[account_number]']")
+        expect(rendered).not_to have_selector("select[name='account[supplier_id]']")
+        expect_submit_button("Update Account")
+      end
     end
   end
 
@@ -35,17 +35,13 @@ RSpec.describe "accounts/edit", type: :view do
     end
   end
 
-  context "rendering links and button" do
+  context "rendering links" do
     it "renders the link to show account" do
-      expect(rendered).to have_link("Show this account", href: account_path(account))
+      expect_link_to_show(account)
     end
 
     it "renders the link to back to accounts" do
-      expect(rendered).to have_link("Back to accounts", href: accounts_path)
-    end
-
-    it "renders the button to update account" do
-      expect(rendered).to have_button("Update Account")
+      expect_link_back_to("accounts")
     end
   end
 end
