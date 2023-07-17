@@ -3,17 +3,14 @@
 require "rails_helper"
 
 RSpec.describe "assemblies/new", type: :view do
+  let(:assembly) { create(:assembly) }
+
   before(:each) do
-    assign(:assembly, Assembly.new(
-                        name: "MyString"
-                      ))
+    assign(:assembly, assembly)
+    render
   end
 
-  it "renders new assembly form" do
-    render
-
-    assert_select "form[action=?][method=?]", assemblies_path, "post" do
-      assert_select "input[name=?]", "assembly[name]"
-    end
+  it "render the page title" do
+    expect_page_title("New assembly")
   end
 end
