@@ -26,4 +26,8 @@ RSpec.describe "assemblies/new", type: :view do
       expect_submit_button("Create Assembly")
     end
   end
+
+  it "render the back link" do
+    expect_link_back_to("assemblies")
+  end
 end
