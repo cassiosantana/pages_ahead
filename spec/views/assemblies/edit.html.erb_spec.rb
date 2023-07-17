@@ -3,11 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "assemblies/edit", type: :view do
-  let(:author) { create(:author) }
-  let(:books) { create_list(:book, 5, author: author) }
-  let(:supplier) { create(:supplier) }
-  let(:parts) { create_list(:part, 3, supplier: supplier) }
-  let(:assembly) { create(:assembly, books: books, parts: parts) }
+  let(:assembly) { create(:assembly) }
 
   before(:each) do
     assign(:assembly, assembly)
