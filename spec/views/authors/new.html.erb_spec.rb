@@ -8,18 +8,17 @@ RSpec.describe "authors/new", type: :view do
     render
   end
 
-  it "renders new author form" do
+  it "renders the page title" do
+    expect_page_title("New author")
+  end
 
+  it "renders new author form" do
     expect(rendered).to have_selector("form[action='#{authors_path}'][method='post']") do
       expect(rendered).to have_selector("input[name='author[name]']")
     end
   end
 
-  it "renders the page title" do
-    expect(rendered).to have_selector("h1", text: "New author")
-  end
-
   it "renders the back link" do
-    expect(rendered).to have_link("Back to authors", href: authors_path)
+    expect_link_back_to("authors")
   end
 end
