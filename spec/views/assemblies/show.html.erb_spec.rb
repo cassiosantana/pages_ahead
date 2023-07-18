@@ -28,4 +28,18 @@ RSpec.describe "assemblies/show", type: :view do
       end
     end
   end
+
+  context "rendering links and button" do
+    it "render the link to edit assembly" do
+      expect_link_to_edit(assembly)
+    end
+
+    it "render the link to assemblies" do
+      expect_link_back_to("assemblies")
+    end
+
+    it "render the button to destroy assembly" do
+      expect_submit_button("Destroy this assembly")
+    end
+  end
 end
