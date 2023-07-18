@@ -24,6 +24,11 @@ module ViewTestHelper
     expect(rendered).to have_link("Show this #{name}", href: send("#{name}_path", object))
   end
 
+  def expect_link_to_edit(object)
+    name = object_name(object)
+    expect(rendered).to have_link("Edit this #{name}", href: send("edit_#{name}_path", object))
+  end
+
   def expect_link_back_to(index_name)
     expect(rendered).to have_link("Back to #{index_name}", href: send("#{index_name}_path"))
   end
