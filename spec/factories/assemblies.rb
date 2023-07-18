@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :assembly do
     name { FFaker::Lorem.word }
 
-    after(:create) do |assembly|
+    before(:create) do |assembly|
       author = create(:author)
       supplier = create(:supplier)
       assembly.books = create_list(:book, 5, author: author)
