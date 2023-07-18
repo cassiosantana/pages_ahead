@@ -3,14 +3,15 @@
 require "rails_helper"
 
 RSpec.describe "assemblies/show", type: :view do
+  let(:assembly) { create(:assembly) }
   before(:each) do
-    assign(:assembly, Assembly.create!(
-                        name: "Name"
-                      ))
+    assign(:assembly, assembly)
+    render
   end
 
-  it "renders attributes in <p>" do
-    render
-    expect(rendered).to match(/Name/)
+  context "rendering of assemblies attributes" do
+    it "render the assembly name" do
+      expect(rendered).to have_text(assembly.name.to_s)
+    end
   end
 end
