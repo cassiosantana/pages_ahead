@@ -25,16 +25,16 @@ RSpec.describe "authors/show", type: :view do
   end
 
   context "rendering links and button" do
-    it "renders the link to edit author" do
-      expect(rendered).to have_link("Edit this author", href: edit_author_path(author))
+    it "render the link to edit author" do
+      expect_link_to_edit(author)
     end
 
-    it "renders the link to edit author" do
-      expect(rendered).to have_link("Back to authors", href: authors_path)
+    it "render the link to edit author" do
+      expect_link_back_to("authors")
     end
 
     it "renders the button to destroy author" do
-      expect(rendered).to have_button("Destroy this author")
+      expect_submit_button("Destroy this author")
     end
   end
 end
