@@ -20,5 +20,12 @@ RSpec.describe "assemblies/show", type: :view do
         expect(rendered).to have_selector("ul li", text: book.published_at)
       end
     end
+
+    it "render the assembly's parts" do
+      expect(rendered).to have_selector("p strong", text: "Books:")
+      assembly.parts.each do |part|
+        expect(rendered).to have_selector("ul li", text: part.part_number)
+      end
+    end
   end
 end
