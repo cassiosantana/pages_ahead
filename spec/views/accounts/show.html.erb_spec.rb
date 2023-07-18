@@ -20,15 +20,15 @@ RSpec.describe "accounts/show", type: :view do
 
   context "link and button rendering" do
     it "render edit account link" do
-      expect(rendered).to have_link("Edit this account", href: edit_account_path(account))
+      expect_link_to_edit(account)
     end
 
     it "render back to accounts link" do
-      expect(rendered).to have_link("Back to accounts", href: accounts_path)
+      expect_link_back_to("accounts")
     end
 
     it "render the button to destroy account" do
-      expect(rendered).to have_button("Destroy this account")
+      expect_submit_button("Destroy this account")
     end
   end
 end
