@@ -3,7 +3,13 @@
 require "rails_helper"
 
 RSpec.describe "assemblies/show", type: :view do
-  let(:assembly) { create(:assembly) }
+  let(:author) { create(:author) }
+  let(:supplier) { create(:supplier) }
+  let(:books) { create_list(:book, FFaker::Random.rand(0..10), author: author) }
+  let(:parts) { create_list(:part, FFaker::Random.rand(0..10), supplier: supplier) }
+
+  let(:assembly) { create(:assembly, books: books, parts: parts) }
+
   before(:each) do
     assign(:assembly, assembly)
     render
