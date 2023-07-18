@@ -3,23 +3,22 @@
 require "rails_helper"
 
 RSpec.describe "parts/index", type: :view do
+  let(:parts) { create_list(:part, 3) }
+
   before(:each) do
-    assign(:parts, [
-             Part.create!(
-               part_number: "Part Number",
-               supplier: nil
-             ),
-             Part.create!(
-               part_number: "Part Number",
-               supplier: nil
-             )
-           ])
+    assign(:parts, parts)
+    render
   end
 
-  it "renders a list of parts" do
-    render
-    cell_selector = Rails::VERSION::STRING >= "7" ? "div>p" : "tr>td"
-    assert_select cell_selector, text: Regexp.new("Part Number".to_s), count: 2
-    assert_select cell_selector, text: Regexp.new(nil.to_s), count: 2
+  it "render the page title" do
+    expect_page_title("Parts")
+  end
+
+  it "render a list of parts" do
+    expect_object_list(parts)
+  end
+
+  it "render a link to new assembly" do
+    expect_link_to_new("part")
   end
 end
