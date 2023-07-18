@@ -13,5 +13,12 @@ RSpec.describe "assemblies/show", type: :view do
     it "render the assembly name" do
       expect(rendered).to have_text(assembly.name.to_s)
     end
+
+    it "render the assembly's books" do
+      expect(rendered).to have_selector("p strong", text: "Books:")
+      assembly.books.each do |book|
+        expect(rendered).to have_selector("ul li", text: book.published_at)
+      end
+    end
   end
 end
