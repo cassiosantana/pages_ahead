@@ -3,7 +3,8 @@
 require "rails_helper"
 
 RSpec.describe "parts/index", type: :view do
-  let(:parts) { create_list(:part, 3) }
+  let!(:supplier) { create(:supplier) }
+  let(:parts) { create_list(:part, 3, supplier: supplier) }
 
   before(:each) do
     assign(:parts, parts)
