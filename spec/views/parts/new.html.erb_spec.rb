@@ -10,7 +10,7 @@ RSpec.describe "parts/new", type: :view do
              Supplier.create(name: "Supplier 1"),
              Supplier.create(name: "Supplier 2")
            ])
-    assign(:assemblies, create_list(:assembly, FFaker::Random.rand(0..10)))
+    assign(:assemblies, create_list(:assembly, rand(11)))
 
     render
   end
