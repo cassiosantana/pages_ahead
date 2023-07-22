@@ -29,4 +29,8 @@ RSpec.describe 'books/new', type: :view do
       expect_submit_button("Create Book")
     end
   end
+
+  it "render the back link" do
+    expect_link_back_to("books")
+  end
 end
