@@ -1,0 +1,34 @@
+<div id="<%= dom_id assembly %>">
+  <div>
+    <p>
+      <strong>Name:</strong>
+      <%= assembly.name %>
+    </p>
+  </div>
+
+  <div>
+    <p><strong>Parts:</strong></p>
+      <ul>
+        <% assembly.parts.each do |part| %>
+          <li>
+            <strong>Part number:</strong>
+            <%= part.part_number %>
+          </li>
+        <% end %>
+      </ul>
+  </div>
+
+  <div>
+    <p><strong>Books:</strong></p>
+      <ul>
+        <% assembly.books.each do |book| %>
+          <li>
+            <strong>Published at:</strong>
+            <%= book.published_at %>,
+            <strong>Author:</strong>
+            <%= book.author.name %>
+          </li>
+        <% end %>
+      </ul>
+  </div>
+</div>

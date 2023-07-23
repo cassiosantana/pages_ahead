@@ -1,0 +1,24 @@
+<div id="<%= dom_id part %>">
+  <div>
+    <p>
+      <strong>Part number:</strong>
+      <%= part.part_number %>
+    </p>
+  </div>
+
+  <div>
+    <p>
+      <strong>Supplier:</strong>
+      <%= part.supplier.name %>
+    </p>
+  </div>
+
+  <div>
+    <p><strong>Assemblies:</strong></p>
+    <ul>
+      <% part.assemblies.each do |assembly| %>
+        <li><%= assembly.name %></li>
+      <% end %>
+    </ul>
+  </div>
+</div>

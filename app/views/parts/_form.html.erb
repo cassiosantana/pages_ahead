@@ -1,0 +1,55 @@
+<%= form_with(model: part) do |form| %>
+  <% if part.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(part.errors.count, "error") %> prohibited this part from being saved:</h2>
+
+      <ul>
+        <% part.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :part_number, style: "display: block" %>
+    <%= form.text_field :part_number %>
+  </div>
+
+  <br>
+
+  <% if @part.persisted? %>
+    <div>
+      <div>
+        <strong>Supplier:</strong>
+        <%= @part.supplier.name %>
+      </div>
+      <div>
+        <em>It is not possible to change the supplier of this part.</em>
+      </div>
+    </div>
+  <% else %>
+    <div>
+      <%= form.label :supplier_id, style: "display: block" %>
+      <%= form.collection_select :supplier_id, Supplier.all, :id, :name, prompt: true %>
+    </div>
+  <% end %>
+
+  <div>
+    <p><%= form.label :assembly_ids, 'Select the assemblies:' %></p>
+    <% Assembly.all.each do |assembly| %>
+      <% if @part.assemblies.exists?(assembly.id) %>
+        <%= form.check_box :assembly_ids, { multiple: true, checked: true }, assembly.id, nil %>
+      <% else %>
+        <%= form.check_box :assembly_ids, { multiple: true }, assembly.id, nil %>
+      <% end %>
+      <%= form.label :assembly_ids, assembly.name %><br>
+    <% end %>
+  </div>
+
+  <br>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

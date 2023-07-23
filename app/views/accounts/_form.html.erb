@@ -1,0 +1,53 @@
+<%= form_with(model: account) do |form| %>
+  <% if account.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(account.errors.count, "error") %> prohibited this account from being saved:</h2>
+
+      <ul>
+        <% account.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <% if @account.persisted? %>
+    <div>
+      <div>
+        <strong>Supplier:</strong>
+        <%= @account.supplier.name %>
+      </div>
+      <div>
+        <em>It is not possible to change the supplier.</em>
+      </div>
+    </div>
+
+    <br>
+
+    <div>
+      <div>
+        <strong>Account number:</strong>
+        <%= @account.account_number %>
+      </div>
+      <div>
+        <em>It is not possible to change the account number.</em>
+      </div>
+    </div>
+  <% else %>
+    <div>
+      <%= form.label :supplier_id, style: "display: block" %>
+      <%= form.collection_select :supplier_id, suppliers_without_account, :id, :name, prompt: true %>
+      <em> Only suppliers without an account will be listed</em>
+    </div>
+    <div>
+      <%= form.label :account_number, style: "display: block" %>
+      <%= form.text_field :account_number %>
+    </div>
+  <% end %>
+
+  <br>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

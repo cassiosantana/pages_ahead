@@ -1,0 +1,20 @@
+<div id="<%= dom_id book %>">
+  <p>
+    <strong>Published at:</strong>
+    <%= book.published_at %>
+  </p>
+
+  <p>
+    <strong>Author:</strong>
+    <%= book.author.name %>
+  </p>
+
+  <div>
+    <p><strong>Assemblies:</strong></p>
+      <ul>
+        <% book.assemblies.each do |assembly| %>
+          <li><%= assembly.name %></li>
+        <% end %>
+      </ul>
+  </div>
+</div>
