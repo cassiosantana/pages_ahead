@@ -20,7 +20,7 @@ RSpec.describe "assemblies/edit", type: :view do
 
   it "render the edit assembly form" do
     expect(rendered).to have_selector("form[action='#{assembly_path(assembly)}'][method='post']") do
-      expect(rendered).to have_selector("input[name='assembly[name]']")
+      expect(rendered).to have_selector("input[name='assembly[name]'][value='#{assembly.name}']")
       expect(rendered).to have_selector("input[type='checkbox'][name='assembly[part_ids][]']", count: Part.count)
       expect(rendered).to have_selector("input[type='checkbox'][name='assembly[book_ids][]']", count: Book.count)
       expect_submit_button("Update Assembly")

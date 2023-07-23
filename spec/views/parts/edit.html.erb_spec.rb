@@ -19,7 +19,7 @@ RSpec.describe "parts/edit", type: :view do
 
   it "render the part form" do
     expect(rendered).to have_selector("form[action='#{part_path(part)}'][method='post']") do
-      expect(rendered).to have_selector("input[name='part[part_number]']")
+      expect(rendered).to have_selector("input[name='part[part_number]'][value='#{part.part_number}']")
       expect(rendered).to have_selector("input[type='checkbox'][name='part[assembly_ids][]']", count: Assembly.count)
       Assembly.all.each do |assembly|
         if part.assemblies.include?(assembly)

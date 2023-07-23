@@ -21,7 +21,8 @@ RSpec.describe 'books/edit', type: :view do
 
   it "render the book form" do
     expect(rendered).to have_selector("form[action='#{book_path(book)}'][method='post']") do
-      expect(rendered).to have_selector("input[type='datetime-local'][name='book[published_at]']")
+      formatted_published_at = book.published_at.utc.strftime("%Y-%m-%dT%H:%M:%S")
+      expect(rendered).to have_selector("input[type='datetime-local'][name='book[published_at]'][value='#{formatted_published_at}']")
       expect(DateTime.parse(Capybara.string(rendered)
                                     .find("input[name='book[published_at]']")
                                     .value).utc.iso8601).to eq(book.published_at.utc.iso8601)
