@@ -5,9 +5,9 @@
 <div id="assemblies">
   <% @assemblies.each do |assembly| %>
     <p>
-      <strong>Assembly name: </strong>
-      <%= assembly.name %>
-      | <%= link_to "Show this assembly", assembly %>
+      <strong>Name:</strong>
+      <%= assembly.name %> |
+      <%= link_to "Show this assembly", assembly %>
     </p>
   <% end %>
 </div>

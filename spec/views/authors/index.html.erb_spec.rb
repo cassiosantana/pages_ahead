@@ -1,22 +1,24 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'authors/index', type: :view do
+RSpec.describe "authors/index", type: :view do
+  let(:authors) { create_list(:author, 3) }
+
   before(:each) do
-    assign(:authors, [
-             Author.create!(
-               name: 'Name'
-             ),
-             Author.create!(
-               name: 'Name'
-             )
-           ])
+    assign(:authors, authors)
+    render
   end
 
-  it 'renders a list of authors' do
-    render
-    cell_selector = Rails::VERSION::STRING >= '7' ? 'div>p' : 'tr>td'
-    assert_select cell_selector, text: Regexp.new('Name'.to_s), count: 2
+  it "renders the page title" do
+    expect_page_title("Authors")
+  end
+
+  it "renders the link to create a new author" do
+    expect_link_to_new("author")
+  end
+
+  it "renders the list of authors" do
+    expect_object_list(authors)
   end
 end

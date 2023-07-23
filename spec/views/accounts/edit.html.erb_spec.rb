@@ -3,24 +3,45 @@
 require "rails_helper"
 
 RSpec.describe "accounts/edit", type: :view do
-  let(:account) do
-    Account.create!(
-      supplier: nil,
-      account_number: "MyString"
-    )
-  end
+  let(:supplier) { create(:supplier) }
+  let(:account) { create(:account, supplier: supplier) }
 
   before(:each) do
     assign(:account, account)
+    render
   end
 
-  it "renders the edit account form" do
-    render
+  it "render the page title" do
+    expect_page_title("Editing account")
+  end
 
-    assert_select "form[action=?][method=?]", account_path(account), "post" do
-      assert_select "input[name=?]", "account[supplier_id]"
+  context "editing the account" do
+    it "not render the edit assembly form" do
+      expect(rendered).to have_selector("form[action='#{account_path(account)}'][method='post']") do
+        expect(rendered).not_to have_selector("input[name='account[account_number]']")
+        expect(rendered).not_to have_selector("select[name='account[supplier_id]']")
+        expect_submit_button("Update Account")
+      end
+    end
+  end
 
-      assert_select "input[name=?]", "account[account_number]"
+  context "message that it is not possible to edit the attribute" do
+    it "render account number message" do
+      expect(rendered).to have_selector("em", text: "It is not possible to change the account number.")
+    end
+
+    it "render supplier message" do
+      expect(rendered).to have_selector("em", text: "It is not possible to change the supplier.")
+    end
+  end
+
+  context "rendering links" do
+    it "renders the link to show account" do
+      expect_link_to_show(account)
+    end
+
+    it "renders the link to back to accounts" do
+      expect_link_back_to("accounts")
     end
   end
 end

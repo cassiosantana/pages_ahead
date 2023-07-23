@@ -3,23 +3,27 @@
 require "rails_helper"
 
 RSpec.describe "accounts/index", type: :view do
+  let(:suppliers) { create_list(:supplier, 3) }
+  let(:accounts) do
+    suppliers.map do |supplier|
+      create(:account, supplier: supplier)
+    end
+  end
+
   before(:each) do
-    assign(:accounts, [
-             Account.create!(
-               supplier: nil,
-               account_number: "Account Number"
-             ),
-             Account.create!(
-               supplier: nil,
-               account_number: "Account Number"
-             )
-           ])
+    assign(:accounts, accounts)
+    render
   end
 
   it "renders a list of accounts" do
-    render
-    cell_selector = Rails::VERSION::STRING >= "7" ? "div>p" : "tr>td"
-    assert_select cell_selector, text: Regexp.new(nil.to_s), count: 2
-    assert_select cell_selector, text: Regexp.new("Account Number".to_s), count: 2
+    expect_object_list(accounts)
+  end
+
+  it "renders the page title" do
+    expect_page_title("Accounts")
+  end
+
+  it "renders the link to create a new account" do
+    expect_link_to_new("account")
   end
 end

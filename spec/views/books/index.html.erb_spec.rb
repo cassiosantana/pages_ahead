@@ -3,20 +3,23 @@
 require 'rails_helper'
 
 RSpec.describe 'books/index', type: :view do
+  let(:author) { create(:author) }
+  let(:books) { create_list(:book, 5, author: author) }
+
   before(:each) do
-    assign(:books, [
-             Book.create!(
-               author: nil
-             ),
-             Book.create!(
-               author: nil
-             )
-           ])
+    assign(:books, books)
+    render
   end
 
-  it 'renders a list of books' do
-    render
-    cell_selector = Rails::VERSION::STRING >= '7' ? 'div>p' : 'tr>td'
-    assert_select cell_selector, text: Regexp.new(nil.to_s), count: 2
+  it "render the page title" do
+    expect_page_title("Books")
+  end
+
+  it "render a list of books" do
+    expect_object_list(books)
+  end
+
+  it "render a link to new book" do
+    expect_link_to_new("book")
   end
 end
