@@ -2,8 +2,8 @@
 
 module Api
   class AuthorsController < ApplicationController
-    skip_before_action :verify_authenticity_token, only: [:create]
-    before_action :set_author, only: :show
+    skip_before_action :verify_authenticity_token, only: %i[create update]
+    before_action :set_author, only: %i[show update]
 
     def index
       @authors = Author.all
@@ -20,6 +20,14 @@ module Api
 
       if @author.save
         render json: @author, status: :created
+      else
+        render json: { errors: @author.errors.full_messages }, status: :unprocessable_entity
+      end
+    end
+
+    def update
+      if @author.update(author_params)
+        render json: @author, status: :ok
       else
         render json: { errors: @author.errors.full_messages }, status: :unprocessable_entity
       end
