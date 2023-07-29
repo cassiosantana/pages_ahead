@@ -8,6 +8,6 @@ Rails.application.routes.draw do
   resources :authors
 
   namespace :api, defaults: { format: :json } do
-    resources :authors
+    resources :authors, only: %i[index show create]
   end
 end
