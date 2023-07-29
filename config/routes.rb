@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root 'home#index'
+  root "home#index"
   resources :assemblies
   resources :parts
   resources :accounts
@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   resources :books
   resources :authors
 
-  namespace :api, defaults:  { format: :json } do
+  namespace :api, defaults: { format: :json } do
     resources :authors
   end
 end
