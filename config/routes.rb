@@ -1,13 +1,13 @@
 Rails.application.routes.draw do
-  root 'home#index'
+  root "home#index"
   resources :assemblies
   resources :parts
   resources :accounts
   resources :suppliers
   resources :books
   resources :authors
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+  namespace :api, defaults: { format: :json } do
+    resources :authors, only: %i[index show create update destroy]
+  end
 end
