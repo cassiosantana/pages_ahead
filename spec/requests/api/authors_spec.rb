@@ -48,4 +48,42 @@ RSpec.describe "Api::Authors", type: :request do
       end
     end
   end
+
+  describe "POST /create" do
+    context "when creating a new author with valid data" do
+      let(:valid_author_params) do
+        {
+          author: {
+            name: "New Author"
+          }
+        }
+      end
+
+      it "create author" do
+        expect do
+          post "/api/authors", params: valid_author_params
+        end.to change(Author, :count).by(1)
+        expect(response).to have_http_status(:created)
+        expect(json_response["name"]).to eq("New Author")
+      end
+    end
+
+    context "when creating a new author with invalid data" do
+      let(:invalid_author_params) do
+        {
+          author: {
+            name: ""
+          }
+        }
+      end
+
+      it "does not create author" do
+        expect do
+          post "/api/authors", params: invalid_author_params
+        end.not_to change(Author, :count)
+        expect(json_response["errors"]).to include("Name can't be blank")
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+  end
 end
