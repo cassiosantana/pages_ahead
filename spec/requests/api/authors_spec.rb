@@ -86,4 +86,61 @@ RSpec.describe "Api::Authors", type: :request do
       end
     end
   end
+
+  describe "PATCH/PUT /api/authors/:id" do
+    context "with valid data" do
+      let!(:author) { create(:author) }
+      let(:valid_author_params) do
+        {
+          author: {
+            name: "Updated author"
+          }
+        }
+      end
+
+      it "updates author" do
+        patch "/api/authors/#{author.id}", params: valid_author_params
+
+        expect(response).to have_http_status(:ok)
+
+        author.reload
+        expect(author.name).to eq("Updated author")
+      end
+    end
+
+    context "with invalid data" do
+      let!(:author) { create(:author) }
+      let(:invalid_author_params) do
+        {
+          author: {
+            name: ""
+          }
+        }
+      end
+
+      it "does not update the author" do
+        expect do
+          patch "/api/authors/#{author.id}", params: invalid_author_params
+        end.not_to change(author, :name)
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(json_response["errors"]).to include("Name can't be blank")
+      end
+    end
+
+    context "when the author does not exist" do
+      let(:invalid_author_params) do
+        {
+          author: {
+            name: "Invalid Author"
+          }
+        }
+      end
+      it "returns an error message for non-existing author" do
+        patch "/api/authors/-1", params: invalid_author_params
+
+        expect(response).to have_http_status(:not_found)
+        expect(json_response["message"]).to eq("Author not found.")
+      end
+    end
+  end
 end
