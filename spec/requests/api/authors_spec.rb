@@ -8,7 +8,7 @@ RSpec.describe "Api::Authors", type: :request do
     it { expect(response).to have_http_status(:ok) }
   end
 
-  describe "GET /index" do
+  describe "GET /api/authors" do
     let!(:authors) { create_list(:author, 3) }
 
     before do
@@ -23,7 +23,7 @@ RSpec.describe "Api::Authors", type: :request do
     end
   end
 
-  describe "GET /show" do
+  describe "GET /api/authors/:id" do
     context "when author exist" do
       let!(:author) { create(:author) }
 
@@ -49,7 +49,7 @@ RSpec.describe "Api::Authors", type: :request do
     end
   end
 
-  describe "POST /create" do
+  describe "POST /api/authors" do
     context "when creating a new author with valid data" do
       let(:valid_author_params) do
         {
