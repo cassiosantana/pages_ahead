@@ -143,4 +143,28 @@ RSpec.describe "Api::Authors", type: :request do
       end
     end
   end
+
+  describe "DELETE /api/authors/:id" do
+    context "when author exists" do
+      let!(:author) { create(:author) }
+
+      it "deletes the author" do
+        expect do
+          delete "/api/authors/#{author.id}"
+        end.to change(Author, :count).by(-1)
+
+        expect(response).to have_http_status(:ok)
+        expect(json_response["message"]).to include("Author deleted successfully.")
+      end
+    end
+
+    context "when author does not exist" do
+      it "return an error message" do
+        delete "/api/authors/-1"
+
+        expect(response).to have_http_status(:not_found)
+        expect(json_response["message"]).to include("Author not found")
+      end
+    end
+  end
 end
