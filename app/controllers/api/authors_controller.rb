@@ -7,10 +7,6 @@ module Api
 
     def index
       @authors = Author.all
-
-      respond_to do |format|
-        format.json
-      end
     end
 
     def show; end
@@ -44,11 +40,11 @@ module Api
     private
 
     def set_author
-      begin
-        @author = Author.find(params[:id])
-      rescue ActiveRecord::RecordNotFound
-        render json: { message: "Author not found." }, status: :not_found
-      end
+      @author = Author.find_by(id: params[:id])
+
+      return if @author
+
+      render json: { message: "Author not found" }, status: :not_found
     end
 
     def author_params
