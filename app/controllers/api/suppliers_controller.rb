@@ -2,6 +2,7 @@
 
 module Api
   class SuppliersController < ApplicationController
+    skip_before_action :verify_authenticity_token
     before_action :set_supplier, only: %i[show]
 
     def index
@@ -10,12 +11,28 @@ module Api
 
     def show; end
 
+    def create
+      @supplier = Supplier.new(supplier_params)
+
+      if @supplier.save
+        render :create, status: :created
+      else
+        render json: { errors: @supplier.errors.full_messages }, status: :unprocessable_entity
+      end
+    end
+
+    private
+
     def set_supplier
       @supplier = Supplier.find_by(id: params[:id])
 
       return if @supplier
 
       render json: { message: "Supplier not found" }, status: :not_found
+    end
+
+    def supplier_params
+      params.require(:supplier).permit(:name)
     end
   end
 end
