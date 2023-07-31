@@ -22,4 +22,30 @@ RSpec.describe "Api::Suppliers", type: :request do
       expect(json_response.length).to eq(5)
     end
   end
+
+  describe "Get /api/suppliers/:id" do
+    context "when supplier exist" do
+      let!(:supplier) { create(:supplier) }
+
+      before do
+        get "/api/suppliers/#{supplier.id}"
+      end
+
+      include_examples "a successful response"
+
+      it "returns a supplier" do
+        expect(json_response["id"]).to eq(supplier.id)
+        expect(json_response["name"]).to eq(supplier.name)
+      end
+    end
+
+    context "when supplier does not exist" do
+      it "return a error message" do
+        get "/api/suppliers/-1"
+
+        expect(response).to have_http_status :not_found
+        expect(json_response["message"]).to eq("Supplier not found")
+      end
+    end
+  end
 end
