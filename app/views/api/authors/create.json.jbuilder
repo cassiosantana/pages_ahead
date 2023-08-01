@@ -1,3 +1,2 @@
-json.data do
-  json.id @author.id
-end
+json.id @author.id
+json.name @author.name
