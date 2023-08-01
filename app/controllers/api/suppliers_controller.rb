@@ -3,7 +3,7 @@
 module Api
   class SuppliersController < ApplicationController
     skip_before_action :verify_authenticity_token
-    before_action :set_supplier, only: %i[show]
+    before_action :set_supplier, only: %i[show update]
 
     def index
       @suppliers = Supplier.all
@@ -16,6 +16,14 @@ module Api
 
       if @supplier.save
         render :create, status: :created
+      else
+        render json: { errors: @supplier.errors.full_messages }, status: :unprocessable_entity
+      end
+    end
+
+    def update
+      if @supplier.update(supplier_params)
+        render :update, status: :ok
       else
         render json: { errors: @supplier.errors.full_messages }, status: :unprocessable_entity
       end
