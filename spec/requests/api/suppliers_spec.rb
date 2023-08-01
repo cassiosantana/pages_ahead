@@ -51,11 +51,11 @@ RSpec.describe "Api::Suppliers", type: :request do
 
   describe "POST /api/suppliers" do
     context "when creating a new supplier with valid data" do
-      let(:valid_author_params) { { supplier: { name: "New Supplier" } } }
+      let(:valid_supplier_params) { { supplier: { name: "New Supplier" } } }
 
       it "create supplier" do
         expect do
-          post "/api/suppliers", params: valid_author_params
+          post "/api/suppliers", params: valid_supplier_params
         end.to change(Supplier, :count).by(1)
 
         expect(response).to have_http_status :created
@@ -64,15 +64,45 @@ RSpec.describe "Api::Suppliers", type: :request do
     end
 
     context "when creating a new supplier with invalid data" do
-      let(:invalid_author_params) { { supplier: { name: "" } } }
+      let(:invalid_supplier_params) { { supplier: { name: "" } } }
 
       it "does not create supplier" do
         expect do
-          post "/api/suppliers", params: invalid_author_params
+          post "/api/suppliers", params: invalid_supplier_params
         end.not_to change(Supplier, :count)
         expect(response).to have_http_status :unprocessable_entity
         expect(json_response["errors"]).to include("Name can't be blank")
       end
     end
   end
+
+  describe "PATCH/PUT /api/suppliers/:id" do
+    context "when try to update the supplier with valid data" do
+      let!(:supplier) { create(:supplier) }
+      let(:valid_supplier_params) { { supplier: { name: "Updated supplier" } } }
+
+      it "the supplier will be updated" do
+        patch "/api/suppliers/#{supplier.id}", params: valid_supplier_params
+
+        expect(response).to have_http_status :ok
+
+        supplier.reload
+        expect(supplier.name).to eq("Updated supplier")
+      end
+    end
+
+    context "when try to update the supplier with invalid data" do
+      let!(:supplier) { create(:supplier) }
+      let(:invalid_supplier_params) { { supplier: { name: "" } } }
+
+      it "the supplier will not be updated" do
+        expect do
+          patch "/api/suppliers/#{supplier.id}", params: invalid_supplier_params
+        end.not_to change(supplier, :name)
+        expect(response).to have_http_status :unprocessable_entity
+        expect(json_response["errors"]).to include("Name can't be blank")
+      end
+    end
+  end
 end
+
