@@ -23,7 +23,7 @@ RSpec.describe "Api::Suppliers", type: :request do
     end
   end
 
-  describe "Get /api/suppliers/:id" do
+  describe "GET /api/suppliers/:id" do
     context "when supplier exist" do
       let!(:supplier) { create(:supplier) }
 
@@ -45,6 +45,33 @@ RSpec.describe "Api::Suppliers", type: :request do
 
         expect(response).to have_http_status :not_found
         expect(json_response["message"]).to eq("Supplier not found")
+      end
+    end
+  end
+
+  describe "POST /api/suppliers" do
+    context "when creating a new supplier with valid data" do
+      let(:valid_author_params) { { supplier: { name: "New Supplier" } } }
+
+      it "create supplier" do
+        expect do
+          post "/api/suppliers", params: valid_author_params
+        end.to change(Supplier, :count).by(1)
+
+        expect(response).to have_http_status :created
+        expect(json_response["name"]).to eq("New Supplier")
+      end
+    end
+
+    context "when creating a new supplier with invalid data" do
+      let(:invalid_author_params) { { supplier: { name: "" } } }
+
+      it "does not create supplier" do
+        expect do
+          post "/api/suppliers", params: invalid_author_params
+        end.not_to change(Supplier, :count)
+        expect(response).to have_http_status :unprocessable_entity
+        expect(json_response["errors"]).to include("Name can't be blank")
       end
     end
   end
