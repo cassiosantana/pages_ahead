@@ -23,7 +23,7 @@ module Api
 
     def update
       if @author.update(author_params)
-        render json: @author, status: :ok
+        render :update, status: :ok
       else
         render json: { errors: @author.errors.full_messages }, status: :unprocessable_entity
       end
@@ -44,7 +44,7 @@ module Api
 
       return if @author
 
-      render json: { message: "Author not found" }, status: :not_found
+      render json: { message: "Author not found." }, status: :not_found
     end
 
     def author_params

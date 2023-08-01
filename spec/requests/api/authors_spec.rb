@@ -163,7 +163,7 @@ RSpec.describe "Api::Authors", type: :request do
         delete "/api/authors/-1"
 
         expect(response).to have_http_status(:not_found)
-        expect(json_response["message"]).to include("Author not found")
+        expect(json_response["message"]).to include("Author not found.")
       end
     end
   end

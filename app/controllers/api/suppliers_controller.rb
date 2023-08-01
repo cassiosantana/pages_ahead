@@ -44,7 +44,7 @@ module Api
 
       return if @supplier
 
-      render json: { message: "Supplier not found" }, status: :not_found
+      render json: { message: "Supplier not found." }, status: :not_found
     end
 
     def supplier_params

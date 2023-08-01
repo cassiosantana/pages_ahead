@@ -44,7 +44,7 @@ RSpec.describe "Api::Suppliers", type: :request do
         get "/api/suppliers/-1"
 
         expect(response).to have_http_status :not_found
-        expect(json_response["message"]).to eq("Supplier not found")
+        expect(json_response["message"]).to eq("Supplier not found.")
       end
     end
   end
