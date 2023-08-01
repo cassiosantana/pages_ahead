@@ -104,5 +104,27 @@ RSpec.describe "Api::Suppliers", type: :request do
       end
     end
   end
-end
 
+  describe "DELETE /api/suppliers/:id" do
+    context "when supplier exists" do
+      let!(:supplier) { create(:supplier) }
+
+      it "the supplier will be deleted" do
+        expect do
+          delete "/api/suppliers/#{supplier.id}"
+        end.to change(Supplier, :count).by(-1)
+        expect(response).to have_http_status :ok
+        expect(json_response["message"]).to eq("Supplier deleted successfully.")
+      end
+    end
+
+    context "when supplier does not exists" do
+      it "return an error message" do
+        delete "/api/suppliers/-1"
+
+        expect(response).to have_http_status :not_found
+        expect(json_response["message"]).to include("Supplier not found")
+      end
+    end
+  end
+end
