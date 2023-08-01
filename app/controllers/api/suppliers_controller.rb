@@ -3,7 +3,7 @@
 module Api
   class SuppliersController < ApplicationController
     skip_before_action :verify_authenticity_token
-    before_action :set_supplier, only: %i[show update]
+    before_action :set_supplier, only: %i[show update destroy]
 
     def index
       @suppliers = Supplier.all
@@ -24,6 +24,14 @@ module Api
     def update
       if @supplier.update(supplier_params)
         render :update, status: :ok
+      else
+        render json: { errors: @supplier.errors.full_messages }, status: :unprocessable_entity
+      end
+    end
+
+    def destroy
+      if @supplier.destroy
+        render json: { message: "Supplier deleted successfully." }, status: :ok
       else
         render json: { errors: @supplier.errors.full_messages }, status: :unprocessable_entity
       end
