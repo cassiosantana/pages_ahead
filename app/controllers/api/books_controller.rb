@@ -17,7 +17,7 @@ module Api
 
       return if @book
 
-      render json: { message: "Book not found" }, status: :not_found
+      render json: { message: "Book not found." }, status: :not_found
     end
   end
 end
