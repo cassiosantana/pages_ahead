@@ -17,7 +17,28 @@ RSpec.describe "Api::Books", type: :request do
   end
 
   describe "GET /api/books/:id" do
-    context "when book exist" do
+    context "when book exist and have associated assemblies" do
+      let!(:assemblies) { create_list(:assembly, 3) }
+      let!(:author) { create(:author) }
+      let!(:book) { create(:book, author: author, assemblies: assemblies) }
+
+      it "returns a book" do
+        get "/api/books/#{book.id}"
+
+        expect(response).to have_http_status :ok
+        expect(json_response["id"]).to eq(book.id)
+        expect(json_response["published_at"].to_time).to eq(book.published_at)
+        expect(json_response["author"]).to eq(author.name)
+        expect(json_response["assemblies"].length).to eq(3)
+
+        assembly_names = assemblies.map(&:name)
+        json_response["assemblies"].each do |assembly|
+          expect(assembly_names).to include(assembly["name"])
+        end
+      end
+    end
+
+    context "when the book exists but has no associated assemblies" do
       let!(:author) { create(:author) }
       let!(:book) { create(:book, author: author) }
 
@@ -27,6 +48,8 @@ RSpec.describe "Api::Books", type: :request do
         expect(response).to have_http_status :ok
         expect(json_response["id"]).to eq(book.id)
         expect(json_response["published_at"].to_time).to eq(book.published_at)
+        expect(json_response["author"]).to eq(author.name)
+        expect(json_response["assemblies"].length).to eq(0)
       end
     end
 
