@@ -7,10 +7,6 @@ module Api
 
     def index
       @authors = Author.all
-
-      respond_to do |format|
-        format.json
-      end
     end
 
     def show; end
@@ -19,7 +15,7 @@ module Api
       @author = Author.new(author_params)
 
       if @author.save
-        render json: @author, status: :created
+        render :create, status: :created
       else
         render json: { errors: @author.errors.full_messages }, status: :unprocessable_entity
       end
@@ -27,7 +23,7 @@ module Api
 
     def update
       if @author.update(author_params)
-        render json: @author, status: :ok
+        render :update, status: :ok
       else
         render json: { errors: @author.errors.full_messages }, status: :unprocessable_entity
       end
@@ -44,11 +40,11 @@ module Api
     private
 
     def set_author
-      begin
-        @author = Author.find(params[:id])
-      rescue ActiveRecord::RecordNotFound
-        render json: { message: "Author not found." }, status: :not_found
-      end
+      @author = Author.find_by(id: params[:id])
+
+      return if @author
+
+      render json: { message: "Author not found." }, status: :not_found
     end
 
     def author_params
