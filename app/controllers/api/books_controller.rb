@@ -6,7 +6,7 @@ module Api
     before_action :set_book, only: %i[show]
 
     def index
-      @books = Book.all
+      @books = Book.includes(:author, :assemblies).all
     end
 
     def show; end
