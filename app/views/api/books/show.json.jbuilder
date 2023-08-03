@@ -1,7 +1,14 @@
 json.id @book.id
 json.published_at @book.published_at
-json.author @book.author.name
 
-json.assemblies @book.assemblies do |assembly|
-  json.name assembly.name
+json.author do
+  json.id @book.author.id
+  json.name @book.author.name
+end
+
+json.assemblies do
+  json.array! @book.assemblies do |assembly|
+    json.id assembly.id
+    json.name assembly.name
+  end
 end
