@@ -4,26 +4,41 @@ require "rails_helper"
 
 RSpec.describe "Api::Books", type: :request do
   describe "GET /api/books" do
+    let!(:assemblies) { create_list(:assembly, 3) }
     let!(:author) { create(:author) }
-    let!(:books) { create_list(:book, 5, author: author) }
+    let!(:books) { create_list(:book, 5, author: author, assemblies: assemblies) }
 
-    it "returns a list of books" do
+    before do
       get "/api/books"
+    end
 
+    it "returns a successful response" do
       expect(response).to have_http_status :ok
+    end
+
+    it "returns an array of books" do
       expect(json_response).to be_an(Array)
-      expect(json_response.length).to eq(5)
+      expect(json_response.length).to eq(books.count)
+    end
+
+    it "returns correct book data" do
+      json_response.each do |book|
+        expect(book["id"]).to be_present
+        expect(book["published_at"]).to be_present
+        expect(book["author"]["id"]).to eq(author.id)
+        expect(book["author"]["name"]).to eq(author.name)
+        expect(book["assemblies"].length).to eq(assemblies.count)
+
+        book["assemblies"].each do |assembly|
+          expect(assembly["id"]).to be_present
+          expect(assembly["name"]).to be_present
+        end
+      end
     end
   end
 
   describe "GET /api/books/:id" do
-    context "when book exist and have associated assemblies" do
-      let!(:assemblies) { create_list(:assembly, 3) }
-      let!(:author) { create(:author) }
-      let!(:book) { create(:book, author: author, assemblies: assemblies) }
-
-      before { get "/api/books/#{book.id}" }
-
+    shared_examples "a book" do
       it "returns a successful response" do
         expect(response).to have_http_status :ok
       end
@@ -37,16 +52,29 @@ RSpec.describe "Api::Books", type: :request do
       end
 
       it "returns the correct author" do
-        expect(json_response["author"]).to eq(author.name)
+        expect(json_response["author"]["id"]).to eq(author.id)
+        expect(json_response["author"]["name"]).to eq(author.name)
       end
+    end
+
+    context "when book exist and have associated assemblies" do
+      let!(:assemblies) { create_list(:assembly, 3) }
+      let!(:author) { create(:author) }
+      let!(:book) { create(:book, author: author, assemblies: assemblies) }
+
+      before { get "/api/books/#{book.id}" }
+
+      it_behaves_like "a book"
 
       it "returns the correct number of assemblies" do
         expect(json_response["assemblies"].length).to eq(3)
       end
 
       it "returns the correct assemblies" do
+        assembly_ids = assemblies.map(&:id)
         assembly_names = assemblies.map(&:name)
         json_response["assemblies"].each do |assembly|
+          expect(assembly_ids).to include(assembly["id"])
           expect(assembly_names).to include(assembly["name"])
         end
       end
@@ -58,21 +86,7 @@ RSpec.describe "Api::Books", type: :request do
 
       before { get "/api/books/#{book.id}" }
 
-      it "returns a successful response" do
-        expect(response).to have_http_status :ok
-      end
-
-      it "returns the correct book id" do
-        expect(json_response["id"]).to eq(book.id)
-      end
-
-      it "returns the correct published_at" do
-        expect(json_response["published_at"].to_time).to eq(book.published_at)
-      end
-
-      it "returns the correct author" do
-        expect(json_response["author"]).to eq(author.name)
-      end
+      it_behaves_like "a book"
 
       it "returns no assemblies" do
         expect(json_response["assemblies"]).to be_empty
