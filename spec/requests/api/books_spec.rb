@@ -184,4 +184,73 @@ RSpec.describe "Api::Books", type: :request do
       end
     end
   end
+
+  describe "PATCH /api/books/:id" do
+    let!(:assemblies) { create_list(:assembly, 3) }
+    let!(:new_assemblies) { create_list(:assembly, 5) }
+    let!(:author) { create(:author) }
+    let!(:new_author) { create(:author) }
+
+    context "when the parameters are valid" do
+      let!(:book) { create(:book, author: author, assemblies: assemblies) }
+
+      let!(:valid_book_params) do
+        {
+          book: {
+            published_at: Time.current,
+            assembly_ids: book.assembly_ids.concat(new_assemblies.map(&:id)),
+            author_id: new_author.id
+          }
+        }
+      end
+
+      before do
+        patch "/api/books/#{book.id}", params: valid_book_params
+      end
+
+      it "returns a successful response" do
+        expect(response).to have_http_status :ok
+      end
+
+      it "updates the published_at" do
+        expect(Time.iso8601(json_response["published_at"]).change(usec: 0))
+          .to eq(valid_book_params[:book][:published_at].change(usec: 0))
+      end
+
+      it "change the number of assemblies" do
+        expect(json_response["assemblies"].length).to eq(8)
+      end
+
+      it "change the author" do
+        expect(json_response["author"]["id"]).to eq(new_author.id)
+        expect(json_response["author"]["name"]).to eq(new_author.name)
+      end
+    end
+
+    context "when the parameters are invalid" do
+      let!(:book) { create(:book, author: author, assemblies: assemblies) }
+
+      let!(:invalid_book_params) do
+        {
+          book: {
+            published_at: nil,
+            author_id: nil
+          }
+        }
+      end
+
+      before do
+        patch "/api/books/#{book.id}", params: invalid_book_params
+      end
+
+      it "returns a unprocessable_entity status" do
+        expect(response).to have_http_status :unprocessable_entity
+      end
+
+      it "returns a error messages" do
+        expect(json_response["errors"]).to include("Author must exist")
+        expect(json_response["errors"]).to include("Published at can't be blank")
+      end
+    end
+  end
 end
