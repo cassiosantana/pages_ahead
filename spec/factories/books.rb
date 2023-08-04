@@ -3,6 +3,6 @@
 FactoryBot.define do
   factory :book do
     published_at { FFaker::Time.date }
-    author { nil }
+    author { Author.create(name: FFaker::Name.first_name) }
   end
 end
