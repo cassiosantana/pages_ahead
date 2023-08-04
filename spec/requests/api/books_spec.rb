@@ -150,11 +150,10 @@ RSpec.describe "Api::Books", type: :request do
   describe "PATCH /api/books/:id" do
     let!(:assemblies) { create_list(:assembly, 3) }
     let!(:new_assemblies) { create_list(:assembly, 5) }
-    let!(:author) { create(:author) }
     let!(:new_author) { create(:author) }
 
     context "when the parameters are valid" do
-      let!(:book) { create(:book, author: author, assemblies: assemblies) }
+      let!(:book) { create(:book, assemblies: assemblies) }
 
       let!(:valid_book_params) do
         {
@@ -181,7 +180,7 @@ RSpec.describe "Api::Books", type: :request do
     end
 
     context "when the parameters are invalid" do
-      let!(:book) { create(:book, author: author) }
+      let!(:book) { create(:book) }
 
       let!(:invalid_book_params) do
         {
@@ -200,6 +199,28 @@ RSpec.describe "Api::Books", type: :request do
         expect(response).to have_http_status :unprocessable_entity
         expect(json_response["errors"]).to include("Author must exist")
         expect(json_response["errors"]).to include("Published at can't be blank")
+      end
+    end
+  end
+
+  describe "DELETE /api/books/:id" do
+    context "when trying to delete an existing book" do
+      let!(:book) { create(:book) }
+
+      it "returns correct status and delete the book" do
+        delete "/api/books/#{book.id}"
+
+        expect(response).to have_http_status :ok
+        expect(json_response["message"]).to eq("Book deleted successfully")
+      end
+    end
+
+    context "when trying to delete a non-existent book" do
+      it "returns correct status and delete the book" do
+        delete "/api/books/-1"
+
+        expect(response).to have_http_status :not_found
+        expect(json_response["message"]).to eq("Book not found.")
       end
     end
   end
