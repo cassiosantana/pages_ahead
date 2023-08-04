@@ -2,8 +2,8 @@
 
 module Api
   class BooksController < ApplicationController
-    skip_before_action :verify_authenticity_token, only: %i[create update]
-    before_action :set_book, only: %i[show update]
+    skip_before_action :verify_authenticity_token, only: %i[create update destroy]
+    before_action :set_book, only: %i[show update destroy]
 
     def index
       @books = Book.includes(:author, :assemblies).all
@@ -24,6 +24,14 @@ module Api
     def update
       if @book.update(book_params)
         render :update, status: :ok
+      else
+        render json: { errors: @book.errors.full_messages }, status: :unprocessable_entity
+      end
+    end
+
+    def destroy
+      if @book.destroy
+        render json: { message: "Book deleted successfully" }, status: :ok
       else
         render json: { errors: @book.errors.full_messages }, status: :unprocessable_entity
       end
