@@ -2,8 +2,8 @@
 
 module Api
   class BooksController < ApplicationController
-    skip_before_action :verify_authenticity_token, only: %i[create]
-    before_action :set_book, only: %i[show]
+    skip_before_action :verify_authenticity_token, only: %i[create update]
+    before_action :set_book, only: %i[show update]
 
     def index
       @books = Book.includes(:author, :assemblies).all
@@ -16,6 +16,14 @@ module Api
 
       if @book.save
         render :create, status: :created
+      else
+        render json: { errors: @book.errors.full_messages }, status: :unprocessable_entity
+      end
+    end
+
+    def update
+      if @book.update(book_params)
+        render :update, status: :ok
       else
         render json: { errors: @book.errors.full_messages }, status: :unprocessable_entity
       end
