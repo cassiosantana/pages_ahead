@@ -4,6 +4,7 @@ module Api
   class AuthorsController < ApplicationController
     skip_before_action :verify_authenticity_token, only: %i[create update destroy]
     before_action :set_author, only: %i[show update destroy]
+    before_action :books_exist?, only: %i[create update]
 
     def index
       @authors = Author.includes(:books).all
@@ -48,7 +49,13 @@ module Api
     end
 
     def author_params
-      params.require(:author).permit(:name)
+      params.require(:author).permit(:name, book_ids: [])
+    end
+
+    def books_exist?
+      return if Book.where(id: author_params[:book_ids]).pluck(:id) == author_params[:book_ids].to_a
+
+      render json: { message: "Book not found." }, status: :not_found
     end
   end
 end
