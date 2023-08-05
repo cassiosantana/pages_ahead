@@ -8,7 +8,7 @@ module Api
     end
 
     def call
-      return if Assembly.where(id: ids).pluck(:id) == ids.to_a
+      return if Assembly.where(id: ids).pluck(:id) == ids&.map(&:to_i) || ids.nil?
 
       raise ActiveRecord::RecordNotFound, "One or more assemblies not found."
     end
