@@ -4,6 +4,7 @@ module Api
   class BooksController < ApplicationController
     skip_before_action :verify_authenticity_token, only: %i[create update destroy]
     before_action :set_book, only: %i[show update destroy]
+    before_action :verify_assembly, only: %i[create update]
 
     def index
       @books = Book.includes(:author, :assemblies).all
@@ -49,6 +50,12 @@ module Api
 
     def book_params
       params.require(:book).permit(:published_at, :author_id, assembly_ids: [])
+    end
+
+    def verify_assembly
+      Api::AssemblyVerifier.call(book_params[:assembly_ids])
+    rescue ActiveRecord::RecordNotFound => e
+      render json: { errors: e.message }, status: :unprocessable_entity
     end
   end
 end
