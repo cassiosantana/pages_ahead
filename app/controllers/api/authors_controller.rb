@@ -6,7 +6,7 @@ module Api
     before_action :set_author, only: %i[show update destroy]
 
     def index
-      @authors = Author.all
+      @authors = Author.includes(:books).all
     end
 
     def show; end
