@@ -55,7 +55,7 @@ module Api
     def verify_assembly
       Api::AssemblyVerifier.call(book_params[:assembly_ids])
     rescue ActiveRecord::RecordNotFound => e
-      render json: { message: e.message }, status: :not_found
+      render json: { errors: e.message }, status: :unprocessable_entity
     end
   end
 end
