@@ -3,23 +3,21 @@
 require "rails_helper"
 
 RSpec.describe "Api::Suppliers", type: :request do
-
-  shared_examples_for "a successful response" do
-    it { expect(response).to have_http_status(:ok) }
-  end
-
   describe "GET /api/suppliers" do
     let!(:suppliers) { create_list(:supplier, 5) }
 
-    before do
-      get "/api/suppliers"
-    end
-
-    include_examples "a successful response"
-
     it "returns a list of suppliers" do
+      get "/api/suppliers"
+
+      expect(response).to have_http_status(:ok)
       expect(json_response).to be_an(Array)
       expect(json_response.length).to eq(5)
+      ids = suppliers.map(&:id)
+      names = suppliers.map(&:name)
+      json_response.each do |supplier|
+        expect(ids).to include(supplier["id"])
+        expect(names).to include(supplier["name"])
+      end
     end
   end
 
@@ -31,9 +29,8 @@ RSpec.describe "Api::Suppliers", type: :request do
         get "/api/suppliers/#{supplier.id}"
       end
 
-      include_examples "a successful response"
-
       it "returns a supplier" do
+        expect(response).to have_http_status(:ok)
         expect(json_response["id"]).to eq(supplier.id)
         expect(json_response["name"]).to eq(supplier.name)
       end
@@ -86,8 +83,8 @@ RSpec.describe "Api::Suppliers", type: :request do
 
         expect(response).to have_http_status :ok
 
-        supplier.reload
-        expect(supplier.name).to eq("Updated supplier")
+        expect(json_response["id"]).to eq(supplier.id)
+        expect(json_response["name"]).to eq("Updated supplier")
       end
     end
 
