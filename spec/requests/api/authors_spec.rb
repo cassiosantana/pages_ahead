@@ -3,39 +3,43 @@
 require "rails_helper"
 
 RSpec.describe "Api::Authors", type: :request do
-
-  shared_examples_for "a successful response" do
-    it { expect(response).to have_http_status(:ok) }
-  end
-
   describe "GET /api/authors" do
     let!(:authors) { create_list(:author, 3) }
 
-    before do
-      get "/api/authors"
-    end
-
-    include_examples "a successful response"
-
     it "returns a list of authors" do
+      get "/api/authors"
+
+      expect(response).to have_http_status(:ok)
       expect(json_response).to be_an(Array)
       expect(json_response.length).to eq(authors.count)
+
+      json_response.each do |author|
+        expect(author["id"]).to be_present
+        expect(author["name"]).to be_present
+        expect(author["books"]).to be_an(Array)
+      end
     end
   end
 
   describe "GET /api/authors/:id" do
-    context "when author exist" do
+    context "when author exist and have associated books" do
       let!(:author) { create(:author) }
+      let!(:books) { create_list(:book, 3, author: author) }
 
       before do
         get "/api/authors/#{author.id}"
       end
 
-      include_examples "a successful response"
-
       it "returns the details of a specific author" do
         expect(json_response["id"]).to eq(author.id)
         expect(json_response["name"]).to eq(author.name)
+
+        book_ids = books.map(&:id)
+        book_published_ats = books.map(&:published_at)
+        json_response["books"].each do |book|
+          expect(book_ids).to include(book["id"])
+          expect(book_published_ats).to include(book["published_at"])
+        end
       end
     end
 
@@ -64,7 +68,10 @@ RSpec.describe "Api::Authors", type: :request do
           post "/api/authors", params: valid_author_params
         end.to change(Author, :count).by(1)
         expect(response).to have_http_status(:created)
+        expect(json_response["id"]).to be_present
         expect(json_response["name"]).to eq("New Author")
+        expect(json_response["books"]).to be_an(Array)
+        expect(json_response["books"]).to be_empty
       end
     end
 
@@ -103,8 +110,10 @@ RSpec.describe "Api::Authors", type: :request do
 
         expect(response).to have_http_status(:ok)
 
-        author.reload
-        expect(author.name).to eq("Updated author")
+        expect(json_response["id"]).to eq(author.id)
+        expect(json_response["name"]).to eq("Updated author")
+        expect(json_response["books"]).to be_an(Array)
+        expect(json_response["books"]).to be_empty
       end
     end
 
