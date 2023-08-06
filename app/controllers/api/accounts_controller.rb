@@ -13,6 +13,10 @@ module Api
 
     def set_account
       @account = Account.find_by(id: params[:id])
+
+      return if @account
+
+      render json: { message: "Account not found." }, status: :not_found
     end
   end
 end
