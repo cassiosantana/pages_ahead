@@ -7,7 +7,7 @@ RSpec.describe "Api::Accounts", type: :request do
     let!(:accounts) { create_list(:account, 3) }
 
     it "returns a list of accounts correctly" do
-      get "/api/accounts"
+      get api_accounts_path
 
       expect(response).to have_http_status :ok
       expect(json_response.length).to eq(Account.all.count)
@@ -25,7 +25,7 @@ RSpec.describe "Api::Accounts", type: :request do
       let!(:account) { create(:account) }
 
       it "show account data correctly" do
-        get "/api/accounts/#{account.id}"
+        get api_account_path(account)
 
         expect(response).to have_http_status :ok
         expect(json_response["id"]).to be_present
@@ -37,7 +37,7 @@ RSpec.describe "Api::Accounts", type: :request do
 
     context "when the account does not exist" do
       it "show error message" do
-        get "/api/accounts/-1"
+        get api_account_path(-1)
 
         expect(response).to have_http_status :not_found
         expect(json_response["message"]).to eq("Account not found.")
@@ -51,7 +51,7 @@ RSpec.describe "Api::Accounts", type: :request do
       let!(:valid_data) { { account: { account_number: "{#{rand(10_000..99_999)}}", supplier_id: supplier.id } } }
 
       it "the account is successfully created" do
-        post "/api/accounts", params: valid_data
+        post api_accounts_path, params: valid_data
 
         expect(response).to have_http_status :created
         expect(json_response["id"]).to be_present
@@ -66,7 +66,7 @@ RSpec.describe "Api::Accounts", type: :request do
       let!(:invalid_data) { { account: { account_number: "" } } }
 
       it "the account is not created successfully" do
-        post "/api/accounts", params: invalid_data
+        post api_accounts_path, params: invalid_data
 
         expect(response).to have_http_status :unprocessable_entity
         expect(json_response["errors"].length).to eq(2)
@@ -81,7 +81,7 @@ RSpec.describe "Api::Accounts", type: :request do
       let!(:account) { create(:account) }
 
       it "respond with an unprocessable entity status and a error message" do
-        patch "/api/accounts/#{account.id}", params: unauthorized_data
+        patch api_account_path(account), params: unauthorized_data
 
         expect(response).to have_http_status :unprocessable_entity
         expect(json_response["message"]).to eq("Update of account_number or supplier_id is not allowed.")
@@ -99,6 +99,41 @@ RSpec.describe "Api::Accounts", type: :request do
       let!(:unauthorized_data) { { account: { supplier_id: new_supplier.id } } }
 
       include_examples "an unauthorized update attempt"
+    end
+  end
+
+  describe "DELETE /api/accounts/:id" do
+    context "when trying to delete an account" do
+      let!(:account) { create(:account) }
+
+      it "the account will be deleted" do
+        delete api_account_path(account)
+
+        expect(response).to have_http_status :ok
+        expect(json_response["message"]).to eq("Account deleted successfully.")
+      end
+    end
+
+    context "when attempt to delete an non-existent account" do
+      it "we received an error message" do
+        delete api_account_path(-1)
+
+        expect(response).to have_http_status :not_found
+        expect(json_response["message"]).to eq("Account not found.")
+      end
+    end
+
+    context "when destroy method fails" do
+      let!(:account) { create(:account) }
+
+      it "returns unprocessable_entity status and error" do
+        allow_any_instance_of(Account).to receive(:destroy).and_return(false)
+
+        delete api_account_path(account)
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(json_response).to have_key("errors")
+      end
     end
   end
 end
