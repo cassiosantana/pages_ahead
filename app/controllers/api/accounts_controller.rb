@@ -2,8 +2,8 @@
 
 module Api
   class AccountsController < ApplicationController
-    skip_before_action :verify_authenticity_token, only: %i[create update]
-    before_action :set_account, only: %i[show update]
+    skip_before_action :verify_authenticity_token, only: %i[create update destroy]
+    before_action :set_account, only: %i[show update destroy]
     def index
       @accounts = Account.includes(:supplier).all
     end
@@ -26,6 +26,14 @@ module Api
                status: :unprocessable_entity
       elsif @account.update(account_params)
         render :update, status: :ok
+      else
+        render json: { errors: @account.errors.full_messages }, status: :unprocessable_entity
+      end
+    end
+
+    def destroy
+      if @account.destroy
+        render json: { message: "Account deleted successfully." }, status: :ok
       else
         render json: { errors: @account.errors.full_messages }, status: :unprocessable_entity
       end
