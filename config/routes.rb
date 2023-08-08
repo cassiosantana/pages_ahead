@@ -9,6 +9,6 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     resources :authors, :suppliers, :books, :accounts, only: %i[index show create update destroy]
-    resources :assemblies, only: %i[index]
+    resources :assemblies, only: %i[index show]
   end
 end
