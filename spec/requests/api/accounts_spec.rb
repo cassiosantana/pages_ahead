@@ -44,4 +44,35 @@ RSpec.describe "Api::Accounts", type: :request do
       end
     end
   end
+
+  describe "POST /api/accounts" do
+    context "when trying to create an account with valid data" do
+      let!(:supplier) { create(:supplier) }
+      let!(:valid_data) { { account: { account_number: "{#{rand(10_000..99_999)}}", supplier_id: supplier.id } } }
+
+      it "the account is successfully created" do
+        post "/api/accounts", params: valid_data
+
+        expect(response).to have_http_status :created
+        expect(json_response["id"]).to be_present
+        expect(json_response["number"]).to be_present
+        expect(Account.exists?(account_number: valid_data[:account][:account_number])).to eq(true)
+        expect(json_response["supplier"]["id"]).to eq(supplier.id)
+        expect(json_response["supplier"]["name"]).to eq(supplier.name)
+      end
+    end
+
+    context "when trying to create an account with invalid data" do
+      let!(:invalid_data) { { account: { account_number: "" } } }
+
+      it "the account is not created successfully" do
+        post "/api/accounts", params: invalid_data
+
+        expect(response).to have_http_status :unprocessable_entity
+        expect(json_response["errors"].length).to eq(2)
+        expect(json_response["errors"]).to include("Account number can't be blank")
+        expect(json_response["errors"]).to include("Supplier must exist")
+      end
+    end
+  end
 end
