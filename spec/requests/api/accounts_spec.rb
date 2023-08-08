@@ -75,4 +75,30 @@ RSpec.describe "Api::Accounts", type: :request do
       end
     end
   end
+
+  describe "PATCH /api/accounts/:id" do
+    shared_examples "an unauthorized update attempt" do
+      let!(:account) { create(:account) }
+
+      it "respond with an unprocessable entity status and a error message" do
+        patch "/api/accounts/#{account.id}", params: unauthorized_data
+
+        expect(response).to have_http_status :unprocessable_entity
+        expect(json_response["message"]).to eq("Update of account_number or supplier_id is not allowed.")
+      end
+    end
+
+    context "when attempting to change the account number which is not allowed" do
+      let!(:unauthorized_data) { { account: { account_number: rand(10_000..99_999).to_s } } }
+
+      include_examples "an unauthorized update attempt"
+    end
+
+    context "when attempting to change the account supplier which is not allowed" do
+      let!(:new_supplier) { create(:supplier) }
+      let!(:unauthorized_data) { { account: { supplier_id: new_supplier.id } } }
+
+      include_examples "an unauthorized update attempt"
+    end
+  end
 end
