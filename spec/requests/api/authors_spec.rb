@@ -7,7 +7,7 @@ RSpec.describe "Api::Authors", type: :request do
     let!(:authors) { create_list(:author, 3) }
 
     it "returns a list of authors" do
-      get "/api/authors"
+      get api_authors_path
 
       expect(response).to have_http_status(:ok)
       expect(json_response).to be_an(Array)
@@ -26,11 +26,9 @@ RSpec.describe "Api::Authors", type: :request do
       let!(:author) { create(:author) }
       let!(:books) { create_list(:book, 3, author: author) }
 
-      before do
-        get "/api/authors/#{author.id}"
-      end
-
       it "returns the details of a specific author" do
+        get api_author_path(author)
+
         expect(json_response["id"]).to eq(author.id)
         expect(json_response["name"]).to eq(author.name)
 
@@ -45,7 +43,7 @@ RSpec.describe "Api::Authors", type: :request do
 
     context "when the author does not exist" do
       it "returns an error message for non-existing author" do
-        get "/api/authors/-1"
+        get api_author_path(-1)
 
         expect(response).to have_http_status :not_found
         expect(json_response["message"]).to eq("Author not found.")
@@ -65,7 +63,7 @@ RSpec.describe "Api::Authors", type: :request do
 
       it "create author" do
         expect do
-          post "/api/authors", params: valid_author_params
+          post api_authors_path, params: valid_author_params
         end.to change(Author, :count).by(1)
         expect(response).to have_http_status(:created)
         expect(json_response["id"]).to be_present
@@ -86,7 +84,7 @@ RSpec.describe "Api::Authors", type: :request do
 
       it "does not create author" do
         expect do
-          post "/api/authors", params: invalid_author_params
+          post api_authors_path, params: invalid_author_params
         end.not_to change(Author, :count)
         expect(json_response["errors"]).to include("Name can't be blank")
         expect(response).to have_http_status(:unprocessable_entity)
@@ -106,7 +104,7 @@ RSpec.describe "Api::Authors", type: :request do
       end
 
       it "updates author" do
-        patch "/api/authors/#{author.id}", params: valid_author_params
+        patch api_author_path(author), params: valid_author_params
 
         expect(response).to have_http_status(:ok)
 
@@ -129,7 +127,7 @@ RSpec.describe "Api::Authors", type: :request do
 
       it "does not update the author" do
         expect do
-          patch "/api/authors/#{author.id}", params: invalid_author_params
+          patch api_author_path(author), params: invalid_author_params
         end.not_to change(author, :name)
         expect(response).to have_http_status(:unprocessable_entity)
         expect(json_response["errors"]).to include("Name can't be blank")
@@ -145,7 +143,7 @@ RSpec.describe "Api::Authors", type: :request do
         }
       end
       it "returns an error message for non-existing author" do
-        patch "/api/authors/-1", params: invalid_author_params
+        patch api_author_path(-1), params: invalid_author_params
 
         expect(response).to have_http_status(:not_found)
         expect(json_response["message"]).to eq("Author not found.")
@@ -159,7 +157,7 @@ RSpec.describe "Api::Authors", type: :request do
 
       it "deletes the author" do
         expect do
-          delete "/api/authors/#{author.id}"
+          delete api_author_path(author)
         end.to change(Author, :count).by(-1)
 
         expect(response).to have_http_status(:ok)
@@ -169,7 +167,7 @@ RSpec.describe "Api::Authors", type: :request do
 
     context "when author does not exist" do
       it "return an error message" do
-        delete "/api/authors/-1"
+        delete api_author_path(-1)
 
         expect(response).to have_http_status(:not_found)
         expect(json_response["message"]).to include("Author not found.")

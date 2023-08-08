@@ -7,7 +7,7 @@ RSpec.describe "Api::Suppliers", type: :request do
     let!(:suppliers) { create_list(:supplier, 5) }
 
     it "returns a list of suppliers" do
-      get "/api/suppliers"
+      get api_suppliers_path
 
       expect(response).to have_http_status(:ok)
       expect(json_response).to be_an(Array)
@@ -25,11 +25,9 @@ RSpec.describe "Api::Suppliers", type: :request do
     context "when supplier exist" do
       let!(:supplier) { create(:supplier) }
 
-      before do
-        get "/api/suppliers/#{supplier.id}"
-      end
-
       it "returns a supplier" do
+        get api_supplier_path(supplier)
+
         expect(response).to have_http_status(:ok)
         expect(json_response["id"]).to eq(supplier.id)
         expect(json_response["name"]).to eq(supplier.name)
@@ -38,7 +36,7 @@ RSpec.describe "Api::Suppliers", type: :request do
 
     context "when supplier does not exist" do
       it "return a error message" do
-        get "/api/suppliers/-1"
+        get api_supplier_path(-1)
 
         expect(response).to have_http_status :not_found
         expect(json_response["message"]).to eq("Supplier not found.")
@@ -52,7 +50,7 @@ RSpec.describe "Api::Suppliers", type: :request do
 
       it "create supplier" do
         expect do
-          post "/api/suppliers", params: valid_supplier_params
+          post api_suppliers_path, params: valid_supplier_params
         end.to change(Supplier, :count).by(1)
 
         expect(response).to have_http_status :created
@@ -65,7 +63,7 @@ RSpec.describe "Api::Suppliers", type: :request do
 
       it "does not create supplier" do
         expect do
-          post "/api/suppliers", params: invalid_supplier_params
+          post api_suppliers_path, params: invalid_supplier_params
         end.not_to change(Supplier, :count)
         expect(response).to have_http_status :unprocessable_entity
         expect(json_response["errors"]).to include("Name can't be blank")
@@ -79,7 +77,7 @@ RSpec.describe "Api::Suppliers", type: :request do
       let(:valid_supplier_params) { { supplier: { name: "Updated supplier" } } }
 
       it "the supplier will be updated" do
-        patch "/api/suppliers/#{supplier.id}", params: valid_supplier_params
+        patch api_supplier_path(supplier), params: valid_supplier_params
 
         expect(response).to have_http_status :ok
 
@@ -94,7 +92,7 @@ RSpec.describe "Api::Suppliers", type: :request do
 
       it "the supplier will not be updated" do
         expect do
-          patch "/api/suppliers/#{supplier.id}", params: invalid_supplier_params
+          patch api_supplier_path(supplier), params: invalid_supplier_params
         end.not_to change(supplier, :name)
         expect(response).to have_http_status :unprocessable_entity
         expect(json_response["errors"]).to include("Name can't be blank")
@@ -108,7 +106,7 @@ RSpec.describe "Api::Suppliers", type: :request do
 
       it "the supplier will be deleted" do
         expect do
-          delete "/api/suppliers/#{supplier.id}"
+          delete api_supplier_path(supplier)
         end.to change(Supplier, :count).by(-1)
         expect(response).to have_http_status :ok
         expect(json_response["message"]).to eq("Supplier deleted successfully.")
@@ -117,7 +115,7 @@ RSpec.describe "Api::Suppliers", type: :request do
 
     context "when supplier does not exists" do
       it "return an error message" do
-        delete "/api/suppliers/-1"
+        delete api_supplier_path(-1)
 
         expect(response).to have_http_status :not_found
         expect(json_response["message"]).to include("Supplier not found")

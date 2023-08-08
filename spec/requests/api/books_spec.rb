@@ -8,11 +8,9 @@ RSpec.describe "Api::Books", type: :request do
     let!(:author) { create(:author) }
     let!(:books) { create_list(:book, 5, author: author, assemblies: assemblies) }
 
-    before do
-      get "/api/books"
-    end
-
     it "returns a successful response and correct books data" do
+      get api_books_path
+
       expect(response).to have_http_status :ok
       expect(json_response).to be_an(Array)
       expect(json_response.length).to eq(books.count)
@@ -48,7 +46,7 @@ RSpec.describe "Api::Books", type: :request do
       let!(:author) { create(:author) }
       let!(:book) { create(:book, author: author, assemblies: assemblies) }
 
-      before { get "/api/books/#{book.id}" }
+      before { get api_book_path(book) }
 
       it_behaves_like "a book"
 
@@ -68,7 +66,7 @@ RSpec.describe "Api::Books", type: :request do
       let!(:author) { create(:author) }
       let!(:book) { create(:book, author: author) }
 
-      before { get "/api/books/#{book.id}" }
+      before { get api_book_path(book) }
 
       it_behaves_like "a book"
 
@@ -78,7 +76,7 @@ RSpec.describe "Api::Books", type: :request do
     end
 
     context "when book does not exist" do
-      before { get "/api/books/-1" }
+      before { get api_book_path(-1) }
 
       it "returns a not found status and correct error message" do
         expect(response).to have_http_status :not_found
@@ -101,7 +99,7 @@ RSpec.describe "Api::Books", type: :request do
         }
       end
 
-      subject { post "/api/books", params: valid_book_params }
+      subject { post api_books_path, params: valid_book_params }
 
       it "creates a new book and returns correct data" do
         expect { subject }.to change(Book, :count).by(1)
@@ -134,7 +132,7 @@ RSpec.describe "Api::Books", type: :request do
         }
       end
 
-      subject { post "/api/books", params: invalid_book_params }
+      subject { post api_books_path, params: invalid_book_params }
 
       it "does not create a new book and returns correct error messages" do
         expect { subject }.not_to change(Book, :count)
@@ -165,11 +163,9 @@ RSpec.describe "Api::Books", type: :request do
         }
       end
 
-      before do
-        patch "/api/books/#{book.id}", params: valid_book_params
-      end
-
       it "updates the book and returns correct data" do
+        patch api_book_path(book), params: valid_book_params
+
         expect(response).to have_http_status :ok
         expect(Time.iso8601(json_response["published_at"]).change(usec: 0))
           .to eq(valid_book_params[:book][:published_at].change(usec: 0))
@@ -191,11 +187,9 @@ RSpec.describe "Api::Books", type: :request do
         }
       end
 
-      before do
-        patch "/api/books/#{book.id}", params: invalid_book_params
-      end
-
       it "does not update the book and returns correct error messages" do
+        patch api_book_path(book), params: invalid_book_params
+
         expect(response).to have_http_status :unprocessable_entity
         expect(json_response["errors"]).to include("Author must exist")
         expect(json_response["errors"]).to include("Published at can't be blank")
@@ -208,7 +202,7 @@ RSpec.describe "Api::Books", type: :request do
       let!(:book) { create(:book) }
 
       it "returns correct status and delete the book" do
-        delete "/api/books/#{book.id}"
+        delete api_book_path(book)
 
         expect(response).to have_http_status :ok
         expect(json_response["message"]).to eq("Book deleted successfully")
@@ -217,7 +211,7 @@ RSpec.describe "Api::Books", type: :request do
 
     context "when trying to delete a non-existent book" do
       it "returns correct status and delete the book" do
-        delete "/api/books/-1"
+        delete api_book_path(-1)
 
         expect(response).to have_http_status :not_found
         expect(json_response["message"]).to eq("Book not found.")
