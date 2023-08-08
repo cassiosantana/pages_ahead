@@ -2,7 +2,7 @@
 
 module Api
   class AccountsController < ApplicationController
-    skip_before_action :verify_authenticity_token, only: %i[create]
+    skip_before_action :verify_authenticity_token, only: %i[create update]
     before_action :set_account, only: %i[show update]
     def index
       @accounts = Account.includes(:supplier).all
@@ -15,6 +15,17 @@ module Api
 
       if @account.save
         render :create, status: :created
+      else
+        render json: { errors: @account.errors.full_messages }, status: :unprocessable_entity
+      end
+    end
+
+    def update
+      if account_params.key?(:account_number) || account_params.key?(:supplier_id)
+        render json: { message: "Update of account_number or supplier_id is not allowed." },
+               status: :unprocessable_entity
+      elsif @account.update(account_params)
+        render :update, status: :ok
       else
         render json: { errors: @account.errors.full_messages }, status: :unprocessable_entity
       end
