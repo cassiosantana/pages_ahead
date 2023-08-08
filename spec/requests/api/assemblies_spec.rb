@@ -22,4 +22,27 @@ RSpec.describe "Api::Assemblies", type: :request do
       end
     end
   end
+
+  describe "GET /api/assemblies/:id" do
+    context "when assembly exist" do
+      let!(:assembly) { create(:assembly) }
+
+      it "show assembly data correctly" do
+        get api_assembly_path(assembly)
+
+        expect(response).to have_http_status :ok
+        expect(json_response["id"]).to eq(assembly.id)
+        expect(json_response["name"]).to eq(assembly.name)
+      end
+    end
+
+    context "when assembly does not exist" do
+      it "show assembly data correctly" do
+        get api_assembly_path(-1)
+
+        expect(response).to have_http_status :not_found
+        expect(json_response["message"]).to eq("Assembly not found.")
+      end
+    end
+  end
 end
