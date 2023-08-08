@@ -11,6 +11,6 @@ Rails.application.routes.draw do
     resources :authors, only: %i[index show create update destroy]
     resources :suppliers, only: %i[index show create update destroy]
     resources :books, only: %i[index show create update destroy]
-    resources :accounts, only: %i[index show]
+    resources :accounts, only: %i[index show create]
   end
 end
