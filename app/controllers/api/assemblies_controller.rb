@@ -2,5 +2,8 @@
 
 module Api
   class AssembliesController < ApplicationController
+    def index
+      @assemblies = Assembly.all
+    end
   end
 end
