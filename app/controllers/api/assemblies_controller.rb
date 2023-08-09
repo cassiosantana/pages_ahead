@@ -31,7 +31,7 @@ module Api
     end
 
     def assembly_params
-      params.require(:assembly).permit(:name)
+      params.require(:assembly).permit(:name, book_ids: [], part_ids: [])
     end
   end
 end
