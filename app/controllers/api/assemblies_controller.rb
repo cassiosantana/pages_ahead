@@ -2,8 +2,8 @@
 
 module Api
   class AssembliesController < ApplicationController
-    skip_before_action :verify_authenticity_token, only: %i[create]
-    before_action :set_assembly, only: %i[show]
+    skip_before_action :verify_authenticity_token, only: %i[create update]
+    before_action :set_assembly, only: %i[show update]
     def index
       @assemblies = Assembly.all
     end
@@ -15,6 +15,14 @@ module Api
 
       if @assembly.save
         render :create, status: :created
+      else
+        render json: { errors: @assembly.errors.full_messages }, status: :unprocessable_entity
+      end
+    end
+
+    def update
+      if @assembly.update(assembly_params)
+        render :update, status: :ok
       else
         render json: { errors: @assembly.errors.full_messages }, status: :unprocessable_entity
       end
