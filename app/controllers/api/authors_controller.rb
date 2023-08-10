@@ -31,9 +31,9 @@ module Api
 
     def destroy
       if @author.destroy
-        render json: { message: "Author deleted successfully." }, status: :ok
+        head :no_content
       else
-        render json: { errors: @author.errors.full_messages }, status: :unprocessable_entity
+        render json: { message: "Failed to delete the author." }, status: :unprocessable_entity
       end
     end
 
