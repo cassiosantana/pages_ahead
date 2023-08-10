@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "Api::Assemblies", type: :request do
-  let!(:assemblies) { create_list(:assembly, rand(1..10)) }
+  let!(:assemblies) { create_list(:assembly, rand(5..10)) }
   let!(:supplier) { create(:supplier) }
   let!(:parts) { create_list(:part, rand(1..10), supplier: supplier) }
   let!(:books) { create_list(:book, rand(1..10)) }
@@ -133,6 +133,36 @@ RSpec.describe "Api::Assemblies", type: :request do
 
         expect(response).to have_http_status :unprocessable_entity
         expect(json_response["errors"]).to include("Name can't be blank")
+      end
+    end
+  end
+
+  describe "DELETE /api/assemblies/:id" do
+    context "when trying to delete an existing assembly" do
+      it "the assembly is deleted successfully" do
+        delete api_assembly_path(assemblies.last)
+
+        expect(response).to have_http_status :no_content
+      end
+    end
+
+    context "when trying to delete an assembly" do
+      it "when trying to delete a non-existent assembly" do
+        delete api_assembly_path(-1)
+
+        expect(response).to have_http_status :not_found
+        expect(json_response["message"]).to eq("Assembly not found.")
+      end
+    end
+
+    context "when trying to delete an assembly" do
+      it "when trying to delete a non-existent assembly" do
+        allow_any_instance_of(Assembly).to receive(:destroy).and_return(false)
+
+        delete api_assembly_path(assemblies.last)
+
+        expect(response).to have_http_status :unprocessable_entity
+        expect(json_response["message"]).to eq("Failed to delete the assembly.")
       end
     end
   end
