@@ -109,8 +109,7 @@ RSpec.describe "Api::Accounts", type: :request do
       it "the account will be deleted" do
         delete api_account_path(account)
 
-        expect(response).to have_http_status :ok
-        expect(json_response["message"]).to eq("Account deleted successfully.")
+        expect(response).to have_http_status :no_content
       end
     end
 
@@ -123,16 +122,16 @@ RSpec.describe "Api::Accounts", type: :request do
       end
     end
 
-    context "when destroy method fails" do
+    context "when deleting account fails" do
       let!(:account) { create(:account) }
 
-      it "returns unprocessable_entity status and error" do
+      it "we received the status and error message correctly" do
         allow_any_instance_of(Account).to receive(:destroy).and_return(false)
 
         delete api_account_path(account)
 
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(json_response).to have_key("errors")
+        expect(response).to have_http_status :unprocessable_entity
+        expect(json_response["message"]).to eq("Failed to delete the account.")
       end
     end
   end
