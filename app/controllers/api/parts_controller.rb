@@ -9,6 +9,16 @@ module Api
 
     def show; end
 
+    def create
+      @part = Part.new(part_params)
+
+      if @part.save
+        render :create, status: :created
+      else
+        render json: { errors: @part.errors.full_messages }, status: :unprocessable_entity
+      end
+    end
+
     private
 
     def set_part
@@ -17,6 +27,10 @@ module Api
       return if @part
 
       render json: { message: "Part not found." }, status: :not_found
+    end
+
+    def part_params
+      params.require(:part).permit(:part_number, :supplier_id)
     end
   end
 end
