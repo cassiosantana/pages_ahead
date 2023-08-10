@@ -2,8 +2,8 @@
 
 module Api
   class AssembliesController < ApplicationController
-    skip_before_action :verify_authenticity_token, only: %i[create update]
-    before_action :set_assembly, only: %i[show update]
+    skip_before_action :verify_authenticity_token, only: %i[create update destroy]
+    before_action :set_assembly, only: %i[show update destroy]
     def index
       @assemblies = Assembly.all
     end
@@ -25,6 +25,14 @@ module Api
         render :update, status: :ok
       else
         render json: { errors: @assembly.errors.full_messages }, status: :unprocessable_entity
+      end
+    end
+
+    def destroy
+      if @assembly.destroy
+        head :no_content
+      else
+        render json: { message: "Failed to delete the assembly." }, status: :unprocessable_entity
       end
     end
 
