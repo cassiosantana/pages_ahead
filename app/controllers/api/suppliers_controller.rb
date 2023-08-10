@@ -31,9 +31,9 @@ module Api
 
     def destroy
       if @supplier.destroy
-        render json: { message: "Supplier deleted successfully." }, status: :ok
+        head :no_content
       else
-        render json: { errors: @supplier.errors.full_messages }, status: :unprocessable_entity
+        render json: { message: "Failed to delete the supplier." }, status: :unprocessable_entity
       end
     end
 
