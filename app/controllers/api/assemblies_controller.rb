@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 module Api
-  class AssembliesController < ApplicationController
-    skip_before_action :verify_authenticity_token, only: %i[create update destroy]
+  class AssembliesController < Api::ApiController
     before_action :set_assembly, only: %i[show update destroy]
     def index
       @assemblies = Assembly.all

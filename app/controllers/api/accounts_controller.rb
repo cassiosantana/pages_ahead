@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 module Api
-  class AccountsController < ApplicationController
-    skip_before_action :verify_authenticity_token, only: %i[create update destroy]
+  class AccountsController < Api::ApiController
     before_action :set_account, only: %i[show update destroy]
     def index
       @accounts = Account.includes(:supplier).all

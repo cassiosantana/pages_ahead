@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 module Api
-  class BooksController < ApplicationController
-    skip_before_action :verify_authenticity_token, only: %i[create update destroy]
+  class BooksController < Api::ApiController
     before_action :set_book, only: %i[show update destroy]
     before_action :verify_assembly, only: %i[create update]
 
