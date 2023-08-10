@@ -204,8 +204,7 @@ RSpec.describe "Api::Books", type: :request do
       it "returns correct status and delete the book" do
         delete api_book_path(book)
 
-        expect(response).to have_http_status :ok
-        expect(json_response["message"]).to eq("Book deleted successfully")
+        expect(response).to have_http_status :no_content
       end
     end
 
@@ -215,6 +214,19 @@ RSpec.describe "Api::Books", type: :request do
 
         expect(response).to have_http_status :not_found
         expect(json_response["message"]).to eq("Book not found.")
+      end
+    end
+
+    context "when deleting book fails" do
+      let!(:book) { create(:book) }
+
+      it "we received the status and error message correctly" do
+        allow_any_instance_of(Book).to receive(:destroy).and_return(false)
+
+        delete api_book_path(book)
+
+        expect(response).to have_http_status :unprocessable_entity
+        expect(json_response["message"]).to eq("Failed to delete the book.")
       end
     end
   end
