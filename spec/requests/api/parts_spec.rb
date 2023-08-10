@@ -22,4 +22,25 @@ RSpec.describe "Api::Parts", type: :request do
       end
     end
   end
+
+  describe "GET /api/part/:id" do
+    context "when trying to show a specific part" do
+      it "it is displayed correctly" do
+        part = parts.first
+        get api_part_path(part)
+
+        expect(response).to have_http_status :ok
+        expect(json_response["id"]).to eq(part.id)
+      end
+    end
+
+    context "when trying to display a part that does not exist" do
+      it "we received the status and message correctly" do
+        get api_part_path(-1)
+
+        expect(response).to have_http_status :not_found
+        expect(json_response["message"]).to eq("Part not found.")
+      end
+    end
+  end
 end
