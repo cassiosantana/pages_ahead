@@ -155,8 +155,8 @@ RSpec.describe "Api::Assemblies", type: :request do
       end
     end
 
-    context "when trying to delete an assembly" do
-      it "when trying to delete a non-existent assembly" do
+    context "when deleting assembly fails" do
+      it "we received the status and error message correctly" do
         allow_any_instance_of(Assembly).to receive(:destroy).and_return(false)
 
         delete api_assembly_path(assemblies.last)

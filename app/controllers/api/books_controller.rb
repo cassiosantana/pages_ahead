@@ -32,9 +32,9 @@ module Api
 
     def destroy
       if @book.destroy
-        render json: { message: "Book deleted successfully" }, status: :ok
+        head :no_content
       else
-        render json: { errors: @book.errors.full_messages }, status: :unprocessable_entity
+        render json: { message: "Failed to delete the book." }, status: :unprocessable_entity
       end
     end
 

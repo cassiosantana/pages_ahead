@@ -160,8 +160,7 @@ RSpec.describe "Api::Authors", type: :request do
           delete api_author_path(author)
         end.to change(Author, :count).by(-1)
 
-        expect(response).to have_http_status(:ok)
-        expect(json_response["message"]).to include("Author deleted successfully.")
+        expect(response).to have_http_status :no_content
       end
     end
 
@@ -171,6 +170,19 @@ RSpec.describe "Api::Authors", type: :request do
 
         expect(response).to have_http_status(:not_found)
         expect(json_response["message"]).to include("Author not found.")
+      end
+    end
+
+    context "when deleting author fails" do
+      let!(:author) { create(:author) }
+
+      it "we received the status and error message correctly" do
+        allow_any_instance_of(Author).to receive(:destroy).and_return(false)
+
+        delete api_author_path(author)
+
+        expect(response).to have_http_status :unprocessable_entity
+        expect(json_response["message"]).to eq("Failed to delete the author.")
       end
     end
   end

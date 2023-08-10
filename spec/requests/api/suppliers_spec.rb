@@ -108,8 +108,7 @@ RSpec.describe "Api::Suppliers", type: :request do
         expect do
           delete api_supplier_path(supplier)
         end.to change(Supplier, :count).by(-1)
-        expect(response).to have_http_status :ok
-        expect(json_response["message"]).to eq("Supplier deleted successfully.")
+        expect(response).to have_http_status :no_content
       end
     end
 
@@ -119,6 +118,19 @@ RSpec.describe "Api::Suppliers", type: :request do
 
         expect(response).to have_http_status :not_found
         expect(json_response["message"]).to include("Supplier not found")
+      end
+    end
+
+    context "when deleting supplier fails" do
+      let!(:supplier) { create(:supplier) }
+
+      it "we received the status and error message correctly" do
+        allow_any_instance_of(Supplier).to receive(:destroy).and_return(false)
+
+        delete api_supplier_path(supplier)
+
+        expect(response).to have_http_status :unprocessable_entity
+        expect(json_response["message"]).to eq("Failed to delete the supplier.")
       end
     end
   end

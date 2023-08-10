@@ -33,9 +33,9 @@ module Api
 
     def destroy
       if @account.destroy
-        render json: { message: "Account deleted successfully." }, status: :ok
+        head :no_content
       else
-        render json: { errors: @account.errors.full_messages }, status: :unprocessable_entity
+        render json: { message: "Failed to delete the account." }, status: :unprocessable_entity
       end
     end
 
