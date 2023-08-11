@@ -57,5 +57,16 @@ RSpec.describe "Api::Parts", type: :request do
         expect(json_response["supplier"]["name"]).to eq(supplier.name)
       end
     end
+
+    context "when trying to create an part with invalid data" do
+      let!(:invalid_data) { { part: { part_number: "", supplier_id: nil } } }
+      it "we received the status and message correctly" do
+        post api_parts_path, params: invalid_data
+
+        expect(response).to have_http_status :unprocessable_entity
+        expect(json_response["errors"]).to include("Part number can't be blank")
+        expect(json_response["errors"]).to include("Supplier must exist")
+      end
+    end
   end
 end
