@@ -77,28 +77,29 @@ RSpec.describe "Api::Accounts", type: :request do
   end
 
   describe "PATCH /api/accounts/:id" do
-    shared_examples "an unauthorized update attempt" do
-      let!(:account) { create(:account) }
+    let!(:account) { create(:account) }
+
+    before do
+      patch api_account_path(account), params: unauthorized_data
+    end
+
+    context "when attempting to change the account number" do
+      let!(:unauthorized_data) { { account: { account_number: rand(10_000..99_999).to_s } } }
 
       it "respond with an unprocessable entity status and a error message" do
-        patch api_account_path(account), params: unauthorized_data
-
         expect(response).to have_http_status :unprocessable_entity
-        expect(json_response["message"]).to eq("Update of account_number or supplier_id is not allowed.")
+        expect(json_response["errors"]).to include("Account number cannot be updated")
       end
     end
 
-    context "when attempting to change the account number which is not allowed" do
-      let!(:unauthorized_data) { { account: { account_number: rand(10_000..99_999).to_s } } }
+    context "when attempting to change the account supplier" do
+      let!(:unauthorized_data) { { account: { supplier_id: -1 } } }
 
-      include_examples "an unauthorized update attempt"
-    end
-
-    context "when attempting to change the account supplier which is not allowed" do
-      let!(:new_supplier) { create(:supplier) }
-      let!(:unauthorized_data) { { account: { supplier_id: new_supplier.id } } }
-
-      include_examples "an unauthorized update attempt"
+      it "respond with an unprocessable entity status and error messages" do
+        expect(response).to have_http_status :unprocessable_entity
+        expect(json_response["errors"]).to include("Supplier cannot be updated")
+        expect(json_response["errors"]).to include("Supplier must exist")
+      end
     end
   end
 
