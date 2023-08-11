@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Api
-  class PartsController < Api::ApiController
-    before_action :set_part, only: %i[show update]
+  class PartsController < ApiController
+    before_action :set_part, only: %i[show update destroy]
     before_action :verify_assembly, only: %i[create update]
 
     def index
@@ -14,29 +14,28 @@ module Api
     def create
       @part = Part.new(part_params)
 
-      if @part.save
-        render :create, status: :created
-      else
-        render json: { errors: @part.errors.full_messages }, status: :unprocessable_entity
-      end
+      return render :create, status: :created if @part.save
+
+      render json: { errors: @part.errors.full_messages }, status: :unprocessable_entity
     end
 
     def update
-      if @part.update(part_params)
-        render :update, status: :ok
-      else
-        render json: { errors: @part.errors.full_messages }, status: :unprocessable_entity
-      end
+      return render :update, status: :ok if @part.update(part_params)
+
+      render json: { errors: @part.errors.full_messages }, status: :unprocessable_entity
+    end
+
+    def destroy
+      return head(:no_content) if @part.destroy
+
+      render json: { message: "Failed to delete the part." }, status: :unprocessable_entity
     end
 
     private
 
     def set_part
       @part = Part.find_by(id: params[:id])
-
-      return if @part
-
-      render json: { message: "Part not found." }, status: :not_found
+      render json: { message: "Part not found." }, status: :not_found unless @part
     end
 
     def part_params
