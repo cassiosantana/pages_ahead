@@ -126,4 +126,36 @@ RSpec.describe "Api::Parts", type: :request do
       end
     end
   end
+
+  describe "DELETE /api/parts/:id" do
+    context "when trying to delete a part and we are successful" do
+      it "we receive the correct status" do
+        part = parts.last
+        delete api_part_path(part)
+
+        expect(response).to have_http_status :no_content
+      end
+    end
+
+    context "when trying to delete a part that does not exist" do
+      it "we receive the correct status and message" do
+        delete api_part_path(-1)
+
+        expect(response).to have_http_status :not_found
+        expect(json_response["message"]).to include("Part not found.")
+      end
+    end
+
+    context "when deleting book fails" do
+      it "we received the status and error message correctly" do
+        allow_any_instance_of(Part).to receive(:destroy).and_return(false)
+
+        part = parts.last
+        delete api_part_path(part)
+
+        expect(response).to have_http_status :unprocessable_entity
+        expect(json_response["message"]).to eq("Failed to delete the part.")
+      end
+    end
+  end
 end
