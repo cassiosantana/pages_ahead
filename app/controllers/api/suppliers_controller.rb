@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 module Api
-  class SuppliersController < ApplicationController
-    skip_before_action :verify_authenticity_token
+  class SuppliersController < Api::ApiController
     before_action :set_supplier, only: %i[show update destroy]
 
     def index
