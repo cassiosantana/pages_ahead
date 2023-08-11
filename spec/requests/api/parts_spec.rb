@@ -32,6 +32,7 @@ RSpec.describe "Api::Parts", type: :request do
 
         expect(response).to have_http_status :ok
         expect(json_response["id"]).to eq(part.id)
+        expect(json_response["number"]).to eq(part.part_number)
       end
     end
 
@@ -66,6 +67,62 @@ RSpec.describe "Api::Parts", type: :request do
         expect(response).to have_http_status :unprocessable_entity
         expect(json_response["errors"]).to include("Part number can't be blank")
         expect(json_response["errors"]).to include("Supplier must exist")
+      end
+    end
+  end
+
+  describe "PATCH /api/parts/:id" do
+    context "when trying to update an part with valid data" do
+      let!(:assemblies) { create_list(:assembly, 3) }
+      let!(:valid_data) { { part: { part_number: rand(1000..9999), assembly_ids: assemblies.pluck(:id) } } }
+
+      it "the part is updated successfully" do
+        part = parts.last
+        patch api_part_path(part), params: valid_data
+
+        part.reload
+        expect(response).to have_http_status :ok
+        expect(json_response["id"]).to eq(part.id)
+        expect(json_response["number"]).to eq(part.part_number)
+      end
+    end
+
+    context "when trying to change the supplier that is readonly" do
+      let!(:new_supplier) { create(:supplier) }
+      let!(:invalid_data) { { part: { supplier_id: new_supplier.id } } }
+
+      it "the part will not be updated" do
+        part = parts.last
+        patch api_part_path(part), params: invalid_data
+
+        part.reload
+        expect(response).to have_http_status :ok
+        expect(json_response["id"]).to eq(part.id)
+        expect(json_response["id"]).not_to eq(new_supplier.id)
+      end
+    end
+
+    context "when trying to change the part name to an empty value" do
+      let!(:invalid_data) { { part: { part_number: "" } } }
+
+      it "we received the status and message correctly" do
+        part = parts.last
+        patch api_part_path(part), params: invalid_data
+
+        expect(response).to have_http_status :unprocessable_entity
+        expect(json_response["errors"]).to include("Part number can't be blank")
+      end
+    end
+
+    context "when trying to update with a non-existing assembly" do
+      let!(:invalid_data) { { part: { assembly_ids: [-1] } } }
+
+      it "we received the status and message correctly" do
+        part = parts.last
+        patch api_part_path(part), params: invalid_data
+
+        expect(response).to have_http_status :unprocessable_entity
+        expect(json_response["errors"]).to eq("One or more assemblies not found.")
       end
     end
   end
