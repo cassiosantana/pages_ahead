@@ -2,7 +2,9 @@
 
 module Api
   class PartsController < Api::ApiController
-    before_action :set_part, only: %i[show]
+    before_action :set_part, only: %i[show update]
+    before_action :verify_assembly, only: %i[create update]
+
     def index
       @parts = Part.all
     end
@@ -19,6 +21,14 @@ module Api
       end
     end
 
+    def update
+      if @part.update(part_params)
+        render :update, status: :ok
+      else
+        render json: { errors: @part.errors.full_messages }, status: :unprocessable_entity
+      end
+    end
+
     private
 
     def set_part
@@ -30,7 +40,13 @@ module Api
     end
 
     def part_params
-      params.require(:part).permit(:part_number, :supplier_id)
+      params.require(:part).permit(:part_number, :supplier_id, assembly_ids: [])
+    end
+
+    def verify_assembly
+      Api::AssemblyVerifier.call(part_params[:assembly_ids])
+    rescue ActiveRecord::RecordNotFound => e
+      render json: { errors: e.message }, status: :unprocessable_entity
     end
   end
 end
