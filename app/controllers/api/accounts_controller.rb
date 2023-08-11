@@ -3,6 +3,7 @@
 module Api
   class AccountsController < Api::ApiController
     before_action :set_account, only: %i[show update destroy]
+
     def index
       @accounts = Account.includes(:supplier).all
     end
@@ -12,30 +13,21 @@ module Api
     def create
       @account = Account.new(account_params)
 
-      if @account.save
-        render :create, status: :created
-      else
-        render json: { errors: @account.errors.full_messages }, status: :unprocessable_entity
-      end
+      return render :create, status: :created if @account.save
+
+      render json: { errors: @account.errors.full_messages }, status: :unprocessable_entity
     end
 
     def update
-      if account_params.key?(:account_number) || account_params.key?(:supplier_id)
-        render json: { message: "Update of account_number or supplier_id is not allowed." },
-               status: :unprocessable_entity
-      elsif @account.update(account_params)
-        render :update, status: :ok
-      else
-        render json: { errors: @account.errors.full_messages }, status: :unprocessable_entity
-      end
+      return render :update, status: :ok if @account.update(account_params)
+
+      render json: { errors: @account.errors.full_messages }, status: :unprocessable_entity
     end
 
     def destroy
-      if @account.destroy
-        head :no_content
-      else
-        render json: { message: "Failed to delete the account." }, status: :unprocessable_entity
-      end
+      return head :no_content if @account.destroy
+
+      render json: { message: "Failed to delete the account." }, status: :unprocessable_entity
     end
 
     private
@@ -43,9 +35,7 @@ module Api
     def set_account
       @account = Account.find_by(id: params[:id])
 
-      return if @account
-
-      render json: { message: "Account not found." }, status: :not_found
+      render json: { message: "Account not found." }, status: :not_found unless @account
     end
 
     def account_params
