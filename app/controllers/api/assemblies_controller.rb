@@ -12,27 +12,21 @@ module Api
     def create
       @assembly = Assembly.new(assembly_params)
 
-      if @assembly.save
-        render :create, status: :created
-      else
-        render json: { errors: @assembly.errors.full_messages }, status: :unprocessable_entity
-      end
+      return render :create, status: :created if @assembly.save
+
+      render json: { errors: @assembly.errors.full_messages }, status: :unprocessable_entity
     end
 
     def update
-      if @assembly.update(assembly_params)
-        render :update, status: :ok
-      else
-        render json: { errors: @assembly.errors.full_messages }, status: :unprocessable_entity
-      end
+      return render :update, status: :ok if @assembly.update(assembly_params)
+
+      render json: { errors: @assembly.errors.full_messages }, status: :unprocessable_entity
     end
 
     def destroy
-      if @assembly.destroy
-        head :no_content
-      else
-        render json: { message: "Failed to delete the assembly." }, status: :unprocessable_entity
-      end
+      return head :no_content if @assembly.destroy
+
+      render json: { message: "Failed to delete the assembly." }, status: :unprocessable_entity
     end
 
     private
@@ -40,9 +34,7 @@ module Api
     def set_assembly
       @assembly = Assembly.find_by(id: params[:id])
 
-      return if @assembly
-
-      render json: { message: "Assembly not found." }, status: :not_found
+      render json: { message: "Assembly not found." }, status: :not_found unless @assembly
     end
 
     def assembly_params

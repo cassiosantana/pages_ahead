@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Api
-  class PartsController < ApiController
+  class PartsController < Api::ApiController
     before_action :set_part, only: %i[show update destroy]
     before_action :verify_assembly, only: %i[create update]
 
@@ -35,6 +35,7 @@ module Api
 
     def set_part
       @part = Part.find_by(id: params[:id])
+
       render json: { message: "Part not found." }, status: :not_found unless @part
     end
 
@@ -43,7 +44,7 @@ module Api
     end
 
     def verify_assembly
-      Api::AssemblyVerifier.call(part_params[:assembly_ids])
+      Api::AssemblyVerifier.call(part_params[:assembly_ids]) if part_params[:assembly_ids].present?
     rescue ActiveRecord::RecordNotFound => e
       render json: { errors: e.message }, status: :unprocessable_entity
     end

@@ -14,27 +14,21 @@ module Api
     def create
       @book = Book.new(book_params)
 
-      if @book.save
-        render :create, status: :created
-      else
-        render json: { errors: @book.errors.full_messages }, status: :unprocessable_entity
-      end
+      return render :create, status: :created if @book.save
+
+      render json: { errors: @book.errors.full_messages }, status: :unprocessable_entity
     end
 
     def update
-      if @book.update(book_params)
-        render :update, status: :ok
-      else
-        render json: { errors: @book.errors.full_messages }, status: :unprocessable_entity
-      end
+      return render :update, status: :ok if @book.update(book_params)
+
+      render json: { errors: @book.errors.full_messages }, status: :unprocessable_entity
     end
 
     def destroy
-      if @book.destroy
-        head :no_content
-      else
-        render json: { message: "Failed to delete the book." }, status: :unprocessable_entity
-      end
+      return head :no_content if @book.destroy
+
+      render json: { message: "Failed to delete the book." }, status: :unprocessable_entity
     end
 
     private
@@ -42,9 +36,7 @@ module Api
     def set_book
       @book = Book.find_by(id: params[:id])
 
-      return if @book
-
-      render json: { message: "Book not found." }, status: :not_found
+      render json: { message: "Book not found." }, status: :not_found unless @book
     end
 
     def book_params
@@ -52,7 +44,7 @@ module Api
     end
 
     def verify_assembly
-      Api::AssemblyVerifier.call(book_params[:assembly_ids])
+      Api::AssemblyVerifier.call(book_params[:assembly_ids]) if book_params[:assembly_ids].present?
     rescue ActiveRecord::RecordNotFound => e
       render json: { errors: e.message }, status: :unprocessable_entity
     end
