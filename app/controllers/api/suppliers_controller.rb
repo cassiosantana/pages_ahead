@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 module Api
-  class SuppliersController < ApplicationController
-    skip_before_action :verify_authenticity_token
+  class SuppliersController < Api::ApiController
     before_action :set_supplier, only: %i[show update destroy]
 
     def index
@@ -14,27 +13,21 @@ module Api
     def create
       @supplier = Supplier.new(supplier_params)
 
-      if @supplier.save
-        render :create, status: :created
-      else
-        render json: { errors: @supplier.errors.full_messages }, status: :unprocessable_entity
-      end
+      return render :create, status: :created if @supplier.save
+
+      render json: { errors: @supplier.errors.full_messages }, status: :unprocessable_entity
     end
 
     def update
-      if @supplier.update(supplier_params)
-        render :update, status: :ok
-      else
-        render json: { errors: @supplier.errors.full_messages }, status: :unprocessable_entity
-      end
+      return render :update, status: :ok if @supplier.update(supplier_params)
+
+      render json: { errors: @supplier.errors.full_messages }, status: :unprocessable_entity
     end
 
     def destroy
-      if @supplier.destroy
-        render json: { message: "Supplier deleted successfully." }, status: :ok
-      else
-        render json: { errors: @supplier.errors.full_messages }, status: :unprocessable_entity
-      end
+      return head :no_content if @supplier.destroy
+
+      render json: { message: "Failed to delete the supplier." }, status: :unprocessable_entity
     end
 
     private
@@ -42,9 +35,7 @@ module Api
     def set_supplier
       @supplier = Supplier.find_by(id: params[:id])
 
-      return if @supplier
-
-      render json: { message: "Supplier not found." }, status: :not_found
+      render json: { message: "Supplier not found." }, status: :not_found unless @supplier
     end
 
     def supplier_params

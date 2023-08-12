@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 module Api
-  class AuthorsController < ApplicationController
-    skip_before_action :verify_authenticity_token, only: %i[create update destroy]
+  class AuthorsController < Api::ApiController
     before_action :set_author, only: %i[show update destroy]
 
     def index
@@ -14,27 +13,21 @@ module Api
     def create
       @author = Author.new(author_params)
 
-      if @author.save
-        render :create, status: :created
-      else
-        render json: { errors: @author.errors.full_messages }, status: :unprocessable_entity
-      end
+      return render :create, status: :created if @author.save
+
+      render json: { errors: @author.errors.full_messages }, status: :unprocessable_entity
     end
 
     def update
-      if @author.update(author_params)
-        render :update, status: :ok
-      else
-        render json: { errors: @author.errors.full_messages }, status: :unprocessable_entity
-      end
+      return render :update, status: :ok if @author.update(author_params)
+
+      render json: { errors: @author.errors.full_messages }, status: :unprocessable_entity
     end
 
     def destroy
-      if @author.destroy
-        render json: { message: "Author deleted successfully." }, status: :ok
-      else
-        render json: { errors: @author.errors.full_messages }, status: :unprocessable_entity
-      end
+      return head :no_content if @author.destroy
+
+      render json: { message: "Failed to delete the author." }, status: :unprocessable_entity
     end
 
     private
@@ -42,9 +35,7 @@ module Api
     def set_author
       @author = Author.find_by(id: params[:id])
 
-      return if @author
-
-      render json: { message: "Author not found." }, status: :not_found
+      render json: { message: "Author not found." }, status: :not_found unless @author
     end
 
     def author_params
