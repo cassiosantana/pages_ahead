@@ -6,7 +6,6 @@ RSpec.describe Supplier, type: :model do
   let!(:supplier) { create(:supplier) }
 
   describe "validations" do
-
     it "is valid with a name" do
       expect(supplier).to be_valid
     end
@@ -18,21 +17,37 @@ RSpec.describe Supplier, type: :model do
     end
   end
 
-  describe "editing" do
-    context "when editing supplier name" do
-      it "the name is changed" do
-        original_name = supplier.name
-        supplier.name = "#{original_name} new_name"
-        supplier.save
-
-        expect(supplier.reload.name).to_not eq(original_name)
+  describe "creating" do
+    context "when trying to create a supplier with valid data" do
+      it "it will be created successfully" do
+        expect { create(:supplier) }.to change(Supplier, :count).by(1)
+        expect(Supplier.last.name).to be_present
+        expect(Supplier.last.cnpj).to be_present
       end
+    end
+  end
+
+  describe "editing" do
+    context "when trying to edit supplier with valid attributes" do
+      let(:new_attributes) { attributes_for(:supplier) }
+
+      it "the attributes is changed" do
+        supplier.update(new_attributes)
+        supplier.reload
+
+        expect(supplier.name).to eq(new_attributes[:name])
+        expect(supplier.cnpj).to eq(new_attributes[:cnpj])
+      end
+    end
+
+    context "when trying to edit supplier with invalid attributes" do
+      let(:invalid_attributes) { attributes_for(:supplier, name: "") }
 
       it "the name is not changed" do
-        supplier.name = ""
-        supplier.save
+        supplier.update(invalid_attributes)
+        supplier.reload
 
-        expect(supplier.reload.name).not_to eq("")
+        expect(supplier.changed?).to eq(false)
       end
     end
   end
