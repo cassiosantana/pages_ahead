@@ -8,13 +8,13 @@ RSpec.describe "suppliers/show", type: :view do
   let(:account) { create(:account, supplier: supplier) }
   let(:supplier_without_associations) { create(:supplier) }
 
-  it "render supplier name" do
+  it "render supplier attributes" do
     assign(:supplier, supplier)
     render
 
     expect(rendered).to have_text(supplier.name)
+    expect(rendered).to have_text(supplier.cnpj)
   end
-
 
   context "when the supplier has no associations" do
     before(:each) do
