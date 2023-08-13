@@ -4,7 +4,7 @@ class Supplier < ApplicationRecord
   has_one :account, dependent: :destroy
   has_many :parts, dependent: :destroy
 
-  attr_readonly :account
+  attr_readonly :account, :part
 
   validates :name, presence: true
 end
