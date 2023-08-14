@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_18_024503) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_12_153131) do
   create_table "accounts", force: :cascade do |t|
     t.integer "supplier_id", null: false
     t.string "account_number"
@@ -69,6 +69,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_18_024503) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "cnpj"
   end
 
   add_foreign_key "accounts", "suppliers"

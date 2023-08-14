@@ -18,7 +18,8 @@ RSpec.describe "suppliers/edit", type: :view do
 
   it "render the supplier form" do
     expect(rendered).to have_selector("form[action='#{supplier_path(supplier)}'][method='post']") do
-      expect(rendered).to have_selector("input[type='text'][name='supplier[name]'][value='#{supplier.name}']")
+      expect(rendered).to have_selector("input[type='text'][name='supplier[name]'][value=\"#{supplier.name}\"]")
+      expect(rendered).to have_selector("input[type='text'][name='supplier[cnpj]'][value=\"#{supplier.cnpj}\"]")
       expect_submit_button("Update Supplier")
     end
   end
