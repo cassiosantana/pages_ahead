@@ -22,7 +22,7 @@ ActiveRecord::Base.connection.execute("DELETE FROM assemblies_parts")
 end
 
 5.times do
-  Supplier.create(name: FFaker::Name.name, cnpj: FFaker::IdentificationBR.pretty_cnpj)
+  Supplier.create(name: FFaker::Company.name, cnpj: FFaker::IdentificationBR.cnpj)
 end
 
 suppliers_ids = Supplier.pluck(:id)
