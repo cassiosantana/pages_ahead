@@ -29,7 +29,8 @@ suppliers_ids = Supplier.pluck(:id)
 
 suppliers_ids.each do |supplier_id|
   account_number = rand(10_000..99_999).to_s
-  Account.create(account_number: account_number, supplier_id: supplier_id)
+  account = Account.create(account_number: account_number, supplier_id: supplier_id)
+  account.update(check_digit: rand(0..9).to_s)
 end
 
 parts = 20.times.map do
