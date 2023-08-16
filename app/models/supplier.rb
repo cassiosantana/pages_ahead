@@ -7,4 +7,10 @@ class Supplier < ApplicationRecord
   attr_readonly :account, :part
 
   validates :name, presence: true
+
+  def account_with_digit
+    return unless account
+
+    [account.account_number, account.check_digit].compact.join(" - ")
+  end
 end
