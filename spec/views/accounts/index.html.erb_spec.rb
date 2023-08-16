@@ -17,6 +17,9 @@ RSpec.describe "accounts/index", type: :view do
 
   it "renders a list of accounts" do
     expect_object_list(accounts)
+    accounts.each do |account|
+      expect(rendered).to have_selector("p", text: account.number_with_digit)
+    end
   end
 
   it "renders the page title" do

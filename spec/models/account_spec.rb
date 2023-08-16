@@ -8,7 +8,6 @@ RSpec.describe Account, type: :model do
 
   describe "validations" do
     context "when account_number is present" do
-
       it "requires account_number to be valid" do
         expect(account).to be_valid
       end
@@ -38,7 +37,6 @@ RSpec.describe Account, type: :model do
     let!(:account) { create(:account, supplier: supplier) }
 
     context "when attempting to update account_number" do
-
       it "does not change the account_number" do
         original_account_number = account.account_number
         account.account_number = "new_account_number"
@@ -66,6 +64,12 @@ RSpec.describe Account, type: :model do
       it "account has been deleted" do
         expect { account.destroy }.to change(Account, :count).by(-1).and change(Supplier, :count).by(0)
       end
+    end
+  end
+
+  describe "number_with_digit" do
+    it "return a account number and check digit" do
+      expect(account.number_with_digit).to eq("#{account.account_number} - #{account.check_digit}")
     end
   end
 end

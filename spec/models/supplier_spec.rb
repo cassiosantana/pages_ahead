@@ -84,4 +84,24 @@ RSpec.describe Supplier, type: :model do
       end
     end
   end
+
+  describe "account_with_digit" do
+    context "when supplier have an account" do
+      let(:account) { create(:account) }
+      let(:supplier) { create(:supplier, account: account) }
+
+      it "return a account number and check digit correctly" do
+        expect(supplier.account_with_digit)
+          .to eq("#{supplier.account.account_number} - #{supplier.account.check_digit}")
+      end
+    end
+
+    context "when the supplier does not have an associated account" do
+      let(:supplier) { create(:supplier) }
+
+      it "return a account number and check digit correctly" do
+        expect(supplier.account_with_digit).to be_nil
+      end
+    end
+  end
 end
