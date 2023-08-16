@@ -3,6 +3,7 @@
 FactoryBot.define do
   factory :account do
     supplier { create(:supplier) }
-    account_number { "#{FFaker::Random.rand(10_000..90_999)}-#{FFaker::Random.rand(0..9)}" }
+    account_number { rand(10_000..99_999) }
+    check_digit { rand(0..9) }
   end
 end
