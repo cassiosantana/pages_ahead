@@ -9,7 +9,6 @@ class AuthorsController < ApplicationController
 
   def show; end
 
-  # GET /authors/new
   def new
     @author = Author.new
   end
