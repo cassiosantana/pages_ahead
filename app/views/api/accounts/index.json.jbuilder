@@ -1,6 +1,6 @@
 json.array! @accounts do |account|
   json.id account.id
-  json.number account.account_number
+  json.number account.number_with_digit
 
   json.supplier do
     json.id account.supplier.id
