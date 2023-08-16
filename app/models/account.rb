@@ -11,7 +11,9 @@ class Account < ApplicationRecord
 
   validate :account_number_not_updated, :supplier_id_not_updated, on: :update
 
-  # ... rest of your model code ...
+  def number_with_digit
+    [account_number, check_digit].compact.join(" - ")
+  end
 
   private
 
