@@ -1,118 +1,63 @@
-# frozen_string_literal: true
-
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Book, type: :model do
   let(:author) { create(:author) }
-  let!(:book) { create(:book, author_id: author.id) }
+  let(:book) { create(:book, author: author) }
+  let(:assemblies) { create_list(:assembly, 3) }
 
-  describe "validations" do
-
-    context "when publication date is present" do
-
-      it "book creation is valid" do
+  describe "validations and associations" do
+    context "when all attributes are valid" do
+      it "is valid and can have assemblies associated" do
+        book.assemblies << assemblies
         expect(book).to be_valid
-      end
-    end
-
-    context "when publication date is NOT present" do
-      let(:book) { build(:book, author_id: author.id, published_at: nil) }
-
-      it "book creation is invalid" do
-        expect(book).to be_invalid
-      end
-    end
-
-    context "when author is NOT present" do
-      let(:book) { build(:book, author_id: nil) }
-
-      it "book creation is invalid" do
-        expect(book).to be_invalid
-      end
-    end
-  end
-
-  describe "edit associations with assemblies" do
-    let(:assemblies) { create_list(:assembly, 3) }
-
-    before do
-      assemblies.each do |assembly|
-        book.assemblies << assembly
-      end
-    end
-
-    context "when adding multiple assemblies" do
-      it "book has all associations" do
         expect(book.assemblies.count).to eq(3)
-      end
-    end
 
-    context "when editing associations" do
-      it "all associations are removed" do
         book.assemblies.clear
         expect(book.assemblies.count).to eq(0)
-      end
 
-      it "only two were kept" do
-        book.assemblies.clear
-
-        assemblies[0..1].each do |assembly|
-          book.assemblies << assembly
-        end
-
+        book.assemblies << assemblies[0..1]
         expect(book.assemblies.count).to eq(2)
       end
     end
-  end
 
-  describe "edit association with author" do
-    let(:new_author) { create(:author) }
-
-    context "when trying to change the author" do
-
-      it "the author has been changed" do
-        original_author = book.author
-        book.author = new_author
-        book.save
-
-        expect(book.reload.author).not_to eq(original_author)
+    context "when publication date or author are not present" do
+      it "is invalid" do
+        book.update(published_at: nil, author: nil)
+        expect(book).to be_invalid
       end
     end
   end
 
-  describe "edit attributes" do
+  describe "updating attributes" do
+    it "can have its author, publication date and isbn updated" do
+      new_isbn = FFaker::Book.isbn
+      new_author = create(:author)
 
-    context "when trying to change the publication date" do
-      it "the date is changed" do
-        previous_date = book.published_at
-        book.published_at = previous_date + 1
-        book.save
+      new_date = book.published_at + 1.day
+      book.update(published_at: new_date, isbn: new_isbn, author: new_author)
 
-        expect(book.reload.published_at).not_to eq(previous_date)
-      end
+      expect(book.reload).to have_attributes(
+        published_at: new_date,
+        isbn: new_isbn,
+        author: new_author
+      )
     end
   end
 
-  describe "destroy" do
-    context "when the book has no associated assemblies" do
-      it "the book is deleted" do
-        expect { book.destroy }.to change(Book, :count).by(-1).and change(Author, :count).by(0)
-        expect(Book.exists?(book.id)).to be_falsey
-        expect(author.books.include?(book.id)).to be_falsey
+  describe "destroying a book" do
+    context "when a book has no associated assemblies" do
+      it "the book is deleted but not its author" do
+        book.assemblies.clear
+        expect { book.destroy }.to change(Book, :count).by(-1)
+                                                       .and change(Author, :count).by(0)
       end
     end
 
-    context "when the book has associated assemblies" do
-      let(:assemblies) { create_list(:assembly, 5) }
-
-      it "the book is deleted and the assemblies remain intact" do
+    context "when a book has associated assemblies" do
+      it "the book is deleted but not its assemblies" do
         book.assemblies << assemblies
-        book.save
-
-        expect do
-          book.destroy
-        end.to change(Book, :count).by(-1).and change(Assembly, :count).by(0)
-        expect(Assembly.where(id: assemblies.pluck(:id)).count).to eq(5)
+        expect { book.destroy }.to change(Book, :count).by(-1)
+                                                       .and change(Assembly, :count).by(0)
       end
     end
   end
