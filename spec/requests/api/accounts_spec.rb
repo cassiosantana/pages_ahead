@@ -12,10 +12,8 @@ RSpec.describe "Api::Accounts", type: :request do
       expect(response).to have_http_status :ok
       expect(json_response.length).to eq(Account.all.count)
       json_response.each do |account|
-        expect(account["id"]).to be_present
-        expect(account["number"]).to be_present
-        expect(account["supplier"]["id"]).to be_present
-        expect(account["supplier"]["name"]).to be_present
+        object = Account.find(account["id"])
+        check_account_data(account, object)
       end
     end
   end
@@ -28,10 +26,8 @@ RSpec.describe "Api::Accounts", type: :request do
         get api_account_path(account)
 
         expect(response).to have_http_status :ok
-        expect(json_response["id"]).to be_present
-        expect(json_response["number"]).to be_present
-        expect(json_response["supplier"]["id"]).to be_present
-        expect(json_response["supplier"]["name"]).to be_present
+        account = Account.find(json_response["id"])
+        check_account_data(json_response, account)
       end
     end
 
@@ -54,11 +50,9 @@ RSpec.describe "Api::Accounts", type: :request do
         post api_accounts_path, params: valid_data
 
         expect(response).to have_http_status :created
-        expect(json_response["id"]).to be_present
-        expect(json_response["number"]).to be_present
+        account = Account.find(json_response["id"])
+        check_account_data(json_response, account)
         expect(Account.exists?(account_number: valid_data[:account][:account_number])).to eq(true)
-        expect(json_response["supplier"]["id"]).to eq(supplier.id)
-        expect(json_response["supplier"]["name"]).to eq(supplier.name)
       end
     end
 
