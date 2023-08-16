@@ -14,7 +14,7 @@ RSpec.describe "accounts/show", type: :view do
   context "account attribute rendering" do
     it "renders supplier and account number" do
       expect(rendered).to have_selector("p", text: "Supplier:\n    #{account.supplier.name}")
-      expect(rendered).to have_selector("p", text: "Account number:\n    #{account.account_number}")
+      expect(rendered).to have_selector("p", text: "Account number:\n    #{account.number_with_digit}")
     end
   end
 

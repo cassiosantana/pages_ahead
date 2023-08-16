@@ -23,6 +23,7 @@ RSpec.describe "accounts/new", type: :view do
       expect(rendered).to have_selector("input[name='account[account_number]']")
       expect(rendered).to have_selector("select[name='account[supplier_id]']")
       expect(rendered).to have_select("account_supplier_id", with_options: ["Supplier 1", "Supplier 2"])
+      expect(rendered).to have_selector("em", text: " Only suppliers without an account will be listed")
       expect_submit_button("Create Account")
     end
   end
