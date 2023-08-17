@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'books/show', type: :view do
+RSpec.describe "books/show", type: :view do
   let(:assemblies) { create_list(:assembly, 3) }
   let(:author) { create(:author) }
   let(:book) { create(:book, author: author, assemblies: assemblies) }
@@ -12,16 +12,11 @@ RSpec.describe 'books/show', type: :view do
     render
   end
 
-  context "rendering of book attributes" do
-    it "render the publication date" do
-      expect(rendered).to have_text(book.published_at)
-    end
-
-    it "render the author name" do
-      expect(rendered).to have_text(book.author.name)
-    end
-
-    it "render the book's assemblies" do
+  context "when trying to display the attributes and associations" do
+    it "they are displayed correctly" do
+      expect(rendered).to have_text("Published at: #{book.published_at}", normalize_ws: true)
+      expect(rendered).to have_text("ISBN: #{book.isbn}", normalize_ws: true)
+      expect(rendered).to have_text("Author: #{book.author.name}", normalize_ws: true)
       expect(rendered).to have_selector("p strong", text: "Assemblies:")
       book.assemblies.each do |assembly|
         expect(rendered).to have_selector("ul li", text: assembly.name)

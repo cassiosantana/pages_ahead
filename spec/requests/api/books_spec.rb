@@ -16,15 +16,18 @@ RSpec.describe "Api::Books", type: :request do
       expect(json_response.length).to eq(books.count)
 
       json_response.each do |book|
-        expect(book["id"]).to be_present
-        expect(book["published_at"]).to be_present
+        book_record = Book.find(book["id"])
+        expect(book["id"]).to eq(book_record.id)
+        expect(book["published_at"].to_time).to eq(book_record.published_at.to_time)
+        expect(book["isbn"]).to eq(book_record.isbn)
         expect(book["author"]["id"]).to eq(author.id)
         expect(book["author"]["name"]).to eq(author.name)
         expect(book["assemblies"].length).to eq(assemblies.count)
 
         book["assemblies"].each do |assembly|
-          expect(assembly["id"]).to be_present
-          expect(assembly["name"]).to be_present
+          assembly_record = Assembly.find(assembly["id"])
+          expect(assembly["id"]).to eq(assembly_record.id)
+          expect(assembly["name"]).to eq(assembly_record.name)
         end
       end
     end
@@ -35,7 +38,8 @@ RSpec.describe "Api::Books", type: :request do
       it "returns a successful response and correct book data" do
         expect(response).to have_http_status :ok
         expect(json_response["id"]).to eq(book.id)
-        expect(json_response["published_at"].to_time).to eq(book.published_at)
+        expect(json_response["published_at"].to_time).to eq(book.published_at.to_time)
+        expect(json_response["isbn"]).to eq(book.isbn)
         expect(json_response["author"]["id"]).to eq(author.id)
         expect(json_response["author"]["name"]).to eq(author.name)
       end
@@ -94,6 +98,7 @@ RSpec.describe "Api::Books", type: :request do
           book: {
             published_at: Time.current,
             author_id: author.id,
+            isbn: FFaker::Book.isbn,
             assembly_ids: assemblies.map(&:id)
           }
         }
@@ -108,6 +113,7 @@ RSpec.describe "Api::Books", type: :request do
         expect(response).to have_http_status :created
         expect(json_response["id"]).to be_present
         expect(json_response["published_at"].to_date).to eq(valid_book_params[:book][:published_at].to_date)
+        expect(json_response["isbn"]).to eq(valid_book_params[:book][:isbn])
         expect(json_response["author"]["id"]).to eq(author.id)
         expect(json_response["author"]["name"]).to eq(author.name)
         expect(json_response["assemblies"].length).to eq(assemblies.count)
@@ -157,6 +163,7 @@ RSpec.describe "Api::Books", type: :request do
         {
           book: {
             published_at: Time.current,
+            isbn: FFaker::Book.isbn,
             assembly_ids: book.assembly_ids.concat(new_assemblies.map(&:id)),
             author_id: new_author.id
           }
@@ -167,8 +174,9 @@ RSpec.describe "Api::Books", type: :request do
         patch api_book_path(book), params: valid_book_params
 
         expect(response).to have_http_status :ok
-        expect(Time.iso8601(json_response["published_at"]).change(usec: 0))
-          .to eq(valid_book_params[:book][:published_at].change(usec: 0))
+        expect(json_response["id"]).to eq(book.id)
+        expect(json_response["published_at"].to_date).to eq(valid_book_params[:book][:published_at].to_date)
+        expect(json_response["isbn"]).to eq(valid_book_params[:book][:isbn])
         expect(json_response["assemblies"].length).to eq(8)
         expect(json_response["author"]["id"]).to eq(new_author.id)
         expect(json_response["author"]["name"]).to eq(new_author.name)

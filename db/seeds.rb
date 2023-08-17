@@ -49,6 +49,6 @@ end
 5.times do
   random_author_id = Author.pluck(:id).sample
   book = Book.create(published_at: FFaker::Time.between(DateTime.now - 1.year, DateTime.now),
-                     author_id: random_author_id)
+                     author_id: random_author_id, isbn: FFaker::Book.isbn)
   book.assemblies << assemblies.sample(rand(1..5))
 end
