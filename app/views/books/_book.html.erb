@@ -1,24 +1,24 @@
 <div id="<%= dom_id book %>">
-  <p data-testid="published-at">
+  <p>
     <strong>Published at:</strong>
     <%= book.published_at %>
   </p>
 
-  <p data-testid="isbn">
+  <p>
     <strong>ISBN:</strong>
-    <span ><%= book.isbn %></span>
+    <%= book.isbn %>
   </p>
 
-  <p data-testid="author-name">
+  <p>
     <strong>Author:</strong>
     <%= book.author.name %>
   </p>
 
-  <div data-testid="assemblies-list">
+  <div>
     <p><strong>Assemblies:</strong></p>
       <ul>
         <% book.assemblies.each do |assembly| %>
-          <li data-testid="assembly-name"><%= assembly.name %></li>
+          <li><%= assembly.name %></li>
         <% end %>
       </ul>
   </div>
