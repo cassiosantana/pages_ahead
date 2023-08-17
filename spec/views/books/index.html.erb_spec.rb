@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'books/index', type: :view do
+RSpec.describe "books/index", type: :view do
   let(:author) { create(:author) }
   let(:books) { create_list(:book, 5, author: author) }
 
@@ -16,7 +16,10 @@ RSpec.describe 'books/index', type: :view do
   end
 
   it "render a list of books" do
-    expect_object_list(books)
+    books.each do |book|
+      expect(rendered).to have_text("Published at: #{book.published_at}", normalize_ws: true)
+      expect(rendered).to have_link("Show this book", href: book_path(book))
+    end
   end
 
   it "render a link to new book" do
