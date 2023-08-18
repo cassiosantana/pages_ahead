@@ -6,9 +6,7 @@ RSpec.describe Author, type: :model do
   let!(:author) { create(:author) }
 
   describe "validations" do
-
     context "when name is present" do
-
       it "author is created" do
         expect(author).to be_valid
       end
@@ -26,17 +24,16 @@ RSpec.describe Author, type: :model do
 
   describe "editing" do
     context "when updating the name" do
-      it "updates the name correctly" do
+      let(:attributes) { attributes_for(:author) }
 
+      it "updates the name correctly" do
         expect do
-          author.name = "another full name"
-          author.save
+          author.update(attributes)
           author.reload
-        end.to change { author.name }.to("another full name")
+        end.to change { [author.name, author.cpf] }.to([attributes[:name], attributes[:cpf]])
       end
 
       it "does not allow an empty name" do
-
         author.name = nil
         author.save
         expect(author.errors[:name]).to include("can't be blank")
