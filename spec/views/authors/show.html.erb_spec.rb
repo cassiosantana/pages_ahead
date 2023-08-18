@@ -11,12 +11,10 @@ RSpec.describe "authors/show", type: :view do
     render
   end
 
-  context "rendering of author attributes" do
-    it "renders the author name" do
-      expect(rendered).to have_text("Name: #{author.name}")
-    end
-
-    it "renders the author's books" do
+  context "when trying to display the attributes and associations" do
+    it "they are displayed correctly" do
+      expect(rendered).to have_text("Name: #{author.name}", normalize_ws: true)
+      expect(rendered).to have_text("Cpf: #{author.cpf}", normalize_ws: true)
       expect(rendered).to have_selector("p strong", text: "Books:")
       author.books.each do |book|
         expect(rendered).to have_selector("ul li", text: book.published_at)
