@@ -7,9 +7,10 @@ RSpec.describe Account, type: :model do
   let!(:account) { create(:account, supplier: supplier) }
 
   describe "validations" do
-    context "when account_number is present" do
-      it "requires account_number to be valid" do
+    context "when the account number is present" do
+      it "it is created and the check digit assigned correctly" do
         expect(account).to be_valid
+        expect(account.check_digit).to eq(AccountServices::CheckDigitCalculatorService.call(account.account_number))
       end
     end
 
