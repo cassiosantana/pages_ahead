@@ -16,9 +16,9 @@ RSpec.describe "accounts/index", type: :view do
   end
 
   it "renders a list of accounts" do
-    expect_object_list(accounts)
     accounts.each do |account|
-      expect(rendered).to have_selector("p", text: account.number_with_digit)
+      expect(rendered).to have_text("Number: #{account.number_with_digit}", normalize_ws: true)
+      expect(rendered).to have_link("Show this account", href: account_path(account))
     end
   end
 

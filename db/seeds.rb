@@ -1,10 +1,4 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
+# frozen_string_literal: true
 
 require "ffaker"
 
@@ -29,8 +23,7 @@ suppliers_ids = Supplier.pluck(:id)
 
 suppliers_ids.each do |supplier_id|
   account_number = rand(10_000..99_999).to_s
-  account = Account.create(account_number: account_number, supplier_id: supplier_id)
-  account.update(check_digit: rand(0..9).to_s)
+  Account.create(account_number: account_number, supplier_id: supplier_id)
 end
 
 parts = 20.times.map do
