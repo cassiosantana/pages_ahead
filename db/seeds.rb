@@ -18,7 +18,7 @@ ActiveRecord::Base.connection.execute("DELETE FROM assemblies_books")
 ActiveRecord::Base.connection.execute("DELETE FROM assemblies_parts")
 
 5.times do
-  Author.create(name: FFaker::Name.name)
+  Author.create(name: FFaker::Name.name, cpf: FFaker::IdentificationBR.cpf)
 end
 
 5.times do

@@ -13,9 +13,9 @@ RSpec.describe "authors/new", type: :view do
   end
 
   it "renders new author form" do
-    expect(rendered).to have_selector("form[action='#{authors_path}'][method='post']") do
-      expect(rendered).to have_selector("input[name='author[name]']")
-    end
+    expect(rendered).to have_selector("form[action='#{authors_path}'][method='post']")
+    expect(rendered).to have_selector("input[name='author[name]']")
+    expect(rendered).to have_selector("input[name='author[cpf]']")
   end
 
   it "renders the back link" do
