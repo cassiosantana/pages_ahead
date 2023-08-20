@@ -102,6 +102,7 @@ GEM
     importmap-rails (1.2.1)
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
+    isbn (2.0.11)
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
@@ -271,6 +272,7 @@ DEPENDENCIES
   factory_bot_rails (~> 6.2)
   ffaker (~> 2.21)
   importmap-rails
+  isbn (~> 2.0, >= 2.0.11)
   jbuilder
   puma (~> 5.0)
   rails (~> 7.0, >= 7.0.7)

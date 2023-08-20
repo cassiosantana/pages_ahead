@@ -1,8 +1,8 @@
 require "rails_helper"
+require "isbn_generator"
 
 RSpec.describe Book, type: :model do
-  let(:author) { create(:author) }
-  let(:book) { create(:book, author: author) }
+  let(:book) { create(:book) }
   let(:assemblies) { create_list(:assembly, 3) }
 
   describe "validations and associations" do
@@ -20,17 +20,20 @@ RSpec.describe Book, type: :model do
       end
     end
 
-    context "when publication date or author are not present" do
-      it "is invalid" do
-        book.update(published_at: nil, author: nil)
+    context "when all attributes are invalid" do
+      it "receive error messages correctly" do
+        book.update(published_at: nil, author: nil, isbn: nil)
         expect(book).to be_invalid
+        expect(book.errors[:author]).to eq(["must exist"])
+        expect(book.errors[:published_at]).to eq(["can't be blank"])
+        expect(book.errors[:isbn]).to eq(["can't be blank", "is invalid"])
       end
     end
   end
 
   describe "updating attributes" do
     it "can have its author, publication date and isbn updated" do
-      new_isbn = FFaker::Book.isbn
+      new_isbn = IsbnGenerator.isbn_thirteen
       new_author = create(:author)
 
       new_date = book.published_at + 1.day

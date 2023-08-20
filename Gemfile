@@ -8,6 +8,7 @@ ruby "3.2.2"
 gem "bootsnap", require: false
 gem "cpf_cnpj", "~> 0.5.0"
 gem "importmap-rails"
+gem "isbn", "~> 2.0", ">= 2.0.11"
 gem "jbuilder"
 gem "puma", "~> 5.0"
 gem "rails", "~> 7.0", ">= 7.0.7"
