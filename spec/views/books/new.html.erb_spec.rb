@@ -4,13 +4,12 @@ require "rails_helper"
 
 RSpec.describe "books/new", type: :view do
   let(:book) { build(:book) }
+  let(:author1) { create(:author, name: "Author 1") }
+  let(:author2) { create(:author, name: "Author 2") }
 
   before(:each) do
     assign(:book, book)
-    assign(:authors, [
-             Author.create(name: "Author 1"),
-             Author.create(name: "Author 2")
-           ])
+    assign(:authors, [author1, author2])
     assign(:assemblies, create_list(:assembly, rand(11)))
 
     render
