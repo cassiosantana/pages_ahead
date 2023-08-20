@@ -5,38 +5,41 @@ require "rails_helper"
 RSpec.describe Author, type: :model do
   let!(:author) { create(:author) }
 
-  describe "validations" do
-    context "when name is present" do
+  describe "create" do
+    context "when name and cpf is present" do
       it "author is created" do
         expect(author).to be_valid
       end
     end
 
-    context "when name is not present" do
-      let(:author) { build(:author, name: nil) }
+    context "when name and cpf is not present" do
+      let(:author) { build(:author, name: nil, cpf: nil) }
 
       it "author is not created" do
         expect(author).to be_invalid
-        expect(author.errors[:name]).to include("can't be blank")
+        expect(author.errors[:name]).to eq(["can't be blank"])
+        expect(author.errors[:cpf]).to eq(["can't be blank", "is invalid"])
       end
     end
   end
 
-  describe "editing" do
-    context "when updating the name" do
+  describe "edit" do
+    context "when updating attributes" do
       let(:attributes) { attributes_for(:author) }
 
-      it "updates the name correctly" do
+      it "updates attributes correctly" do
         expect do
           author.update(attributes)
           author.reload
         end.to change { [author.name, author.cpf] }.to([attributes[:name], attributes[:cpf]])
       end
 
-      it "does not allow an empty name" do
-        author.name = nil
-        author.save
-        expect(author.errors[:name]).to include("can't be blank")
+      it "does not update and receive error messages correctly" do
+        author.update(name: nil, cpf: nil)
+
+        expect(author).to be_invalid
+        expect(author.errors[:name]).to eq(["can't be blank"])
+        expect(author.errors[:cpf]).to eq(["can't be blank", "is invalid"])
       end
     end
   end
