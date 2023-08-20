@@ -6,14 +6,20 @@ RSpec.describe Supplier, type: :model do
   let!(:supplier) { create(:supplier) }
 
   describe "validations" do
-    it "is valid with a name" do
-      expect(supplier).to be_valid
+    context "when attributes are valid" do
+      it "supplier is created" do
+        expect(supplier).to be_valid
+      end
     end
 
-    it "is invalid without a name" do
-      supplier.name = nil
-      expect(supplier).to be_invalid
-      expect(supplier.errors[:name]).to include("can't be blank")
+    context "when all attributes are invalid" do
+      it "whe received the error messages correctly" do
+        supplier.name = nil
+        supplier.cnpj = nil
+        expect(supplier).to be_invalid
+        expect(supplier.errors[:name]).to eq(["can't be blank"])
+        expect(supplier.errors[:cnpj]).to eq(["can't be blank", "is invalid"])
+      end
     end
   end
 
@@ -23,6 +29,16 @@ RSpec.describe Supplier, type: :model do
         expect { create(:supplier) }.to change(Supplier, :count).by(1)
         expect(Supplier.last.name).to be_present
         expect(Supplier.last.cnpj).to be_present
+      end
+    end
+
+    context "when cnpj is invalid" do
+      let(:supplier) { build(:supplier, cnpj: "11111") }
+
+      it "whe received the error message correctly" do
+        supplier.save
+        expect(supplier).to be_invalid
+        expect(supplier.errors[:cnpj]).to eq(["is invalid"])
       end
     end
   end
@@ -41,13 +57,15 @@ RSpec.describe Supplier, type: :model do
     end
 
     context "when trying to edit supplier with invalid attributes" do
-      let(:invalid_attributes) { attributes_for(:supplier, name: "") }
+      let(:invalid_attributes) { attributes_for(:supplier, name: "", cnpj: "") }
 
       it "the name is not changed" do
         supplier.update(invalid_attributes)
         supplier.reload
 
         expect(supplier.changed?).to eq(false)
+        expect(supplier.errors[:name]).to eq(["can't be blank"])
+        expect(supplier.errors[:cnpj]).to eq(["can't be blank", "is invalid"])
       end
     end
   end
