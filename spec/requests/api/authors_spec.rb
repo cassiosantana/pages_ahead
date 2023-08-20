@@ -12,7 +12,7 @@ RSpec.describe "Api::Authors", type: :request do
     }
   end
 
-  let(:invalid_author_params) { { author: { name: "" } } }
+  let(:invalid_author_params) { { author: { name: "", cpf: "" } } }
 
   describe "GET /api/authors" do
     let!(:authors) { create_list(:author, 3) }
@@ -81,12 +81,16 @@ RSpec.describe "Api::Authors", type: :request do
     end
 
     context "when creating a new author with invalid data" do
-      it "does not create author" do
+      it "does not create author and receive error messages correctly" do
         expect do
           post api_authors_path, params: invalid_author_params
         end.not_to change(Author, :count)
-        expect(json_response["errors"]).to include("Name can't be blank")
         expect(response).to have_http_status(:unprocessable_entity)
+        expect(json_response["errors"]).to eq([
+                                                "Name can't be blank",
+                                                "Cpf can't be blank",
+                                                "Cpf is invalid"
+                                              ])
       end
     end
   end
@@ -116,7 +120,11 @@ RSpec.describe "Api::Authors", type: :request do
           patch api_author_path(author), params: invalid_author_params
         end.not_to change(author, :name)
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(json_response["errors"]).to include("Name can't be blank")
+        expect(json_response["errors"]).to eq([
+                                                "Name can't be blank",
+                                                "Cpf can't be blank",
+                                                "Cpf is invalid"
+                                              ])
       end
     end
 
