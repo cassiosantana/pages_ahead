@@ -1,11 +1,44 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+require "isbn_generator"
 
 RSpec.describe "Api::Books", type: :request do
+  let(:assemblies) { create_list(:assembly, 3) }
+  let(:author) { create(:author) }
+  let(:book) { create(:book) }
+  let(:valid_book_params) do
+    {
+      book: attributes_for(:book)
+        .merge(
+          author_id: author.id,
+          assembly_ids: assemblies.map(&:id)
+        )
+    }
+  end
+  let(:invalid_book_params) do
+    {
+      book: {
+        published_at: nil,
+        isbn: nil,
+        author_id: nil
+      }
+    }
+  end
+
+  shared_examples "all json errors" do
+    it "receive all error messages" do
+      expect(response).to have_http_status :unprocessable_entity
+      expect(json_response["errors"]).to include(
+        "Published at can't be blank",
+        "Author must exist",
+        "Isbn can't be blank",
+        "Isbn is invalid"
+      )
+    end
+  end
+
   describe "GET /api/books" do
-    let!(:assemblies) { create_list(:assembly, 3) }
-    let!(:author) { create(:author) }
     let!(:books) { create_list(:book, 5, author: author, assemblies: assemblies) }
 
     it "returns a successful response and correct books data" do
@@ -40,14 +73,12 @@ RSpec.describe "Api::Books", type: :request do
         expect(json_response["id"]).to eq(book.id)
         expect(json_response["published_at"].to_time).to eq(book.published_at.to_time)
         expect(json_response["isbn"]).to eq(book.isbn)
-        expect(json_response["author"]["id"]).to eq(author.id)
-        expect(json_response["author"]["name"]).to eq(author.name)
+        expect(json_response["author"]["id"]).to eq(book.author.id)
+        expect(json_response["author"]["name"]).to eq(book.author.name)
       end
     end
 
     context "when book exist and have associated assemblies" do
-      let!(:assemblies) { create_list(:assembly, 3) }
-      let!(:author) { create(:author) }
       let!(:book) { create(:book, author: author, assemblies: assemblies) }
 
       before { get api_book_path(book) }
@@ -67,9 +98,6 @@ RSpec.describe "Api::Books", type: :request do
     end
 
     context "when the book exists but has no associated assemblies" do
-      let!(:author) { create(:author) }
-      let!(:book) { create(:book, author: author) }
-
       before { get api_book_path(book) }
 
       it_behaves_like "a book"
@@ -91,19 +119,6 @@ RSpec.describe "Api::Books", type: :request do
 
   describe "POST /api/books" do
     context "when creating a new book with valid data" do
-      let!(:assemblies) { create_list(:assembly, 3) }
-      let!(:author) { create(:author) }
-      let!(:valid_book_params) do
-        {
-          book: {
-            published_at: Time.current,
-            author_id: author.id,
-            isbn: FFaker::Book.isbn,
-            assembly_ids: assemblies.map(&:id)
-          }
-        }
-      end
-
       subject { post api_books_path, params: valid_book_params }
 
       it "creates a new book and returns correct data" do
@@ -116,7 +131,7 @@ RSpec.describe "Api::Books", type: :request do
         expect(json_response["isbn"]).to eq(valid_book_params[:book][:isbn])
         expect(json_response["author"]["id"]).to eq(author.id)
         expect(json_response["author"]["name"]).to eq(author.name)
-        expect(json_response["assemblies"].length).to eq(assemblies.count)
+        expect(json_response["assemblies"].length).to eq(assemblies.length)
 
         assembly_ids = assemblies.map(&:id)
         assembly_names = assemblies.map(&:name)
@@ -127,81 +142,48 @@ RSpec.describe "Api::Books", type: :request do
       end
     end
 
-    context "when creating a new book with invalid data" do
-      let!(:invalid_book_params) do
-        {
-          book: {
-            published_at: nil,
-            author_id: nil,
-            assembly_ids: nil
-          }
-        }
+    context "when trying to create a new book with invalid params" do
+      before do
+        post api_books_path, params: invalid_book_params
       end
 
-      subject { post api_books_path, params: invalid_book_params }
-
-      it "does not create a new book and returns correct error messages" do
-        expect { subject }.not_to change(Book, :count)
-
-        subject
-        expect(response).to have_http_status :unprocessable_entity
-        expect(json_response["errors"]).to include("Published at can't be blank")
-        expect(json_response["errors"]).to include("Author must exist")
-      end
+      include_examples "all json errors"
     end
   end
 
   describe "PATCH /api/books/:id" do
-    let!(:assemblies) { create_list(:assembly, 3) }
-    let!(:new_assemblies) { create_list(:assembly, 5) }
-    let!(:new_author) { create(:author) }
-
     context "when the parameters are valid" do
-      let!(:book) { create(:book, assemblies: assemblies) }
-
-      let!(:valid_book_params) do
+      let!(:new_assemblies) { create_list(:assembly, 5) }
+      let!(:new_author) { create(:author) }
+      let!(:changes) do
         {
-          book: {
-            published_at: Time.current,
-            isbn: FFaker::Book.isbn,
-            assembly_ids: book.assembly_ids.concat(new_assemblies.map(&:id)),
-            author_id: new_author.id
-          }
+          book: attributes_for(:book)
+            .merge(
+              author_id: new_author.id,
+              assembly_ids: book.assembly_ids.concat(new_assemblies.map(&:id))
+            )
         }
       end
 
       it "updates the book and returns correct data" do
-        patch api_book_path(book), params: valid_book_params
+        patch api_book_path(book), params: changes
 
         expect(response).to have_http_status :ok
         expect(json_response["id"]).to eq(book.id)
-        expect(json_response["published_at"].to_date).to eq(valid_book_params[:book][:published_at].to_date)
-        expect(json_response["isbn"]).to eq(valid_book_params[:book][:isbn])
-        expect(json_response["assemblies"].length).to eq(8)
+        expect(json_response["published_at"].to_date).to eq(changes[:book][:published_at].to_date)
+        expect(json_response["isbn"]).to eq(changes[:book][:isbn])
         expect(json_response["author"]["id"]).to eq(new_author.id)
         expect(json_response["author"]["name"]).to eq(new_author.name)
+        expect(json_response["assemblies"].length).to eq(Assembly.count)
       end
     end
 
-    context "when the parameters are invalid" do
-      let!(:book) { create(:book) }
-
-      let!(:invalid_book_params) do
-        {
-          book: {
-            published_at: nil,
-            author_id: nil
-          }
-        }
-      end
-
-      it "does not update the book and returns correct error messages" do
+    context "when trying to update with invalid params" do
+      before do
         patch api_book_path(book), params: invalid_book_params
-
-        expect(response).to have_http_status :unprocessable_entity
-        expect(json_response["errors"]).to include("Author must exist")
-        expect(json_response["errors"]).to include("Published at can't be blank")
       end
+
+      include_examples "all json errors"
     end
   end
 
