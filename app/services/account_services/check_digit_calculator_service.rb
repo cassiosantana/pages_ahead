@@ -1,12 +1,9 @@
 # frozen_string_literal: true
 
 module AccountServices
-  class CheckDigitCalculatorService
-    def self.call(account_number)
-      new(account_number).call
-    end
-
+  class CheckDigitCalculatorService < ApplicationService
     def initialize(account_number)
+      super
       @account_number = account_number.to_i
     end
 
