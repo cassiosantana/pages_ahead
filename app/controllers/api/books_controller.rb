@@ -44,7 +44,7 @@ module Api
     end
 
     def verify_assembly
-      Api::AssemblyVerifier.call(book_params[:assembly_ids]) if book_params[:assembly_ids].present?
+      AssemblyServices::ExistenceVerifierService.call(book_params[:assembly_ids]) if book_params[:assembly_ids].present?
     rescue ActiveRecord::RecordNotFound => e
       render json: { errors: e.message }, status: :unprocessable_entity
     end
