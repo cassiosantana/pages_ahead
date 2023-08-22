@@ -1,0 +1,31 @@
+name: Run tests
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby 3.2.2
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.2
+
+      - name: Install dependencies
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3
+
+      - name: Setup test database
+        env:
+          RAILS_ENV: test
+        run: |
+          bundle exec rake db:migrate
+
+      - name: Run tests
+        env:
+          RAILS_ENV: test
+        run: bundle exec rspec

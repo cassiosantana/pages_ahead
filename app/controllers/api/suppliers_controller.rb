@@ -39,7 +39,7 @@ module Api
     end
 
     def supplier_params
-      params.require(:supplier).permit(:name)
+      params.require(:supplier).permit(:name, :cnpj)
     end
   end
 end

@@ -3,10 +3,21 @@
 require "rails_helper"
 
 RSpec.describe "Api::Authors", type: :request do
+  let(:valid_author_params) do
+    {
+      author: {
+        name: FFaker::Name.name,
+        cpf: FFaker::IdentificationBR.cpf
+      }
+    }
+  end
+
+  let(:invalid_author_params) { { author: { name: "", cpf: "" } } }
+
   describe "GET /api/authors" do
     let!(:authors) { create_list(:author, 3) }
 
-    it "returns a list of authors" do
+    it "returns a successful response and correct books data" do
       get api_authors_path
 
       expect(response).to have_http_status(:ok)
@@ -14,8 +25,10 @@ RSpec.describe "Api::Authors", type: :request do
       expect(json_response.length).to eq(authors.count)
 
       json_response.each do |author|
-        expect(author["id"]).to be_present
-        expect(author["name"]).to be_present
+        author_record = Author.find(author["id"])
+        expect(author["id"]).to eq(author_record.id)
+        expect(author["name"]).to eq(author_record.name)
+        expect(author["cpf"]).to eq(author_record.cpf)
         expect(author["books"]).to be_an(Array)
       end
     end
@@ -31,6 +44,7 @@ RSpec.describe "Api::Authors", type: :request do
 
         expect(json_response["id"]).to eq(author.id)
         expect(json_response["name"]).to eq(author.name)
+        expect(json_response["cpf"]).to eq(author.cpf)
 
         book_ids = books.map(&:id)
         book_published_ats = books.map(&:published_at)
@@ -53,41 +67,30 @@ RSpec.describe "Api::Authors", type: :request do
 
   describe "POST /api/authors" do
     context "when creating a new author with valid data" do
-      let(:valid_author_params) do
-        {
-          author: {
-            name: "New Author"
-          }
-        }
-      end
-
-      it "create author" do
+      it "creates a new author and returns correct data" do
         expect do
           post api_authors_path, params: valid_author_params
         end.to change(Author, :count).by(1)
         expect(response).to have_http_status(:created)
         expect(json_response["id"]).to be_present
-        expect(json_response["name"]).to eq("New Author")
+        expect(json_response["name"]).to eq(valid_author_params[:author][:name])
+        expect(json_response["cpf"]).to eq(valid_author_params[:author][:cpf])
         expect(json_response["books"]).to be_an(Array)
         expect(json_response["books"]).to be_empty
       end
     end
 
     context "when creating a new author with invalid data" do
-      let(:invalid_author_params) do
-        {
-          author: {
-            name: ""
-          }
-        }
-      end
-
-      it "does not create author" do
+      it "does not create author and receive error messages correctly" do
         expect do
           post api_authors_path, params: invalid_author_params
         end.not_to change(Author, :count)
-        expect(json_response["errors"]).to include("Name can't be blank")
         expect(response).to have_http_status(:unprocessable_entity)
+        expect(json_response["errors"]).to eq([
+                                                "Name can't be blank",
+                                                "Cpf can't be blank",
+                                                "Cpf is invalid"
+                                              ])
       end
     end
   end
@@ -95,13 +98,6 @@ RSpec.describe "Api::Authors", type: :request do
   describe "PATCH/PUT /api/authors/:id" do
     context "with valid data" do
       let!(:author) { create(:author) }
-      let(:valid_author_params) do
-        {
-          author: {
-            name: "Updated author"
-          }
-        }
-      end
 
       it "updates author" do
         patch api_author_path(author), params: valid_author_params
@@ -109,7 +105,8 @@ RSpec.describe "Api::Authors", type: :request do
         expect(response).to have_http_status(:ok)
 
         expect(json_response["id"]).to eq(author.id)
-        expect(json_response["name"]).to eq("Updated author")
+        expect(json_response["name"]).to eq(valid_author_params[:author][:name])
+        expect(json_response["cpf"]).to eq(valid_author_params[:author][:cpf])
         expect(json_response["books"]).to be_an(Array)
         expect(json_response["books"]).to be_empty
       end
@@ -117,33 +114,23 @@ RSpec.describe "Api::Authors", type: :request do
 
     context "with invalid data" do
       let!(:author) { create(:author) }
-      let(:invalid_author_params) do
-        {
-          author: {
-            name: ""
-          }
-        }
-      end
 
       it "does not update the author" do
         expect do
           patch api_author_path(author), params: invalid_author_params
         end.not_to change(author, :name)
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(json_response["errors"]).to include("Name can't be blank")
+        expect(json_response["errors"]).to eq([
+                                                "Name can't be blank",
+                                                "Cpf can't be blank",
+                                                "Cpf is invalid"
+                                              ])
       end
     end
 
     context "when the author does not exist" do
-      let(:invalid_author_params) do
-        {
-          author: {
-            name: "Invalid Author"
-          }
-        }
-      end
       it "returns an error message for non-existing author" do
-        patch api_author_path(-1), params: invalid_author_params
+        patch api_author_path(-1)
 
         expect(response).to have_http_status(:not_found)
         expect(json_response["message"]).to eq("Author not found.")

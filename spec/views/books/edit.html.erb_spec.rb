@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'books/edit', type: :view do
+RSpec.describe "books/edit", type: :view do
   let(:authors) { create_list(:author, 3) }
   let(:not_associated_assemblies) { create_list(:assembly, 3) }
   let(:associated_assemblies) { create_list(:assembly, 4) }
@@ -26,6 +26,7 @@ RSpec.describe 'books/edit', type: :view do
       expect(DateTime.parse(Capybara.string(rendered)
                                     .find("input[name='book[published_at]']")
                                     .value).utc.iso8601).to eq(book.published_at.utc.iso8601)
+      expect(rendered).to have_selector("input[type='text'][name='book[isbn]'][value='#{book.isbn}']")
       expect(rendered).to have_selector("select[name='book[author_id]']")
       expect(rendered).to have_select("book[author_id]", selected: book.author.name)
       expect(rendered).to have_select("book_author_id", with_options: authors.pluck(:name))

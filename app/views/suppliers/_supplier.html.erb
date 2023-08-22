@@ -5,13 +5,18 @@
   </p>
 
   <p>
+    <strong>Cnpj:</strong>
+    <%= supplier.cnpj %>
+  </p>
+
+  <p>
     <strong>Account:</strong>
-    <%= supplier.account&.account_number %>
+    <span id="test-account_with_digit_value"><%= supplier.account_with_digit %></span>
   </p>
 
   <div>
     <p><strong>Parts:</strong></p>
-    <ul>
+    <ul id="test-parts_list">
       <% supplier.parts.each do |part| %>
         <li><%= part.part_number %></li>
       <% end %>

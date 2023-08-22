@@ -16,13 +16,18 @@
     <%= form.text_field :name %>
   </div>
 
+  <div>
+    <%=form.label :cnpj, style: "display: block" %>
+    <%= form.text_field :cnpj %>
+  </div>
+
   <br>
 
   <% if @supplier.persisted? %>
     <div>
       <div>
         <strong>Account:</strong>
-        <%= @supplier.account.account_number %>
+        <%= @supplier.account_with_digit %>
       </div>
       <div>
         <em>It is not possible to change the account.</em>

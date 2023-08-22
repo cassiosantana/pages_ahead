@@ -9,7 +9,6 @@ class AuthorsController < ApplicationController
 
   def show; end
 
-  # GET /authors/new
   def new
     @author = Author.new
   end
@@ -47,6 +46,6 @@ class AuthorsController < ApplicationController
   end
 
   def author_params
-    params.require(:author).permit(:name)
+    params.require(:author).permit(:name, :cpf)
   end
 end

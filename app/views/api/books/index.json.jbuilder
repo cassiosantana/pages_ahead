@@ -1,6 +1,7 @@
 json.array! @books do |book|
   json.id book.id
   json.published_at book.published_at
+  json.isbn book.isbn
 
   json.author do
     json.id book.author.id

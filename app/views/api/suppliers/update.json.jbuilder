@@ -1,2 +1,1 @@
-json.id @supplier.id
-json.name @supplier.name
+json.partial! "supplier", supplier: @supplier

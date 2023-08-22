@@ -6,7 +6,7 @@
   <% @accounts.each do |account| %>
     <p>
       <strong>Number:</strong>
-      <%= account.account_number %> |
+      <%= account.number_with_digit %> |
       <%= link_to "Show this account", account %>
     </p>
   <% end %>

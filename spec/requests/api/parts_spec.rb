@@ -96,9 +96,9 @@ RSpec.describe "Api::Parts", type: :request do
         patch api_part_path(part), params: invalid_data
 
         part.reload
-        expect(response).to have_http_status :ok
-        expect(json_response["id"]).to eq(part.id)
-        expect(json_response["id"]).not_to eq(new_supplier.id)
+        expect(response).to have_http_status :unprocessable_entity
+        expect(json_response["errors"]).to include("Supplier cannot be updated")
+        expect(part.id).not_to eq(new_supplier.id)
       end
     end
 

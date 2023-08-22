@@ -6,33 +6,66 @@ RSpec.describe Supplier, type: :model do
   let!(:supplier) { create(:supplier) }
 
   describe "validations" do
-
-    it "is valid with a name" do
-      expect(supplier).to be_valid
+    context "when attributes are valid" do
+      it "supplier is created" do
+        expect(supplier).to be_valid
+      end
     end
 
-    it "is invalid without a name" do
-      supplier.name = nil
-      expect(supplier).to be_invalid
-      expect(supplier.errors[:name]).to include("can't be blank")
+    context "when all attributes are invalid" do
+      it "whe received the error messages correctly" do
+        supplier.name = nil
+        supplier.cnpj = nil
+        expect(supplier).to be_invalid
+        expect(supplier.errors[:name]).to eq(["can't be blank"])
+        expect(supplier.errors[:cnpj]).to eq(["can't be blank", "is invalid"])
+      end
+    end
+  end
+
+  describe "creating" do
+    context "when trying to create a supplier with valid data" do
+      it "it will be created successfully" do
+        expect { create(:supplier) }.to change(Supplier, :count).by(1)
+        expect(Supplier.last.name).to be_present
+        expect(Supplier.last.cnpj).to be_present
+      end
+    end
+
+    context "when cnpj is invalid" do
+      let(:supplier) { build(:supplier, cnpj: "11111") }
+
+      it "whe received the error message correctly" do
+        supplier.save
+        expect(supplier).to be_invalid
+        expect(supplier.errors[:cnpj]).to eq(["is invalid"])
+      end
     end
   end
 
   describe "editing" do
-    context "when editing supplier name" do
-      it "the name is changed" do
-        original_name = supplier.name
-        supplier.name = "#{original_name} new_name"
-        supplier.save
+    context "when trying to edit supplier with valid attributes" do
+      let(:new_attributes) { attributes_for(:supplier) }
 
-        expect(supplier.reload.name).to_not eq(original_name)
+      it "the attributes is changed" do
+        supplier.update(new_attributes)
+        supplier.reload
+
+        expect(supplier.name).to eq(new_attributes[:name])
+        expect(supplier.cnpj).to eq(new_attributes[:cnpj])
       end
+    end
+
+    context "when trying to edit supplier with invalid attributes" do
+      let(:invalid_attributes) { attributes_for(:supplier, name: "", cnpj: "") }
 
       it "the name is not changed" do
-        supplier.name = ""
-        supplier.save
+        supplier.update(invalid_attributes)
+        supplier.reload
 
-        expect(supplier.reload.name).not_to eq("")
+        expect(supplier.changed?).to eq(false)
+        expect(supplier.errors[:name]).to eq(["can't be blank"])
+        expect(supplier.errors[:cnpj]).to eq(["can't be blank", "is invalid"])
       end
     end
   end
@@ -66,6 +99,26 @@ RSpec.describe Supplier, type: :model do
         expect { supplier.destroy }.to change(Supplier, :count).by(-1).and change(Part, :count).by(-3)
         expect(Supplier.exists?(supplier.id)).to be_falsey
         expect(Part.where(id: supplier.parts.pluck(:id))).to be_empty
+      end
+    end
+  end
+
+  describe "account_with_digit" do
+    context "when supplier have an account" do
+      let(:account) { create(:account) }
+      let(:supplier) { create(:supplier, account: account) }
+
+      it "return a account number and check digit correctly" do
+        expect(supplier.account_with_digit)
+          .to eq("#{supplier.account.account_number} - #{supplier.account.check_digit}")
+      end
+    end
+
+    context "when the supplier does not have an associated account" do
+      let(:supplier) { create(:supplier) }
+
+      it "return a account number and check digit correctly" do
+        expect(supplier.account_with_digit).to be_nil
       end
     end
   end

@@ -22,6 +22,10 @@ RSpec.describe "accounts/edit", type: :view do
         expect(rendered).not_to have_selector("select[name='account[supplier_id]']")
         expect_submit_button("Update Account")
       end
+      expect(rendered).to have_selector("div", text: account.supplier.name)
+      expect(rendered).to have_selector("div em", text: "It is not possible to change the supplier.")
+      expect(rendered).to have_selector("div", text: account.number_with_digit)
+      expect(rendered).to have_selector("div em", text: "It is not possible to change the account number.")
     end
   end
 

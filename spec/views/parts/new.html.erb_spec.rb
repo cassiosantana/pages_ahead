@@ -4,14 +4,12 @@ require "rails_helper"
 
 RSpec.describe "parts/new", type: :view do
   let(:part) { build(:part) }
+  let(:supplier1) { create(:supplier, name: "Supplier 1") }
+  let(:supplier2) { create(:supplier, name: "Supplier 2") }
   before(:each) do
     assign(:part, part)
-    assign(:suppliers, [
-             Supplier.create(name: "Supplier 1"),
-             Supplier.create(name: "Supplier 2")
-           ])
+    assign(:suppliers, [supplier1, supplier2])
     assign(:assemblies, create_list(:assembly, rand(11)))
-
     render
   end
 

@@ -15,10 +15,10 @@ RSpec.describe "suppliers/new", type: :view do
   end
 
   it "render the supplier form" do
-    expect(rendered).to have_selector("form[action='#{suppliers_path}'][method='post']") do
-      expect(rendered).to have_selector("input[type='text'][name='supplier[name]']")
-      expect_submit_button("Create Supplier")
-    end
+    expect(rendered).to have_selector("form[action='#{suppliers_path}'][method='post']")
+    expect(rendered).to have_selector("input[type='text'][name='supplier[name]']")
+    expect(rendered).to have_selector("input[type='text'][name='supplier[cnpj]']")
+    expect_submit_button("Create Supplier")
   end
 
   it "render the back link" do
