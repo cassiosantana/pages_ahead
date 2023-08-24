@@ -21,6 +21,7 @@ RSpec.describe "books/new", type: :view do
 
   it "render the book form" do
     expect(rendered).to have_selector("form[action='#{books_path}'][method='post']")
+    expect(rendered).to have_selector("input[type='text'][name='book[title]']")
     expect(rendered).to have_selector("input[type='datetime-local'][name='book[published_at]']")
     expect(rendered).to have_selector("input[type='text'][name='book[isbn]']")
     expect(rendered).to have_selector("select[name='book[author_id]']")

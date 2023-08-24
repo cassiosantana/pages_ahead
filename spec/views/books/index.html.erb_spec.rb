@@ -17,7 +17,7 @@ RSpec.describe "books/index", type: :view do
 
   it "render a list of books" do
     books.each do |book|
-      expect(rendered).to have_text("Published at: #{book.published_at}", normalize_ws: true)
+      expect(rendered).to have_text("Title: #{book.title}", normalize_ws: true)
       expect(rendered).to have_link("Show this book", href: book_path(book))
     end
   end

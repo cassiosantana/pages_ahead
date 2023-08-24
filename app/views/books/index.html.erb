@@ -5,8 +5,8 @@
 <div id="books">
   <% @books.each do |book| %>
     <p>
-      <strong>Published at:</strong>
-      <%= book.published_at %> |
+      <strong>Title:</strong>
+      <%= book.title %> |
       <%= link_to "Show this book", book %>
     </p>
   <% end %>

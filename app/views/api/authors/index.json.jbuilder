@@ -5,6 +5,6 @@ json.array! @authors do |author|
 
   json.books author.books do |book|
     json.id book.id
-    json.published_at book.published_at
+    json.title book.title
   end
 end

@@ -3,14 +3,13 @@
 require "rails_helper"
 
 RSpec.describe "assemblies/new", type: :view do
-  let(:assembly) do
-    build(:assembly,
-          books: create_list(:book, 5, author: create(:author)),
-          parts: create_list(:part, 3, supplier: create(:supplier)))
-  end
+  let(:books) { create_list(:book, 5) }
+  let(:parts) { create_list(:part, 3) }
 
   before(:each) do
-    assign(:assembly, assembly)
+    assign(:assembly, build(:assembly))
+    assign(:books, books)
+    assign(:parts, parts)
     render
   end
 
@@ -19,12 +18,22 @@ RSpec.describe "assemblies/new", type: :view do
   end
 
   it "render the edit assembly form" do
-    expect(rendered).to have_selector("form[action='#{assemblies_path}'][method='post']") do
-      expect(rendered).to have_selector("input[name='assembly[name]']")
-      expect(rendered).to have_selector("input[type='checkbox'][name='assembly[part_ids][]']", count: 3)
-      expect(rendered).to have_selector("input[type='checkbox'][name='assembly[book_ids][]']", count: 5)
-      expect_submit_button("Create Assembly")
+    form = "form[action='#{assemblies_path}'][method='post']"
+    name = "input[name='assembly[name]']"
+    assembly_parts = "input[type='checkbox'][name='assembly[part_ids][]']"
+    assembly_books = "input[type='checkbox'][name='assembly[book_ids][]']"
+
+    expect(rendered).to have_selector(form)
+    expect(rendered).to have_selector(name)
+    expect(rendered).to have_selector(assembly_parts, count: 3)
+    Part.all.each do |part|
+      expect(rendered).to have_text(part.part_number)
     end
+    expect(rendered).to have_selector(assembly_books, count: 5)
+    Book.all.each do |book|
+      expect(rendered).to have_text(book.title)
+    end
+    expect_submit_button("Create Assembly")
   end
 
   it "render the back link" do
