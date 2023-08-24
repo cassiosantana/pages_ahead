@@ -36,8 +36,7 @@
       <% else %>
         <%= form.check_box :book_ids, { multiple: true }, book.id, nil %>
       <% end %>
-      Published at:
-      <%= form.label :book_ids, book.published_at %><br>
+      <%= form.label :book_ids, book.title %><br>
     <% end %>
   </div>
 

@@ -39,7 +39,6 @@
       <% else %>
         <%= form.check_box :assembly_ids, { multiple: true }, assembly.id, nil %>
       <% end %>
-      Assembly name:
       <%= form.label :assembly_ids, assembly.name %><br>
     <% end %>
   </div>
