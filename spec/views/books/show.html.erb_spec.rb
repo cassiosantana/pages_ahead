@@ -14,6 +14,7 @@ RSpec.describe "books/show", type: :view do
 
   context "when trying to display the attributes and associations" do
     it "they are displayed correctly" do
+      expect(rendered).to have_text("Title: #{book.title}", normalize_ws: true)
       expect(rendered).to have_text("Published at: #{book.published_at}", normalize_ws: true)
       expect(rendered).to have_text("ISBN: #{book.isbn}", normalize_ws: true)
       expect(rendered).to have_text("Author: #{book.author.name}", normalize_ws: true)
