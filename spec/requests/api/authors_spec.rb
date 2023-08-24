@@ -3,19 +3,18 @@
 require "rails_helper"
 
 RSpec.describe "Api::Authors", type: :request do
-  let(:valid_author_params) do
-    {
-      author: {
-        name: FFaker::Name.name,
-        cpf: FFaker::IdentificationBR.cpf
-      }
-    }
-  end
+  let(:valid_author_params) { { author: attributes_for(:author) } }
 
   let(:invalid_author_params) { { author: { name: "", cpf: "" } } }
 
   describe "GET /api/authors" do
-    let!(:authors) { create_list(:author, 3) }
+    let!(:authors) do
+      create_list(:author, 3).tap do |authors|
+        authors.each do |author|
+          create_list(:book, 3, author: author)
+        end
+      end
+    end
 
     it "returns a successful response and correct books data" do
       get api_authors_path
@@ -30,6 +29,13 @@ RSpec.describe "Api::Authors", type: :request do
         expect(author["name"]).to eq(author_record.name)
         expect(author["cpf"]).to eq(author_record.cpf)
         expect(author["books"]).to be_an(Array)
+
+        books_ids = author["books"].map { |book| book["id"] }
+        books_titles = author["books"].map { |book| book["title"] }
+        author_record.books.each do |book|
+          expect(books_ids).to include(book.id)
+          expect(books_titles).to include(book.title)
+        end
       end
     end
   end
@@ -47,10 +53,10 @@ RSpec.describe "Api::Authors", type: :request do
         expect(json_response["cpf"]).to eq(author.cpf)
 
         book_ids = books.map(&:id)
-        book_published_ats = books.map(&:published_at)
+        book_titles = books.map(&:title)
         json_response["books"].each do |book|
           expect(book_ids).to include(book["id"])
-          expect(book_published_ats).to include(book["published_at"])
+          expect(book_titles).to include(book["title"])
         end
       end
     end

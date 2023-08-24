@@ -30,7 +30,7 @@ RSpec.describe "Api::Assemblies", type: :request do
       expect(json_response["books"].length).to eq(books.length)
       json_response["books"].each do |book|
         expect(book["id"]).to be_present
-        expect(book["published_at"]).to be_present
+        expect(book["title"]).to be_present
       end
       expect(json_response["parts"].length).to eq(parts.length)
       json_response["parts"].each do |part|
