@@ -3,10 +3,8 @@
 require "rails_helper"
 
 RSpec.describe "assemblies/edit", type: :view do
-  let(:author) { create(:author) }
-  let(:supplier) { create(:supplier) }
-  let(:books) { create_list(:book, FFaker::Random.rand(0..10), author: author) }
-  let(:parts) { create_list(:part, FFaker::Random.rand(0..10), supplier: supplier) }
+  let(:books) { create_list(:book, rand(0..10)) }
+  let(:parts) { create_list(:part, rand(0..10)) }
   let(:assembly) { create(:assembly, books: books, parts: parts) }
 
   before(:each) do
@@ -19,12 +17,22 @@ RSpec.describe "assemblies/edit", type: :view do
   end
 
   it "render the edit assembly form" do
-    expect(rendered).to have_selector("form[action='#{assembly_path(assembly)}'][method='post']") do
-      expect(rendered).to have_selector("input[name='assembly[name]'][value='#{assembly.name}']")
-      expect(rendered).to have_selector("input[type='checkbox'][name='assembly[part_ids][]']", count: Part.count)
-      expect(rendered).to have_selector("input[type='checkbox'][name='assembly[book_ids][]']", count: Book.count)
-      expect_submit_button("Update Assembly")
+    form = "form[action='#{assembly_path(assembly)}'][method='post']"
+    name = "input[name='assembly[name]'][value='#{assembly.name}']"
+    assembly_parts = "input[type='checkbox'][name='assembly[part_ids][]']"
+    assembly_books = "input[type='checkbox'][name='assembly[book_ids][]']"
+
+    expect(rendered).to have_selector(form)
+    expect(rendered).to have_selector(name)
+    expect(rendered).to have_selector(assembly_parts, count: Part.count)
+    expect(rendered).to have_selector(assembly_books, count: Book.count)
+    assembly.parts.each do |part|
+      expect(rendered).to have_text(part.part_number)
     end
+    assembly.books.each do |book|
+      expect(rendered).to have_text(book.title)
+    end
+    expect_submit_button("Update Assembly")
   end
 
   it "render the show link" do
