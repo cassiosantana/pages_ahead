@@ -3,19 +3,9 @@
 require "rails_helper"
 
 RSpec.describe "Api::Assemblies", type: :request do
-  let!(:assemblies) { create_list(:assembly, rand(5..10)) }
-  let!(:supplier) { create(:supplier) }
-  let!(:parts) { create_list(:part, rand(1..10), supplier: supplier) }
-  let!(:books) { create_list(:book, rand(1..10)) }
-  let!(:valid_data) do
-    {
-      assembly: {
-        name: FFaker::Lorem.word,
-        book_ids: books.pluck(:id),
-        part_ids: parts.pluck(:id)
-      }
-    }
-  end
+  let(:supplier) { create(:supplier) }
+  let(:parts) { create_list(:part, rand(1..10), supplier: supplier) }
+  let(:books) { create_list(:book, rand(1..10)) }
 
   shared_examples "verify assembly creation" do
     it "the assembly is successfully created" do
@@ -35,13 +25,14 @@ RSpec.describe "Api::Assemblies", type: :request do
       expect(json_response["parts"].length).to eq(parts.length)
       json_response["parts"].each do |part|
         expect(part["id"]).to be_present
-        expect(part["number"]).to be_present
+        expect(part["name"]).to be_present
       end
     end
   end
 
   describe "GET /api/assemblies" do
     context "when request all assemblies" do
+      let!(:assemblies) { create_list(:assembly, rand(5..10)) }
       it "list all assemblies" do
         get api_assemblies_path
 
@@ -91,6 +82,16 @@ RSpec.describe "Api::Assemblies", type: :request do
     end
 
     context "when trying to create an assembly with associations" do
+      let(:valid_data) do
+        {
+          assembly: {
+            name: FFaker::Lorem.word,
+            book_ids: books.pluck(:id),
+            part_ids: parts.pluck(:id)
+          }
+        }
+      end
+
       before { post api_assemblies_path, params: valid_data }
 
       include_examples "verify assembly creation"
@@ -112,11 +113,22 @@ RSpec.describe "Api::Assemblies", type: :request do
 
   describe "PATCH /api/assemblies/:id" do
     context "when trying to update assembly with valid data" do
-      before do
-        patch api_assembly_path(assemblies.first), params: valid_data
+      let(:valid_data) do
+        {
+          assembly: {
+            name: FFaker::Lorem.word,
+            book_ids: books.pluck(:id),
+            part_ids: parts.pluck(:id)
+          }
+        }
       end
 
-      it "the assembly is successful updated" do
+      let(:assembly) { create(:assembly) }
+      before do
+        patch api_assembly_path(assembly), params: valid_data
+      end
+
+      it "receive correct status" do
         expect(response).to have_http_status :ok
         expect(json_response["id"]).to be_present
         expect(json_response["name"]).to eq(valid_data[:assembly][:name])
@@ -126,10 +138,11 @@ RSpec.describe "Api::Assemblies", type: :request do
     end
 
     context "when trying to update an assembly with invalid data" do
-      let!(:invalid_data) { { assembly: { name: "" } } }
+      let(:assembly) { create(:assembly) }
+      let(:invalid_data) { { assembly: { name: "" } } }
 
       it "the assembly is successfully created" do
-        patch api_assembly_path(assemblies.second), params: invalid_data
+        patch api_assembly_path(assembly), params: invalid_data
 
         expect(response).to have_http_status :unprocessable_entity
         expect(json_response["errors"]).to include("Name can't be blank")
@@ -139,8 +152,10 @@ RSpec.describe "Api::Assemblies", type: :request do
 
   describe "DELETE /api/assemblies/:id" do
     context "when trying to delete an existing assembly" do
+      let!(:assembly) { create(:assembly) }
+
       it "the assembly is deleted successfully" do
-        delete api_assembly_path(assemblies.last)
+        delete api_assembly_path(assembly)
 
         expect(response).to have_http_status :no_content
       end
@@ -156,10 +171,12 @@ RSpec.describe "Api::Assemblies", type: :request do
     end
 
     context "when deleting assembly fails" do
+      let!(:assembly) { create(:assembly) }
+
       it "we received the status and error message correctly" do
         allow_any_instance_of(Assembly).to receive(:destroy).and_return(false)
 
-        delete api_assembly_path(assemblies.last)
+        delete api_assembly_path(assembly)
 
         expect(response).to have_http_status :unprocessable_entity
         expect(json_response["message"]).to eq("Failed to delete the assembly.")
