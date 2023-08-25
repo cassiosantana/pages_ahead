@@ -3,8 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "parts/index", type: :view do
-  let!(:supplier) { create(:supplier) }
-  let(:parts) { create_list(:part, 3, supplier: supplier) }
+  let(:parts) { create_list(:part, 3) }
 
   before(:each) do
     assign(:parts, parts)
@@ -16,7 +15,10 @@ RSpec.describe "parts/index", type: :view do
   end
 
   it "render a list of parts" do
-    expect_object_list(parts)
+    parts.each do |part|
+      expect(rendered).to have_text("Name: #{part.name}", normalize_ws: true)
+      expect(rendered).to have_link("Show this part", href: part_path(part))
+    end
   end
 
   it "render a link to new assembly" do

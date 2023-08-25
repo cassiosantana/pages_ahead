@@ -27,7 +27,7 @@ RSpec.describe "assemblies/new", type: :view do
     expect(rendered).to have_selector(name)
     expect(rendered).to have_selector(assembly_parts, count: 3)
     Part.all.each do |part|
-      expect(rendered).to have_text(part.part_number)
+      expect(rendered).to have_text(part.name)
     end
     expect(rendered).to have_selector(assembly_books, count: 5)
     Book.all.each do |book|

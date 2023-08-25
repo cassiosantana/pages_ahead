@@ -12,16 +12,11 @@ RSpec.describe "parts/show", type: :view do
     render
   end
 
-  context "rendering of part attributes" do
-    it "render the part number" do
-      expect(rendered).to have_text(part.part_number.to_s)
-    end
-
-    it "render the supplier name" do
-      expect(rendered).to have_text(part.supplier.name.to_s)
-    end
-
-    it "render the part's assemblies" do
+  context "rendering of part attributes and associations" do
+    it "all data is displayed correctly" do
+      expect(rendered).to have_text("Name: #{part.name}", normalize_ws: true)
+      expect(rendered).to have_text("Number: #{part.part_number}", normalize_ws: true)
+      expect(rendered).to have_text("Supplier: #{part.supplier.name}", normalize_ws: true)
       expect(rendered).to have_selector("p strong", text: "Assemblies:")
       part.assemblies.each do |assembly|
         expect(rendered).to have_selector("ul li", text: assembly.name)
