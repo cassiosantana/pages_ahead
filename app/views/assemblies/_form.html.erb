@@ -24,7 +24,7 @@
       <% else %>
         <%= form.check_box :part_ids, { multiple: true }, part.id, nil %>
       <% end %>
-      <%= form.label :part_ids, part.part_number %><br>
+      <%= form.label :part_ids, part.name %><br>
     <% end %>
   </div>
 

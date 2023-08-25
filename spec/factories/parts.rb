@@ -2,7 +2,8 @@
 
 FactoryBot.define do
   factory :part do
-    part_number { FFaker::Random.rand(1..99_999).to_s.rjust(5, "0") }
+    name { FFaker::Product.product_name }
+    part_number { rand(10_000..99_999).to_s }
     supplier { create(:supplier) }
   end
 end

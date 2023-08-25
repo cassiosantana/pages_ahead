@@ -18,7 +18,7 @@ RSpec.describe "assemblies/show", type: :view do
       expect(rendered).to have_text("Name: #{assembly.name}", normalize_ws: true)
       expect(rendered).to have_selector("p strong", text: "Parts:")
       assembly.parts.each do |part|
-        expect(rendered).to have_text(part.part_number)
+        expect(rendered).to have_text(part.name)
       end
       expect(rendered).to have_selector("p strong", text: "Books:")
       assembly.books.each do |book|

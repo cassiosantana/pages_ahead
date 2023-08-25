@@ -27,7 +27,7 @@ RSpec.describe "assemblies/edit", type: :view do
     expect(rendered).to have_selector(assembly_parts, count: Part.count)
     expect(rendered).to have_selector(assembly_books, count: Book.count)
     assembly.parts.each do |part|
-      expect(rendered).to have_text(part.part_number)
+      expect(rendered).to have_text(part.name)
     end
     assembly.books.each do |book|
       expect(rendered).to have_text(book.title)
