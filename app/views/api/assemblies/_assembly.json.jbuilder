@@ -11,6 +11,6 @@ end
 json.parts do
   json.array! @assembly.parts do |part|
     json.id part.id
-    json.number part.part_number
+    json.name part.name
   end
 end
