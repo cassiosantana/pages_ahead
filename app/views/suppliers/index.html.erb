@@ -2,6 +2,16 @@
 
 <h1>Suppliers</h1>
 
+<div>
+  <%= search_form_for @q do |f| %>
+    <%= f.label :name_cont, "Search by name" %>
+    <%= f.search_field :name_cont %>
+    <%= f.submit %>
+  <% end %>
+</div>
+
+<br>
+
 <div id="suppliers">
   <% @suppliers.each do |supplier| %>
     <p>
