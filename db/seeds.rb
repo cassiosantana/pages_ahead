@@ -12,13 +12,13 @@ Book.destroy_all
 ActiveRecord::Base.connection.execute("DELETE FROM assemblies_books")
 ActiveRecord::Base.connection.execute("DELETE FROM assemblies_parts")
 
-# Author
+# Aut0or
 5.times do
   Author.create(name: FFaker::Name.name, cpf: FFaker::IdentificationBR.cpf)
 end
 
 # Supplier
-5.times do
+50.times do
   Supplier.create(name: FFaker::Company.name, cnpj: FFaker::IdentificationBR.cnpj)
 end
 
