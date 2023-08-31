@@ -6,12 +6,13 @@ RSpec.describe "accounts/index", type: :view do
   let(:suppliers) { create_list(:supplier, 3) }
   let(:accounts) do
     suppliers.map do |supplier|
-      create(:account, supplier: supplier)
+      create(:account, supplier:)
     end
   end
 
   before(:each) do
     assign(:accounts, accounts)
+    assign(:q, Account.ransack)
     render
   end
 
