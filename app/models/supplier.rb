@@ -18,6 +18,10 @@ class Supplier < ApplicationRecord
     %w[name]
   end
 
+  def self.ransackable_associations(_auth_object = nil)
+    %w[account]
+  end
+
   private
 
   def cnpj_valid?
