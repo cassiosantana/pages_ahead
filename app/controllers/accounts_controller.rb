@@ -4,12 +4,7 @@ class AccountsController < ApplicationController
   before_action :set_account, only: %i[show edit update destroy]
 
   def index
-    @q = Account.ransack(params[:q])
-    @accounts = @q.result(distinct: true).includes(:supplier)
-
-    return unless params[:q].present? && params[:q][:account_number_cont].present?
-
-    @suppliers = @accounts.map(&:supplier).uniq
+    @accounts = Account.all
   end
 
   def show; end

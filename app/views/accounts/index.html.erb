@@ -2,33 +2,13 @@
 
 <h1>Accounts</h1>
 
-<div>
-  <%= search_form_for @q do |f| %>
-    <%= f.label :supplier_name_cont, "Search Supplier by account number" %>
-    <%= f.search_field :account_number_cont %>
-    <%= f.submit "search" %>
-  <% end %>
-</div>
-
-<br>
-
 <div id="accounts">
-  <% if @suppliers.present? %>
-    <% @suppliers.each do |supplier| %>
-      <p>
-        <strong>Name:</strong>
-        <%= supplier.name %> |
-        <%= link_to "Show this supplier", supplier_path(supplier) %>
-      </p>
-    <% end %>
-  <% else %>
-    <% @accounts.each do |account| %>
-      <p>
-        <strong>Number:</strong>
-        <%= account.number_with_digit %> |
-        <%= link_to "Show this account", account %>
-      </p>
-    <% end %>
+  <% @accounts.each do |account| %>
+    <p>
+      <strong>Number:</strong>
+      <%= account.number_with_digit %> |
+      <%= link_to "Show this account", account %>
+    </p>
   <% end %>
 </div>
 

@@ -11,14 +11,6 @@ class Account < ApplicationRecord
 
   attr_readonly :account_number, :supplier_id
 
-  def self.ransackable_attributes(_auth_object = nil)
-    %w[account_number]
-  end
-
-  def self.ransackable_associations(_auth_object = nil)
-    ["supplier"]
-  end
-
   def number_with_digit
     [account_number, check_digit].compact.join(" - ")
   end
