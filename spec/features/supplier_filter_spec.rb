@@ -7,6 +7,7 @@ RSpec.describe "Supplier filters", type: :feature do
     let!(:supplier_one) { create(:supplier, name: "Supplier 1") }
     let!(:supplier_two) { create(:supplier, name: "Supplier 2") }
     let!(:supplier_three) { create(:supplier, name: "Supplier 3") }
+    let!(:account) { create(:account) }
 
     shared_examples "all suppliers are visible" do
       it "shows all suppliers" do
@@ -26,7 +27,7 @@ RSpec.describe "Supplier filters", type: :feature do
 
     context "when filtering by name" do
       before do
-        fill_in "q_name_cont", with: "Supplier 1"
+        fill_in "q_name_or_account_account_number_cont", with: "Supplier 1"
         click_button "Search"
       end
 
@@ -38,11 +39,25 @@ RSpec.describe "Supplier filters", type: :feature do
 
       context "when removing the name filter" do
         before do
-          fill_in "q_name_cont", with: ""
+          fill_in "q_name_or_account_account_number_cont", with: ""
           click_button "Search"
         end
 
         include_examples "all suppliers are visible"
+      end
+    end
+
+    context "when filtering by account number" do
+      before do
+        fill_in "q_name_or_account_account_number_cont", with: account.account_number
+        click_button "Search"
+      end
+
+      it "filters suppliers correctly" do
+        expect(page).to have_content(account.supplier.name)
+        expect(page).to have_no_content(supplier_one.name)
+        expect(page).to have_no_content(supplier_two.name)
+        expect(page).to have_no_content(supplier_three.name)
       end
     end
   end
