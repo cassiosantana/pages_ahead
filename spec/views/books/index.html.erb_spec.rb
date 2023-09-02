@@ -4,10 +4,11 @@ require "rails_helper"
 
 RSpec.describe "books/index", type: :view do
   let(:author) { create(:author) }
-  let(:books) { create_list(:book, 5, author: author) }
+  let(:books) { create_list(:book, 5, author:) }
 
   before(:each) do
     assign(:books, books)
+    assign(:q, Book.ransack)
     render
   end
 
