@@ -8,6 +8,10 @@ class Book < ApplicationRecord
   validates :isbn, presence: true
   validate :isbn_valid?
 
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[title]
+  end
+
   private
 
   def isbn_valid?
