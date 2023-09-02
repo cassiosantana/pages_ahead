@@ -4,8 +4,8 @@
 
 <div>
   <%= search_form_for @q do |f| %>
-    <%= f.label :title_cont, "Search by title" %>
-    <%= f.search_field :title_cont %>
+    <%= f.label :title_or_author_name_cont, "Search by title or Author name" %>
+    <%= f.search_field :title_or_author_name_cont %>
     <%= f.submit %>
   <% end %>
 </div>

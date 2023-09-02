@@ -12,6 +12,10 @@ class Book < ApplicationRecord
     %w[title]
   end
 
+  def self.ransackable_associations(_auth_object = nil)
+    %w[author]
+  end
+
   private
 
   def isbn_valid?
