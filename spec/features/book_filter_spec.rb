@@ -26,7 +26,7 @@ RSpec.describe "Book filters", type: :feature do
 
     context "when filtering by title" do
       before do
-        fill_in "q_title_cont", with: "Book 1"
+        fill_in "q_title_or_author_name_cont", with: "Book 1"
         click_button "Search"
       end
 
@@ -38,11 +38,24 @@ RSpec.describe "Book filters", type: :feature do
 
       context "when removing the title filter" do
         before do
-          fill_in "q_title_cont", with: ""
+          fill_in "q_title_or_author_name_cont", with: ""
           click_button "Search"
         end
 
         include_examples "all books are visible"
+      end
+    end
+
+    context "when filtering by author name" do
+      before do
+        fill_in "q_title_or_author_name_cont", with: book_one.author.name
+        click_button "Search"
+      end
+
+      it "filters books correctly" do
+        expect(page).to have_content(book_one.title)
+        expect(page).to have_no_content(book_two.title)
+        expect(page).to have_no_content(book_three.title)
       end
     end
   end
