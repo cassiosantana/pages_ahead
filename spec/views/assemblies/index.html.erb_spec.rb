@@ -7,6 +7,7 @@ RSpec.describe "assemblies/index", type: :view do
 
   before(:each) do
     assign(:assemblies, assemblies)
+    assign(:q, Assembly.ransack)
     render
   end
 
