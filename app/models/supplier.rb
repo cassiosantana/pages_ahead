@@ -19,7 +19,7 @@ class Supplier < ApplicationRecord
   end
 
   def self.ransackable_associations(_auth_object = nil)
-    %w[account]
+    %w[account parts]
   end
 
   private

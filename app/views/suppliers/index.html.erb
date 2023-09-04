@@ -4,8 +4,8 @@
 
 <div>
   <%= search_form_for @q do |f| %>
-    <%= f.label :name_or_account_account_number_cont, "Search by name or account number" %>
-    <%= f.search_field :name_or_account_account_number_cont %>
+    <%= f.label :name_or_account_account_number_or_parts_assemblies_books_author_name_cont, 'Search by Supplier name, supplier Account number or Author name where parts are associated with suppliers' %>
+    <%= f.search_field :name_or_account_account_number_or_parts_assemblies_books_author_name_cont %>
     <%= f.submit %>
   <% end %>
 </div>

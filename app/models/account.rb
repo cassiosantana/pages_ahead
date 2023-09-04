@@ -19,6 +19,10 @@ class Account < ApplicationRecord
     %w[account_number]
   end
 
+  def self.ransackable_associations(_auth_object = nil)
+    ["supplier"]
+  end
+
   private
 
   def assign_check_digit
