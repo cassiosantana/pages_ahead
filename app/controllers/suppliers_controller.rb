@@ -5,7 +5,7 @@ class SuppliersController < ApplicationController
 
   def index
     @q = Supplier.ransack(params[:q])
-    @suppliers = @q.result(distinct: true)
+    @suppliers = @q.result(distinct: true).includes(parts: { assemblies: { books: :author } })
   end
 
   def show; end
