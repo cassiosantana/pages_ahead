@@ -19,6 +19,9 @@ RSpec.describe "authors/index", type: :view do
   end
 
   it "renders the list of authors" do
-    expect_object_list(authors)
+    authors.each do |author|
+      expect(rendered).to have_text("Name: #{author.name}", normalize_ws: true)
+      expect(rendered).to have_link("Show this author", href: author_path(author))
+    end
   end
 end

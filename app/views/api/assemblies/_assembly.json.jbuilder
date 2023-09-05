@@ -4,13 +4,13 @@ json.name @assembly.name
 json.books do
   json.array! @assembly.books do |book|
     json.id book.id
-    json.published_at book.published_at
+    json.title book.title
   end
 end
 
 json.parts do
   json.array! @assembly.parts do |part|
     json.id part.id
-    json.number part.part_number
+    json.name part.name
   end
 end

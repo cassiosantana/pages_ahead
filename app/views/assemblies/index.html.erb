@@ -2,6 +2,16 @@
 
 <h1>Assemblies</h1>
 
+<div>
+  <%= search_form_for @q do |f| %>
+    <%= f.label :parts_name_cont, "Search by Part name" %>
+    <%= f.search_field :parts_name_cont %>
+    <%= f.submit %>
+  <% end %>
+</div>
+
+<br>
+
 <div id="assemblies">
   <% @assemblies.each do |assembly| %>
     <p>

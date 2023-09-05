@@ -3,10 +3,8 @@
 require "rails_helper"
 
 RSpec.describe "assemblies/show", type: :view do
-  let(:author) { create(:author) }
-  let(:supplier) { create(:supplier) }
-  let(:books) { create_list(:book, FFaker::Random.rand(0..10), author: author) }
-  let(:parts) { create_list(:part, FFaker::Random.rand(0..10), supplier: supplier) }
+  let(:books) { create_list(:book, rand(1..10)) }
+  let(:parts) { create_list(:part, rand(1..10)) }
 
   let(:assembly) { create(:assembly, books: books, parts: parts) }
 
@@ -15,22 +13,16 @@ RSpec.describe "assemblies/show", type: :view do
     render
   end
 
-  context "rendering of assemblies attributes" do
-    it "render the assembly name" do
-      expect(rendered).to have_text(assembly.name.to_s)
-    end
-
-    it "render the assembly's books" do
+  context "when show assemblies attributes and associations" do
+    it "all data are displayed correctly" do
+      expect(rendered).to have_text("Name: #{assembly.name}", normalize_ws: true)
+      expect(rendered).to have_selector("p strong", text: "Parts:")
+      assembly.parts.each do |part|
+        expect(rendered).to have_text(part.name)
+      end
       expect(rendered).to have_selector("p strong", text: "Books:")
       assembly.books.each do |book|
-        expect(rendered).to have_selector("ul li", text: book.published_at)
-      end
-    end
-
-    it "render the assembly's parts" do
-      expect(rendered).to have_selector("p strong", text: "Books:")
-      assembly.parts.each do |part|
-        expect(rendered).to have_selector("ul li", text: part.part_number)
+        expect(rendered).to have_text(book.title)
       end
     end
   end

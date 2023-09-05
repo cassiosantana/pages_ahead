@@ -19,16 +19,22 @@ RSpec.describe "suppliers/edit", type: :view do
   end
 
   it "render the supplier form" do
-    expect(rendered).to have_selector("form[action='#{supplier_path(supplier)}'][method='post']")
-    expect(rendered).to have_selector("input[type='text'][name='supplier[name]'][value=\"#{supplier.name}\"]")
-    expect(rendered).to have_selector("input[type='text'][name='supplier[cnpj]'][value=\"#{supplier.cnpj}\"]")
-    expect_submit_button("Update Supplier")
-    expect(rendered).to have_selector("div", text: supplier.account_with_digit)
+    form = "form[action='#{supplier_path(supplier)}'][method='post']"
+    name = "input[type='text'][name='supplier[name]'][value=\"#{supplier.name}\"]"
+    cnpj = "input[type='text'][name='supplier[cnpj]'][value=\"#{supplier.cnpj}\"]"
+    account = "Account: #{supplier.account_with_digit}"
+
+    expect(rendered).to have_selector(form)
+    expect(rendered).to have_selector(name)
+    expect(rendered).to have_selector(cnpj)
+    expect(rendered).to have_text(account, normalize_ws: true)
     expect(rendered).to have_selector("em", text: "It is not possible to change the account.")
+    expect(rendered).to have_selector("strong", text: "Parts:")
     expect(rendered).to have_selector("em", text: "It is not possible to change the parts.")
     supplier.parts.each do |part|
-      expect(rendered).to have_selector("ul li", text: part.part_number)
+      expect(rendered).to have_selector("ul li", text: part.name)
     end
+    expect_submit_button("Update Supplier")
   end
 
   it "render the show supplier link" do

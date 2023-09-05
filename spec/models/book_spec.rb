@@ -32,17 +32,17 @@ RSpec.describe Book, type: :model do
   end
 
   describe "updating attributes" do
-    it "can have its author, publication date and isbn updated" do
-      new_isbn = IsbnGenerator.isbn_thirteen
-      new_author = create(:author)
+    let(:new_author) { create(:author) }
+    let(:new_attributes) { attributes_for(:book, author: new_author) }
 
-      new_date = book.published_at + 1.day
-      book.update(published_at: new_date, isbn: new_isbn, author: new_author)
+    it "can have its author, publication date and isbn updated" do
+      book.update(new_attributes)
 
       expect(book.reload).to have_attributes(
-        published_at: new_date,
-        isbn: new_isbn,
-        author: new_author
+        author_id: new_author.id,
+        title: new_attributes[:title],
+        published_at: new_attributes[:published_at],
+        isbn: new_attributes[:isbn]
       )
     end
   end
