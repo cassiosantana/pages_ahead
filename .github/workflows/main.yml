@@ -7,6 +7,19 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+      db:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test
+        ports: ['5432:5432']
+
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/test
+
     steps:
       - uses: actions/checkout@v2
       - name: Set up Ruby 3.2.2
@@ -20,10 +33,9 @@ jobs:
           bundle install --jobs 4 --retry 3
 
       - name: Setup test database
-        env:
-          RAILS_ENV: test
         run: |
-          bundle exec rake db:migrate
+          bundle exec rails db:create
+          bundle exec rails db:schema:load
 
       - name: Run tests
         env:

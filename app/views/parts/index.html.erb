@@ -5,8 +5,8 @@
 <div id="parts">
   <% @parts.each do |part| %>
     <p>
-      <strong>Number:</strong>
-      <%= part.part_number %> |
+      <strong>Name:</strong>
+      <%= part.name %> |
       <%= link_to "Show this part", part %>
     </p>
   <% end %>

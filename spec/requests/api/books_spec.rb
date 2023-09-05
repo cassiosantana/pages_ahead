@@ -51,6 +51,7 @@ RSpec.describe "Api::Books", type: :request do
       json_response.each do |book|
         book_record = Book.find(book["id"])
         expect(book["id"]).to eq(book_record.id)
+        expect(book["title"]).to eq(book_record.title)
         expect(book["published_at"].to_time).to eq(book_record.published_at.to_time)
         expect(book["isbn"]).to eq(book_record.isbn)
         expect(book["author"]["id"]).to eq(author.id)
@@ -71,6 +72,7 @@ RSpec.describe "Api::Books", type: :request do
       it "returns a successful response and correct book data" do
         expect(response).to have_http_status :ok
         expect(json_response["id"]).to eq(book.id)
+        expect(json_response["title"]).to eq(book.title)
         expect(json_response["published_at"].to_time).to eq(book.published_at.to_time)
         expect(json_response["isbn"]).to eq(book.isbn)
         expect(json_response["author"]["id"]).to eq(book.author.id)
@@ -127,6 +129,7 @@ RSpec.describe "Api::Books", type: :request do
         subject
         expect(response).to have_http_status :created
         expect(json_response["id"]).to be_present
+        expect(json_response["title"]).to eq(valid_book_params[:book][:title])
         expect(json_response["published_at"].to_date).to eq(valid_book_params[:book][:published_at].to_date)
         expect(json_response["isbn"]).to eq(valid_book_params[:book][:isbn])
         expect(json_response["author"]["id"]).to eq(author.id)
@@ -170,6 +173,7 @@ RSpec.describe "Api::Books", type: :request do
 
         expect(response).to have_http_status :ok
         expect(json_response["id"]).to eq(book.id)
+        expect(json_response["title"]).to eq(changes[:book][:title])
         expect(json_response["published_at"].to_date).to eq(changes[:book][:published_at].to_date)
         expect(json_response["isbn"]).to eq(changes[:book][:isbn])
         expect(json_response["author"]["id"]).to eq(new_author.id)

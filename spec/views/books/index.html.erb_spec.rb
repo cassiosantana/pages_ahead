@@ -4,10 +4,11 @@ require "rails_helper"
 
 RSpec.describe "books/index", type: :view do
   let(:author) { create(:author) }
-  let(:books) { create_list(:book, 5, author: author) }
+  let(:books) { create_list(:book, 5, author:) }
 
   before(:each) do
     assign(:books, books)
+    assign(:q, Book.ransack)
     render
   end
 
@@ -17,7 +18,7 @@ RSpec.describe "books/index", type: :view do
 
   it "render a list of books" do
     books.each do |book|
-      expect(rendered).to have_text("Published at: #{book.published_at}", normalize_ws: true)
+      expect(rendered).to have_text("Title: #{book.title}", normalize_ws: true)
       expect(rendered).to have_link("Show this book", href: book_path(book))
     end
   end

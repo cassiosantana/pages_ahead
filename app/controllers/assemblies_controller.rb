@@ -4,7 +4,8 @@ class AssembliesController < ApplicationController
   before_action :set_assembly, only: %i[show edit update destroy]
 
   def index
-    @assemblies = Assembly.all
+    @q = Assembly.ransack(params[:q])
+    @assemblies = @q.result(distinct: true).includes(:parts)
   end
 
   def show; end

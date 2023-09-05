@@ -34,17 +34,19 @@
       </div>
     </div>
 
-  <div>
-    <p><strong>Parts:</strong></p>
+    <br>
+
     <div>
-      <em>It is not possible to change the parts.</em>
+      <strong>Parts:</strong>
+      <div>
+        <em>It is not possible to change the parts.</em>
+      </div>
+      <ul>
+        <% supplier.parts.each do |part| %>
+          <li><%= part.name %></li>
+        <% end %>
+      </ul>
     </div>
-    <ul>
-      <% supplier.parts.each do |part| %>
-        <li><%= part.part_number %></li>
-      <% end %>
-    </ul>
-  </div>
   <% end %>
 
   <div>

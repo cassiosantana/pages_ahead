@@ -12,6 +12,11 @@
   <% end %>
 
   <div>
+    <%= form.label :title, style: "display: block" %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div>
     <%= form.label :published_at, style: "display: block" %>
     <%= form.datetime_field :published_at %>
   </div>
@@ -34,7 +39,6 @@
       <% else %>
         <%= form.check_box :assembly_ids, { multiple: true }, assembly.id, nil %>
       <% end %>
-      Assembly name:
       <%= form.label :assembly_ids, assembly.name %><br>
     <% end %>
   </div>

@@ -11,13 +11,15 @@ RSpec.describe "suppliers/show", type: :view do
   context "when the supplier has associations" do
     it "renders the supplier correctly" do
       assign(:supplier, supplier)
+      assign(:parts, parts)
+      assign(:account, account)
       render
 
-      expect(rendered).to have_selector("p", text: supplier.name)
-      expect(rendered).to have_selector("p", text: supplier.cnpj)
-      expect(rendered).to have_selector("div", text: supplier.account_with_digit)
+      expect(rendered).to have_text("Name: #{supplier.name}", normalize_ws: true)
+      expect(rendered).to have_text("Cnpj: #{supplier.cnpj}", normalize_ws: true)
+      expect(rendered).to have_text("Account: #{supplier.account_with_digit}", normalize_ws: true)
       supplier.parts.each do |part|
-        expect(rendered).to have_selector("ul li", text: part.part_number)
+        expect(rendered).to have_selector("ul li", text: part.name)
       end
     end
   end
@@ -27,9 +29,9 @@ RSpec.describe "suppliers/show", type: :view do
       assign(:supplier, supplier_without_associations)
       render
 
-      expect(rendered).to have_selector("p", text: supplier_without_associations.name)
-      expect(rendered).to have_selector("p", text: supplier_without_associations.cnpj)
-      expect(rendered).to have_selector("span#test-account_with_digit_value", text: "")
+      expect(rendered).to have_text("Name: #{supplier_without_associations.name}", normalize_ws: true)
+      expect(rendered).to have_text("Cnpj: #{supplier_without_associations.cnpj}", normalize_ws: true)
+      expect(rendered).to have_text("Account: ", normalize_ws: true)
       expect(rendered).to have_selector("ul#test-parts_list", text: "")
     end
   end

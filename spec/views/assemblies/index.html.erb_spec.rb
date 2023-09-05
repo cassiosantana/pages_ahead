@@ -7,6 +7,7 @@ RSpec.describe "assemblies/index", type: :view do
 
   before(:each) do
     assign(:assemblies, assemblies)
+    assign(:q, Assembly.ransack)
     render
   end
 
@@ -15,7 +16,10 @@ RSpec.describe "assemblies/index", type: :view do
   end
 
   it "render a list of assemblies" do
-    expect_object_list(assemblies)
+    assemblies.each do |assembly|
+      expect(rendered).to have_text("Name: #{assembly.name}", normalize_ws: true)
+      expect(rendered).to have_link("Show this assembly", href: assembly_path(assembly))
+    end
   end
 
   it "render a link to new assembly" do

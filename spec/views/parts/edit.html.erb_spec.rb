@@ -18,18 +18,25 @@ RSpec.describe "parts/edit", type: :view do
   end
 
   it "render the part form" do
-    expect(rendered).to have_selector("form[action='#{part_path(part)}'][method='post']") do
-      expect(rendered).to have_selector("input[name='part[part_number]'][value='#{part.part_number}']")
-      expect(rendered).to have_selector("input[type='checkbox'][name='part[assembly_ids][]']", count: Assembly.count)
-      Assembly.all.each do |assembly|
-        if part.assemblies.include?(assembly)
-          expect(rendered).to have_selector("input[type='checkbox'][name='part[assembly_ids][]'][value='#{assembly.id}'][checked]")
-        else
-          expect(rendered).to have_selector("input[type='checkbox'][name='part[assembly_ids][]'][value='#{assembly.id}']:not([checked])")
-        end
+    form = "form[action='#{part_path(part)}'][method='post']"
+    name = "input[name='part[name]'][value='#{part.name}']"
+    number = "input[name='part[part_number]'][value='#{part.part_number}']"
+    assembly_ids = "input[type='checkbox'][name='part[assembly_ids][]']"
+
+    expect(rendered).to have_selector(form)
+    expect(rendered).to have_selector(name)
+    expect(rendered).to have_selector(number)
+    expect(rendered).to have_selector(assembly_ids, count: Assembly.count)
+    Assembly.all.each do |assembly|
+      if part.assemblies.include?(assembly)
+        assemblies_checked = "input[type='checkbox'][name='part[assembly_ids][]'][value='#{assembly.id}'][checked]"
+        expect(rendered).to have_selector(assemblies_checked)
+      else
+        assemblies_not_checked = "input[type='checkbox'][name='part[assembly_ids][]'][value='#{assembly.id}']:not([checked])"
+        expect(rendered).to have_selector(assemblies_not_checked)
       end
-      expect_submit_button("Update Part")
     end
+    expect_submit_button("Update Part")
   end
 
   it "render the show part link" do

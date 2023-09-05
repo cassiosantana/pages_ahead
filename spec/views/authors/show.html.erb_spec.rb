@@ -17,7 +17,7 @@ RSpec.describe "authors/show", type: :view do
       expect(rendered).to have_text("Cpf: #{author.cpf}", normalize_ws: true)
       expect(rendered).to have_selector("p strong", text: "Books:")
       author.books.each do |book|
-        expect(rendered).to have_selector("ul li", text: book.published_at)
+        expect(rendered).to have_selector("ul li", text: book.title)
       end
     end
   end

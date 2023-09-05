@@ -11,8 +11,7 @@
       <ul>
         <% assembly.parts.each do |part| %>
           <li>
-            <strong>Part number:</strong>
-            <%= part.part_number %>
+            <%= part.name %>
           </li>
         <% end %>
       </ul>
@@ -23,10 +22,7 @@
       <ul>
         <% assembly.books.each do |book| %>
           <li>
-            <strong>Published at:</strong>
-            <%= book.published_at %>,
-            <strong>Author:</strong>
-            <%= book.author.name %>
+            <%= book.title %>
           </li>
         <% end %>
       </ul>

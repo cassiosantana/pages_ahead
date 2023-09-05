@@ -15,6 +15,14 @@ class Account < ApplicationRecord
     [account_number, check_digit].compact.join(" - ")
   end
 
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[account_number]
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    ["supplier"]
+  end
+
   private
 
   def assign_check_digit

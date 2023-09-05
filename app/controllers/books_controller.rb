@@ -4,7 +4,8 @@ class BooksController < ApplicationController
   before_action :set_book, only: %i[show edit update destroy]
 
   def index
-    @books = Book.all
+    @q = Book.ransack(params[:q])
+    @books = @q.result(distinct: true).includes(:author)
   end
 
   def show; end
@@ -51,6 +52,6 @@ class BooksController < ApplicationController
   end
 
   def book_params
-    params.require(:book).permit(:published_at, :isbn, :author_id, assembly_ids: [])
+    params.require(:book).permit(:title, :published_at, :isbn, :author_id, assembly_ids: [])
   end
 end

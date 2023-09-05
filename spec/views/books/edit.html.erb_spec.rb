@@ -19,27 +19,32 @@ RSpec.describe "books/edit", type: :view do
     expect_page_title("Editing book")
   end
 
-  it "render the book form" do
-    expect(rendered).to have_selector("form[action='#{book_path(book)}'][method='post']") do
-      formatted_published_at = book.published_at.utc.strftime("%Y-%m-%dT%H:%M:%S")
-      expect(rendered).to have_selector("input[type='datetime-local'][name='book[published_at]'][value='#{formatted_published_at}']")
-      expect(DateTime.parse(Capybara.string(rendered)
-                                    .find("input[name='book[published_at]']")
-                                    .value).utc.iso8601).to eq(book.published_at.utc.iso8601)
-      expect(rendered).to have_selector("input[type='text'][name='book[isbn]'][value='#{book.isbn}']")
-      expect(rendered).to have_selector("select[name='book[author_id]']")
-      expect(rendered).to have_select("book[author_id]", selected: book.author.name)
-      expect(rendered).to have_select("book_author_id", with_options: authors.pluck(:name))
-      expect(rendered).to have_selector("input[type='checkbox'][name='book[assembly_ids][]']", count: Assembly.count)
-      Assembly.all.each do |assembly|
-        if book.assemblies.include?(assembly)
-          expect(rendered).to have_selector("input[type='checkbox'][name='book[assembly_ids][]'][value='#{assembly.id}'][checked]")
-        else
-          expect(rendered).to have_selector("input[type='checkbox'][name='book[assembly_ids][]'][value='#{assembly.id}']:not([checked])")
-        end
-      end
-      expect_submit_button("Update Book")
+  it "renders the book form" do
+    form = "form[action='#{book_path(book)}'][method='post']"
+    title = "input[type='text'][name='book[title]'][value='#{book.title}']"
+    datetime = "input[type='datetime-local'][name='book[published_at]']"
+    isbn = "input[type='text'][name='book[isbn]'][value='#{book.isbn}']"
+    author = "select[name='book[author_id]']"
+    assembly = "input[type='checkbox'][name='book[assembly_ids][]']"
+
+    expect(rendered).to have_selector(form)
+    expect(rendered).to have_selector(title)
+    expect(rendered).to have_selector(datetime)
+    expect(rendered).to have_selector(isbn)
+    expect(rendered).to have_selector(author)
+    expect(rendered).to have_select("book[author_id]", selected: book.author.name)
+    expect(rendered).to have_select("book_author_id", with_options: authors.pluck(:name))
+    expect(rendered).to have_selector(assembly, count: Assembly.count)
+
+    Assembly.all.each do |object|
+      assembly_id = "input[type='checkbox'][name='book[assembly_ids][]'][value='#{object.id}']"
+      expect(rendered).to have_selector(book.assemblies.include?(object) ? "#{assembly_id}[checked]" : "#{assembly_id}:not([checked])")
     end
+
+    datetime_input_value = Capybara.string(rendered).find(datetime).value
+    expect(DateTime.parse(datetime_input_value).utc.iso8601).to eq(book.published_at.utc.iso8601)
+
+    expect_submit_button("Update Book")
   end
 
   it "render the show book link" do
