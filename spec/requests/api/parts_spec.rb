@@ -6,6 +6,7 @@ RSpec.describe "Api::Parts", type: :request do
   let(:part_ids) { Part.pluck(:id) }
   let(:part_names) { Part.pluck(:name) }
   let(:part_numbers) { Part.pluck(:part_number) }
+  let(:part_prices) { Part.pluck(:price) }
 
   describe "GET /api/parts" do
     before { create_list(:part, 3) }
@@ -18,6 +19,7 @@ RSpec.describe "Api::Parts", type: :request do
         expect(part_ids).to include(part["id"])
         expect(part_names).to include(part["name"])
         expect(part_numbers).to include(part["number"])
+        expect(part_prices).to include(part["price"].to_d)
       end
     end
   end
@@ -33,6 +35,7 @@ RSpec.describe "Api::Parts", type: :request do
         expect(json_response["id"]).to eq(part.id)
         expect(json_response["name"]).to eq(part.name)
         expect(json_response["number"]).to eq(part.part_number)
+        expect(json_response["price"].to_d).to eq(part.price)
       end
     end
 
@@ -48,15 +51,7 @@ RSpec.describe "Api::Parts", type: :request do
 
   describe "POST /api/parts" do
     let(:supplier) { create(:supplier) }
-    let(:valid_data) do
-      {
-        part: {
-          name: FFaker::Product.product_name,
-          part_number: rand(1000..9999).to_s,
-          supplier_id: supplier.id
-        }
-      }
-    end
+    let(:valid_data) { { part: attributes_for(:part).merge(supplier_id: supplier.id) } }
 
     context "when data is valid" do
       it "creates a new part" do
@@ -65,6 +60,7 @@ RSpec.describe "Api::Parts", type: :request do
         expect(response).to have_http_status :created
         expect(json_response["name"]).to eq(valid_data[:part][:name])
         expect(json_response["number"]).to eq(valid_data[:part][:part_number])
+        expect(json_response["price"].to_d).to eq(valid_data[:part][:price])
         expect(json_response["supplier"]["id"]).to eq(valid_data[:part][:supplier_id])
         expect(json_response["supplier"]["name"]).to eq(supplier.name)
       end
@@ -100,6 +96,7 @@ RSpec.describe "Api::Parts", type: :request do
         expect(json_response["id"]).to eq(part.id)
         expect(json_response["name"]).to eq(valid_data[:part][:name])
         expect(json_response["number"]).to eq(valid_data[:part][:part_number])
+        expect(json_response["price"].to_d).to eq(valid_data[:part][:price])
         expect(json_response["supplier"]["id"]).to eq(part.supplier.id)
         expect(json_response["supplier"]["name"]).to eq(part.supplier.name)
       end
