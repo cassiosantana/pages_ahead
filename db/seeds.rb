@@ -40,7 +40,8 @@ part_names = ["Hard Cover", "Soft Cover", "Premium Cover", "Dust Jacket", "Comic
 
 _parts = part_names.each_with_index.map do |name, index|
   part_number = rand(10_000..99_999)
-  Part.create(name:, part_number:, supplier_id: suppliers_ids[index % suppliers_ids.size])
+  Part.create(name:, part_number:, price: rand(14.9..49.9).round(2),
+              supplier_id: suppliers_ids[index % suppliers_ids.size])
 end
 
 # Assemblies (Made adjustments to more closely mirror real-world book assemblies)
