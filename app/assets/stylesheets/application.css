@@ -14,18 +14,11 @@
  *= require_self
  */
 
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    margin: 0;
-}
-
 .navbar {
     background-color: #f2f2f2;
     padding: 10px;
-    position: fixed; /* Adicionado para fixar o navbar */
-    top: 0; /* Adicionado para fixar o navbar no topo */
+    position: fixed;
+    top: 0;
     left: 0;
     right: 0;
 }
@@ -39,6 +32,17 @@ body {
 
 .navbar li {
     margin-right: 10px;
+    position: relative;
+}
+
+.navbar li::after {
+    content: '|';
+    margin-left: 10px;
+    color: #333;
+}
+
+.navbar li:last-child::after {
+    content: '';
 }
 
 .navbar a {
@@ -55,12 +59,45 @@ body {
     flex: 1;
 }
 
-footer {
-    background-color: #f2f2f2;
-    text-align: center;
-    margin-top: auto;
+.reports-h1 {
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 
-footer p {
-    margin: 5px 0;
+p {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.author-section {
+    margin-bottom: 30px;
+}
+
+.reports-table th {
+    background-color: #f2f2f2;
+    padding: 10px;
+    text-align: left;
+}
+
+.reports-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.books-table th,
+.books-table td {
+    text-align: left;
+}
+
+.books-table th {
+    background-color: #e0e0e0;
+}
+
+.reports-table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
 }
