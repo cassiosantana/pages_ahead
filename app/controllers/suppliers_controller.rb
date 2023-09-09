@@ -40,6 +40,12 @@ class SuppliersController < ApplicationController
     redirect_to suppliers_url, notice: "Supplier was successfully destroyed."
   end
 
+  def report
+    @supplier = Supplier.find_with_associations(params[:id])
+    @authors  = @supplier.associated_authors
+    @books = @supplier.associated_books
+  end
+
   private
 
   def set_supplier
