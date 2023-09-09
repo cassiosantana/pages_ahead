@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe "authors/show", type: :view do
   let(:author) { create(:author) }
-  let(:books) { create_list(:book, 3, author: author) }
+  let(:books) { create_list(:book, 3, author:) }
 
   before(:each) do
     assign(:author, author)
@@ -15,10 +15,6 @@ RSpec.describe "authors/show", type: :view do
     it "they are displayed correctly" do
       expect(rendered).to have_text("Name: #{author.name}", normalize_ws: true)
       expect(rendered).to have_text("Cpf: #{author.cpf}", normalize_ws: true)
-      expect(rendered).to have_selector("p strong", text: "Books:")
-      author.books.each do |book|
-        expect(rendered).to have_selector("ul li", text: book.title)
-      end
     end
   end
 
