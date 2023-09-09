@@ -39,6 +39,10 @@ class AuthorsController < ApplicationController
     redirect_to authors_url, notice: "Author was successfully destroyed."
   end
 
+  def report
+    @author = Author.includes(:books).find(params[:id])
+  end
+
   private
 
   def set_author
