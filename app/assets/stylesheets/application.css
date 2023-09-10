@@ -92,3 +92,10 @@ table {
     border-collapse: collapse;
     width: 100%;
 }
+
+.assembly-section {
+    border: 1px solid #ccc;
+    padding: 1em;
+    margin-bottom: 1em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
