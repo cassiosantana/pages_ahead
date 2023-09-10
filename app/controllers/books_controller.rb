@@ -45,6 +45,10 @@ class BooksController < ApplicationController
     redirect_to books_url, notice: "Book was successfully destroyed."
   end
 
+  def report
+    @book = Book.includes(assemblies: :parts).find(params[:id])
+  end
+
   private
 
   def set_book
