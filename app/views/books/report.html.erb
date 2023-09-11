@@ -49,7 +49,7 @@
             <td><%= assembly.created_at %></td>
             <td><%= assembly.updated_at %></td>
             <td><%= assembly.parts.count %></td>
-            <td>$ <%= assembly.parts.map(&:price).sum %></td>
+            <td>$ <%= assembly.total_cost %></td>
           </tr>
         </tbody>
       </table>
@@ -86,5 +86,5 @@
 </section>
 
 <div>
-  <%= link_to "Back to suppliers", suppliers_path %>
+  <%= link_to "Back to books", books_path %>
 </div>
