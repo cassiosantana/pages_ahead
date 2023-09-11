@@ -2,7 +2,7 @@
 
 Rails.application.routes.draw do
   resources :books, :accounts, :assemblies, :parts
-  resources :authors, :suppliers do
+  resources :authors, :suppliers, :books do
     get :report, on: :member
   end
 

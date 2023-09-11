@@ -6,6 +6,10 @@ class Assembly < ApplicationRecord
 
   validates :name, presence: true
 
+  def total_cost
+    parts.sum(&:price)
+  end
+
   def self.ransackable_attributes(_auth_object = nil)
     %w[name]
   end
