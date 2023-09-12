@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>PagesAhead</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -11,18 +11,16 @@
   </head>
 
   <body>
-    <nav class="navbar">
-      <ul>
-        <li><%= link_to "Home", root_path %></li>
-        <li><%= link_to "Authors", authors_path %></li>
-        <li><%= link_to "Accounts", accounts_path %></li>
-        <li><%= link_to "Assemblies", assemblies_path %></li>
-        <li><%= link_to "Parts", parts_path %></li>
-        <li><%= link_to "Books", books_path %></li>
-        <li><%= link_to "Suppliers", suppliers_path %></li>
-      </ul>
+    <nav>
+      <%= link_to "Home", root_path %>
+      <%= link_to "Authors", authors_path %>
+      <%= link_to "Accounts", accounts_path %>
+      <%= link_to "Assemblies", assemblies_path %>
+      <%= link_to "Parts", parts_path %>
+      <%= link_to "Books", books_path %>
+      <%= link_to "Suppliers", suppliers_path %>
     </nav>
-    <div class="content">
+    <div>
       <%= yield %>
     </div>
   </body>
