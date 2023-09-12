@@ -7,6 +7,7 @@ ruby "3.2.2"
 
 gem "bootsnap", require: false
 gem "cpf_cnpj", "~> 0.5.0"
+gem "ffaker", "~> 2.21"
 gem "importmap-rails"
 gem "isbn", "~> 2.0", ">= 2.0.11"
 gem "jbuilder"
@@ -21,7 +22,6 @@ gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 
 group :development, :test do
   gem "factory_bot_rails", "~> 6.2"
-  gem "ffaker", "~> 2.21"
   gem "rspec-rails", "~> 6.0", ">= 6.0.2"
   gem "rubocop-rails", "~> 2.19", ">= 2.19.1", require: false
 end
