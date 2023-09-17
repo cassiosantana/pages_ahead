@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  resources :books, :accounts, :assemblies, :parts
+  resources :accounts, :assemblies, :parts
   resources :authors, :suppliers, :books do
     get :report, on: :member
   end
