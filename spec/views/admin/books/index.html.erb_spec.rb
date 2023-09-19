@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "books/index", type: :view do
+RSpec.describe "admin/books/index", type: :view do
   let(:author) { create(:author) }
   let(:books) { create_list(:book, 5, author:) }
 
@@ -13,17 +13,17 @@ RSpec.describe "books/index", type: :view do
   end
 
   it "render the page title" do
-    expect_page_title("Books")
+    expect(rendered).to have_selector("h1", text: "Books")
   end
 
   it "render a list of books" do
     books.each do |book|
       expect(rendered).to have_text("Title: #{book.title}", normalize_ws: true)
-      expect(rendered).to have_link("Show this book", href: book_path(book))
+      expect(rendered).to have_link("Show this book", href: admin_book_path(book))
     end
   end
 
   it "render a link to new book" do
-    expect_link_to_new("book")
+    expect(rendered).to have_link("New book", href: new_admin_book_path)
   end
 end

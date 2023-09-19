@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "books/new", type: :view do
+RSpec.describe "admin/books/new", type: :view do
   let(:book) { build(:book) }
   let(:author1) { create(:author, name: "Author 1") }
   let(:author2) { create(:author, name: "Author 2") }
@@ -16,11 +16,11 @@ RSpec.describe "books/new", type: :view do
   end
 
   it "render the page title" do
-    expect_page_title("New book")
+    expect(rendered).to have_selector("h1", text: "New book")
   end
 
   it "render the book form" do
-    expect(rendered).to have_selector("form[action='#{books_path}'][method='post']")
+    expect(rendered).to have_selector("form[action='#{admin_books_path}'][method='post']")
     expect(rendered).to have_selector("input[type='text'][name='book[title]']")
     expect(rendered).to have_selector("input[type='datetime-local'][name='book[published_at]']")
     expect(rendered).to have_selector("input[type='text'][name='book[isbn]']")
@@ -31,6 +31,6 @@ RSpec.describe "books/new", type: :view do
   end
 
   it "render the back link" do
-    expect_link_back_to("books")
+    expect(rendered).to have_link("Back to books", href: admin_books_path)
   end
 end

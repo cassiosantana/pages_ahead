@@ -2,10 +2,10 @@
 
 require "rails_helper"
 
-RSpec.describe "books/show", type: :view do
+RSpec.describe "admin/books/show", type: :view do
   let(:assemblies) { create_list(:assembly, 3) }
   let(:author) { create(:author) }
-  let(:book) { create(:book, author: author, assemblies: assemblies) }
+  let(:book) { create(:book, author:, assemblies:) }
 
   before(:each) do
     assign(:book, book)
@@ -27,15 +27,15 @@ RSpec.describe "books/show", type: :view do
 
   context "rendering links and button" do
     it "render the link to edit book" do
-      expect_link_to_edit(book)
+      expect(rendered).to have_link("Edit this book", href: edit_admin_book_path(book))
     end
 
     it "render the link to all books" do
-      expect_link_back_to("books")
+      expect(rendered).to have_link("Back to books", href: admin_books_path)
     end
 
     it "render the button to destroy book" do
-      expect_submit_button("Destroy this book")
+      expect(rendered).to have_button("Destroy this book")
     end
   end
 end
