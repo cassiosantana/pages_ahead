@@ -2,8 +2,14 @@
 
 Rails.application.routes.draw do
   resources :accounts, :assemblies, :parts
-  resources :authors, :suppliers, :books do
+  resources :authors, :suppliers do
     get :report, on: :member
+  end
+
+  namespace :admin do
+    resources :books do
+      get :report, on: :member
+    end
   end
 
   namespace :api, defaults: { format: :json } do
