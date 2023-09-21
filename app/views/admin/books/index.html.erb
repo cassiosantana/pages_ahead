@@ -3,7 +3,7 @@
 <h1>Books</h1>
 
 <div>
-  <%= search_form_for @q do |f| %>
+  <%= search_form_for [:admin, @q] do |f| %>
     <%= f.label :title_or_author_name_cont, "Search by title or Author name" %>
     <%= f.search_field :title_or_author_name_cont %>
     <%= f.submit %>
@@ -17,9 +17,9 @@
     <p>
       <strong>Title:</strong>
       <%= book.title %> |
-      <%= link_to "Show this book", book %>
+      <%= link_to "Show this book", admin_book_path(book) %>
     </p>
   <% end %>
 </div>
 
-<%= link_to "New book", new_book_path %>
+<%= link_to "New book", new_admin_book_path %>
