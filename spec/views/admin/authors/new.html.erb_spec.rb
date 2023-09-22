@@ -2,23 +2,23 @@
 
 require "rails_helper"
 
-RSpec.describe "authors/new", type: :view do
+RSpec.describe "admin/authors/new", type: :view do
   before(:each) do
     assign(:author, build(:author))
     render
   end
 
   it "renders the page title" do
-    expect_page_title("New author")
+    expect(rendered).to have_selector("h1", text: "New author")
   end
 
   it "renders new author form" do
-    expect(rendered).to have_selector("form[action='#{authors_path}'][method='post']")
+    expect(rendered).to have_selector("form[action='#{admin_authors_path}'][method='post']")
     expect(rendered).to have_selector("input[name='author[name]']")
     expect(rendered).to have_selector("input[name='author[cpf]']")
   end
 
   it "renders the back link" do
-    expect_link_back_to("authors")
+    expect(rendered).to have_link("Back to authors", href: admin_authors_path)
   end
 end
