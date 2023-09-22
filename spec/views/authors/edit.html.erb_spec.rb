@@ -16,7 +16,7 @@ RSpec.describe "authors/edit", type: :view do
 
   context "editing the author" do
     it "renders the edit author form" do
-      expect(rendered).to have_selector("form[action='#{author_path(author)}'][method='post']")
+      expect(rendered).to have_selector("form[action='#{admin_author_path(author)}'][method='post']")
       expect(rendered).to have_selector("input[name='author[name]'][value='#{author.name}']")
       expect(rendered).to have_selector("input[name='author[cpf]'][value='#{author.cpf}']")
       expect_submit_button("Update Author")

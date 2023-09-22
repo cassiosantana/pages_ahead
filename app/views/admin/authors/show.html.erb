@@ -1,0 +1,11 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render "admin/authors/author", author: @author %>
+
+<div>
+  <%= link_to "Edit this author", edit_admin_author_path(@author) %> |
+  <%= link_to "Back to authors", admin_authors_path %> |
+  <%= link_to "Show report", report_admin_author_path(@author) %>
+
+  <%= button_to "Destroy this author", admin_author_path(@author), method: :delete %>
+</div>

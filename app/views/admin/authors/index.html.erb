@@ -7,9 +7,9 @@
     <p>
       <strong>Name:</strong>
       <%= author.name %> |
-      <%= link_to "Show this author", author %>
+      <%= link_to "Show this author", admin_author_path(author) %>
     </p>
   <% end %>
 </div>
 
-<%= link_to "New author", new_author_path %>
+<%= link_to "New author", new_admin_author_path %>

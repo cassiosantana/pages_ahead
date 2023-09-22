@@ -2,12 +2,12 @@
 
 Rails.application.routes.draw do
   resources :accounts, :assemblies, :parts
-  resources :authors, :suppliers do
+  resources :suppliers do
     get :report, on: :member
   end
 
   namespace :admin do
-    resources :books do
+    resources :books, :authors do
       get :report, on: :member
     end
   end
