@@ -1,4 +1,4 @@
-<%= form_with(model: assembly) do |form| %>
+<%= form_with(model: [:admin, assembly]) do |form| %>
   <% if assembly.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(assembly.errors.count, "error") %> prohibited this assembly from being saved:</h2>

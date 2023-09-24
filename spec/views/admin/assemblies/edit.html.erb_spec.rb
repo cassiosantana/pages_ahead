@@ -2,10 +2,10 @@
 
 require "rails_helper"
 
-RSpec.describe "assemblies/edit", type: :view do
+RSpec.describe "admin/assemblies/edit", type: :view do
   let(:books) { create_list(:book, rand(0..10)) }
   let(:parts) { create_list(:part, rand(0..10)) }
-  let(:assembly) { create(:assembly, books: books, parts: parts) }
+  let(:assembly) { create(:assembly, books:, parts:) }
 
   before(:each) do
     assign(:assembly, assembly)
@@ -13,11 +13,11 @@ RSpec.describe "assemblies/edit", type: :view do
   end
 
   it " render the page title" do
-    expect_page_title("Editing assembly")
+    expect(rendered).to have_selector("h1", text: "Editing assembly")
   end
 
   it "render the edit assembly form" do
-    form = "form[action='#{assembly_path(assembly)}'][method='post']"
+    form = "form[action='#{admin_assembly_path(assembly)}'][method='post']"
     name = "input[name='assembly[name]'][value='#{assembly.name}']"
     assembly_parts = "input[type='checkbox'][name='assembly[part_ids][]']"
     assembly_books = "input[type='checkbox'][name='assembly[book_ids][]']"
@@ -32,14 +32,14 @@ RSpec.describe "assemblies/edit", type: :view do
     assembly.books.each do |book|
       expect(rendered).to have_text(book.title)
     end
-    expect_submit_button("Update Assembly")
+    expect(rendered).to have_button("Update Assembly")
   end
 
   it "render the show link" do
-    expect_link_to_show(assembly)
+    expect(rendered).to have_link("Show this assembly", href: admin_assembly_path(assembly))
   end
 
   it "render the back link" do
-    expect_link_back_to("assemblies")
+    expect(rendered).to have_link("Back to assemblies", href: admin_assemblies_path)
   end
 end
