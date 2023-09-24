@@ -2,10 +2,10 @@
 
 require "rails_helper"
 
-RSpec.describe "parts/show", type: :view do
+RSpec.describe "admin/parts/show", type: :view do
   let(:supplier) { create(:supplier) }
   let(:assemblies) { create_list(:assembly, 3) }
-  let(:part) { create(:part, supplier: supplier, assemblies: assemblies) }
+  let(:part) { create(:part, supplier:, assemblies:) }
 
   before(:each) do
     assign(:part, part)
@@ -26,15 +26,15 @@ RSpec.describe "parts/show", type: :view do
 
   context "rendering links and button" do
     it "render the link to edit part" do
-      expect_link_to_edit(part)
+      expect(rendered).to have_link("Edit this part", href: edit_admin_part_path(part))
     end
 
-    it "render the link to part" do
-      expect_link_back_to("parts")
+    it "render the link to parts" do
+      expect(rendered).to have_link("Back to parts", href: admin_parts_path)
     end
 
     it "render the button to destroy part" do
-      expect_submit_button("Destroy this part")
+      expect(rendered).to have_button("Destroy this part")
     end
   end
 end
