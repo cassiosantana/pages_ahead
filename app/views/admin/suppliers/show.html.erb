@@ -1,0 +1,11 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render "admin/suppliers/supplier", supplier: @supplier %>
+
+<div>
+  <%= link_to "Edit this supplier", edit_admin_supplier_path(@supplier) %> |
+  <%= link_to "Back to suppliers", admin_suppliers_path %> |
+  <%= link_to "Show report", report_admin_supplier_path(@supplier) %>
+
+  <%= button_to "Destroy this supplier", admin_supplier_path(@supplier), method: :delete %>
+</div>
