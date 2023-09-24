@@ -2,10 +2,10 @@
 
 require "rails_helper"
 
-RSpec.describe "suppliers/edit", type: :view do
+RSpec.describe "admin/suppliers/edit", type: :view do
   let(:supplier) { create(:supplier) }
-  let(:parts) { create_list(:part, 3, supplier: supplier) }
-  let(:account) { create(:account, supplier: supplier) }
+  let(:parts) { create_list(:part, 3, supplier:) }
+  let(:account) { create(:account, supplier:) }
 
   before(:each) do
     assign(:supplier, supplier)
@@ -15,11 +15,11 @@ RSpec.describe "suppliers/edit", type: :view do
   end
 
   it "render the page title" do
-    expect_page_title("Editing supplier")
+    expect(rendered).to have_selector("h1", text: "Editing supplier")
   end
 
   it "render the supplier form" do
-    form = "form[action='#{supplier_path(supplier)}'][method='post']"
+    form = "form[action='#{admin_supplier_path(supplier)}'][method='post']"
     name = "input[type='text'][name='supplier[name]'][value=\"#{supplier.name}\"]"
     cnpj = "input[type='text'][name='supplier[cnpj]'][value=\"#{supplier.cnpj}\"]"
     account = "Account: #{supplier.account_with_digit}"
@@ -34,14 +34,14 @@ RSpec.describe "suppliers/edit", type: :view do
     supplier.parts.each do |part|
       expect(rendered).to have_selector("ul li", text: part.name)
     end
-    expect_submit_button("Update Supplier")
+    expect(rendered).to have_button("Update Supplier")
   end
 
   it "render the show supplier link" do
-    expect_link_to_show(supplier)
+    expect(rendered).to have_link("Show this supplier", href: admin_supplier_path(supplier))
   end
 
   it "render the back link" do
-    expect_link_back_to("suppliers")
+    expect(rendered).to have_link("Back to suppliers", href: admin_suppliers_path)
   end
 end

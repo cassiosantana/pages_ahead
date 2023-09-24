@@ -2,10 +2,10 @@
 
 require "rails_helper"
 
-RSpec.describe "suppliers/show", type: :view do
+RSpec.describe "admin/suppliers/show", type: :view do
   let(:supplier) { create(:supplier) }
-  let(:parts) { create_list(:part, 3, supplier: supplier) }
-  let(:account) { create(:account, supplier: supplier) }
+  let(:parts) { create_list(:part, 3, supplier:) }
+  let(:account) { create(:account, supplier:) }
   let(:supplier_without_associations) { create(:supplier) }
 
   context "when the supplier has associations" do
@@ -43,9 +43,9 @@ RSpec.describe "suppliers/show", type: :view do
     end
 
     it "they are displayed correctly" do
-      expect_link_to_edit(supplier)
-      expect_link_back_to("suppliers")
-      expect_submit_button("Destroy this supplier")
+      expect(rendered).to have_link("Edit this supplier", href: edit_admin_supplier_path(supplier))
+      expect(rendered).to have_link("Back to suppliers", href: admin_suppliers_path)
+      expect(rendered).to have_button("Destroy this supplier")
     end
   end
 end
