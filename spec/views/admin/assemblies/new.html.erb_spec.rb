@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "assemblies/new", type: :view do
+RSpec.describe "admin/assemblies/new", type: :view do
   let(:books) { create_list(:book, 5) }
   let(:parts) { create_list(:part, 3) }
 
@@ -14,11 +14,11 @@ RSpec.describe "assemblies/new", type: :view do
   end
 
   it "render the page title" do
-    expect_page_title("New assembly")
+    expect(rendered).to have_selector("h1", text: "New assembly")
   end
 
   it "render the edit assembly form" do
-    form = "form[action='#{assemblies_path}'][method='post']"
+    form = "form[action='#{admin_assemblies_path}'][method='post']"
     name = "input[name='assembly[name]']"
     assembly_parts = "input[type='checkbox'][name='assembly[part_ids][]']"
     assembly_books = "input[type='checkbox'][name='assembly[book_ids][]']"
@@ -33,10 +33,10 @@ RSpec.describe "assemblies/new", type: :view do
     Book.all.each do |book|
       expect(rendered).to have_text(book.title)
     end
-    expect_submit_button("Create Assembly")
+    expect(rendered).to have_button("Create Assembly")
   end
 
   it "render the back link" do
-    expect_link_back_to("assemblies")
+    expect(rendered).to have_link("Back to assemblies", href: admin_assemblies_path)
   end
 end

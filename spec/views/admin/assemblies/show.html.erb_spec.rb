@@ -2,11 +2,11 @@
 
 require "rails_helper"
 
-RSpec.describe "assemblies/show", type: :view do
+RSpec.describe "admin/assemblies/show", type: :view do
   let(:books) { create_list(:book, rand(1..10)) }
   let(:parts) { create_list(:part, rand(1..10)) }
 
-  let(:assembly) { create(:assembly, books: books, parts: parts) }
+  let(:assembly) { create(:assembly, books:, parts:) }
 
   before(:each) do
     assign(:assembly, assembly)
@@ -29,15 +29,15 @@ RSpec.describe "assemblies/show", type: :view do
 
   context "rendering links and button" do
     it "render the link to edit assembly" do
-      expect_link_to_edit(assembly)
+      expect(rendered).to have_link("Edit this assembly", href: edit_admin_assembly_path(assembly))
     end
 
     it "render the link to assemblies" do
-      expect_link_back_to("assemblies")
+      expect(rendered).to have_link("Back to assemblies", href: admin_assemblies_path)
     end
 
     it "render the button to destroy assembly" do
-      expect_submit_button("Destroy this assembly")
+      expect(rendered).to have_button("Destroy this assembly")
     end
   end
 end

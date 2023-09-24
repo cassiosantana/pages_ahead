@@ -18,7 +18,7 @@ RSpec.describe "Assembly filters", type: :feature do
     end
 
     before do
-      visit assemblies_path
+      visit admin_assemblies_path
     end
 
     context "when initializing the page" do
