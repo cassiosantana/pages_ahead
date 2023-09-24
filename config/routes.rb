@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  resources :accounts, :parts
+  resources :accounts
 
   namespace :admin do
-    resources :assemblies
+    resources :assemblies, :parts
     resources :books, :authors, :suppliers do
       get :report, on: :member
     end
