@@ -3,7 +3,7 @@
 <h1>Assemblies</h1>
 
 <div>
-  <%= search_form_for @q do |f| %>
+  <%= search_form_for [:admin, @q] do |f| %>
     <%= f.label :parts_name_cont, "Search by Part name" %>
     <%= f.search_field :parts_name_cont %>
     <%= f.submit %>
@@ -17,9 +17,9 @@
     <p>
       <strong>Name:</strong>
       <%= assembly.name %> |
-      <%= link_to "Show this assembly", assembly %>
+      <%= link_to "Show this assembly", admin_assembly_path(assembly) %>
     </p>
   <% end %>
 </div>
 
-<%= link_to "New assembly", new_assembly_path %>
+<%= link_to "New assembly", new_admin_assembly_path %>

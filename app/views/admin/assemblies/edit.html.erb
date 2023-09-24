@@ -1,0 +1,10 @@
+<h1>Editing assembly</h1>
+
+<%= render "admin/assemblies/form", assembly: @assembly %>
+
+<br>
+
+<div>
+  <%= link_to "Show this assembly", admin_assembly_path(@assembly) %> |
+  <%= link_to "Back to assemblies", admin_assemblies_path %>
+</div>
