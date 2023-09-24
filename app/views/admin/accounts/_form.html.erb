@@ -1,4 +1,4 @@
-<%= form_with(model: account) do |form| %>
+<%= form_with(model: [:admin, account]) do |form| %>
   <% if account.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(account.errors.count, "error") %> prohibited this account from being saved:</h2>

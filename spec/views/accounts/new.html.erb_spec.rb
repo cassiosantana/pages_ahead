@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "accounts/new", type: :view do
+RSpec.describe "admin/accounts/new", type: :view do
   let(:account) { build(:account) }
   let(:supplier1) { create(:supplier, name: "Supplier 1") }
   let(:supplier2) { create(:supplier, name: "Supplier 2") }
@@ -14,20 +14,20 @@ RSpec.describe "accounts/new", type: :view do
   end
 
   it "renders the page title" do
-    expect_page_title("New account")
+    expect(rendered).to have_selector("h1", text: "New account")
   end
 
   it "renders new account form" do
-    expect(rendered).to have_selector("form[action='#{accounts_path}'][method='post']") do
+    expect(rendered).to have_selector("form[action='#{admin_accounts_path}'][method='post']") do
       expect(rendered).to have_selector("input[name='account[account_number]']")
       expect(rendered).to have_selector("select[name='account[supplier_id]']")
       expect(rendered).to have_select("account_supplier_id", with_options: ["Supplier 1", "Supplier 2"])
       expect(rendered).to have_selector("em", text: " Only suppliers without an account will be listed")
-      expect_submit_button("Create Account")
+      expect(rendered).to have_button("Create Account")
     end
   end
 
   it "renders the back link" do
-    expect_link_back_to("accounts")
+    expect(rendered).to have_link("Back to accounts", href: admin_accounts_path)
   end
 end

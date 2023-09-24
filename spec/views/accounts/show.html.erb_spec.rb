@@ -2,9 +2,9 @@
 
 require "rails_helper"
 
-RSpec.describe "accounts/show", type: :view do
+RSpec.describe "admin/accounts/show", type: :view do
   let(:supplier) { create(:supplier) }
-  let(:account) { create(:account, supplier: supplier) }
+  let(:account) { create(:account, supplier:) }
 
   before(:each) do
     assign(:account, account)
@@ -20,15 +20,15 @@ RSpec.describe "accounts/show", type: :view do
 
   context "link and button rendering" do
     it "render edit account link" do
-      expect_link_to_edit(account)
+      expect(rendered).to have_link("Edit this account", href: edit_admin_account_path(account))
     end
 
     it "render back to accounts link" do
-      expect_link_back_to("accounts")
+      expect(rendered).to have_link("Back to accounts", href: admin_accounts_path)
     end
 
     it "render the button to destroy account" do
-      expect_submit_button("Destroy this account")
+      expect(rendered).to have_button("Destroy this account")
     end
   end
 end

@@ -1,0 +1,10 @@
+<h1>Editing account</h1>
+
+<%= render "admin/accounts/form", account: @account %>
+
+<br>
+
+<div>
+  <%= link_to "Show this account", admin_account_path(@account) %> |
+  <%= link_to "Back to accounts", admin_accounts_path %>
+</div>

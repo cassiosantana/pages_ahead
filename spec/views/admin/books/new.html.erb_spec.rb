@@ -27,7 +27,7 @@ RSpec.describe "admin/books/new", type: :view do
     expect(rendered).to have_selector("select[name='book[author_id]']")
     expect(rendered).to have_select("book_author_id", with_options: ["Author 1", "Author 2"])
     expect(rendered).to have_selector("input[type='checkbox'][name='book[assembly_ids][]']", count: Assembly.count)
-    expect_submit_button("Create Book")
+    expect(rendered).to have_button("Create Book")
   end
 
   it "render the back link" do
