@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "suppliers/index", type: :view do
+RSpec.describe "admin/suppliers/index", type: :view do
   let(:suppliers) { create_list(:supplier, 3) }
 
   before(:each) do
@@ -12,17 +12,17 @@ RSpec.describe "suppliers/index", type: :view do
   end
 
   it "render the page title" do
-    expect_page_title("Suppliers")
+    expect(rendered).to have_selector("h1", text: "Suppliers")
   end
 
   it "render a list of suppliers" do
     suppliers.each do |supplier|
       expect(rendered).to have_text("Name: #{supplier.name}", normalize_ws: true)
-      expect(rendered).to have_link("Show this supplier", href: supplier_path(supplier))
+      expect(rendered).to have_link("Show this supplier", href: admin_supplier_path(supplier))
     end
   end
 
   it "render a link to new supplier" do
-    expect_link_to_new("supplier")
+    expect(rendered).to have_link("New supplier", href: new_admin_supplier_path)
   end
 end

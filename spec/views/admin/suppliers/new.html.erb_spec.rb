@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "suppliers/new", type: :view do
+RSpec.describe "admin/suppliers/new", type: :view do
   let(:supplier) { build(:supplier) }
 
   before(:each) do
@@ -11,21 +11,21 @@ RSpec.describe "suppliers/new", type: :view do
   end
 
   it "render the page title" do
-    expect_page_title("New supplier")
+    expect(rendered).to have_selector("h1", text: "New supplier")
   end
 
   it "render the supplier form" do
-    form = "form[action='#{suppliers_path}'][method='post']"
+    form = "form[action='#{admin_suppliers_path}'][method='post']"
     name = "input[type='text'][name='supplier[name]'][value=\"#{supplier.name}\"]"
     cnpj = "input[type='text'][name='supplier[cnpj]'][value=\"#{supplier.cnpj}\"]"
 
     expect(rendered).to have_selector(form)
     expect(rendered).to have_selector(name)
     expect(rendered).to have_selector(cnpj)
-    expect_submit_button("Create Supplier")
+    expect(rendered).to have_button("Create Supplier")
   end
 
   it "render the back link" do
-    expect_link_back_to("suppliers")
+    expect(rendered).to have_link("Back to suppliers", href: admin_suppliers_path)
   end
 end
