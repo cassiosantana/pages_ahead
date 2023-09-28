@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module AssemblyServices
-  class ExistenceVerifierService < ApplicationService
+module Assemblies
+  class ExistenceVerifier < BusinessApplication
     def initialize(ids)
       super
       @ids = ids
