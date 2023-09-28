@@ -7,6 +7,7 @@ ruby "3.2.2"
 
 gem "bootsnap", require: false
 gem "cpf_cnpj", "~> 0.5.0"
+gem "foreman", "~> 0.87.2"
 gem "importmap-rails"
 gem "isbn", "~> 2.0", ">= 2.0.11"
 gem "jbuilder"
@@ -16,6 +17,7 @@ gem "rails", "~> 7.0", ">= 7.0.7"
 gem "ransack", "~> 4.0"
 gem "sprockets-rails"
 gem "stimulus-rails"
+gem "tailwindcss-rails", "~> 2.0"
 gem "turbo-rails"
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 

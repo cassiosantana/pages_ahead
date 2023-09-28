@@ -17,7 +17,7 @@ RSpec.describe "Book filters", type: :feature do
     end
 
     before do
-      visit books_path
+      visit admin_books_path
     end
 
     context "when initializing the page" do

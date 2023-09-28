@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  resources :accounts, :assemblies, :parts
-  resources :authors, :suppliers, :books do
-    get :report, on: :member
+  namespace :admin do
+    resources :accounts, :assemblies, :parts
+    resources :books, :authors, :suppliers do
+      get :report, on: :member
+    end
   end
 
   namespace :api, defaults: { format: :json } do

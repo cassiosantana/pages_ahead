@@ -1,0 +1,10 @@
+<h1>Editing supplier</h1>
+
+<%= render "admin/suppliers/form", supplier: @supplier %>
+
+<br>
+
+<div>
+  <%= link_to "Show this supplier", admin_supplier_path(@supplier) %> |
+  <%= link_to "Back to suppliers", admin_suppliers_path %>
+</div>

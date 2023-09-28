@@ -1,0 +1,81 @@
+<h1 class="reports-h1">Supplier Report</h1>
+
+<section class="report-section">
+  <h2>Supplier</h2>
+  <table class="reports-table table-section">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>CNPJ</th>
+        <th>Created at</th>
+        <th>Updated at</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><%= @supplier.id %></td>
+        <td><%= @supplier.name %></td>
+        <td><%= @supplier.cnpj %></td>
+        <td><%= @supplier.created_at %></td>
+        <td><%= @supplier.updated_at %></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Authors</h3>
+  <table class="reports-table table-section">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>CPF</th>
+        <th>Created at</th>
+        <th>Updated at</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @authors.each do |author| %>
+        <tr>
+          <td><%= author.id %></td>
+          <td><%= author.name %></td>
+          <td><%= author.cpf %></td>
+          <td><%= author.created_at %></td>
+          <td><%= author.updated_at %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <h3>Books</h3>
+  <table class="reports-table">
+    <thead>
+    <tr>
+      <th>Id</th>
+      <th>Title</th>
+      <th>ISBN</th>
+      <th>Published at</th>
+      <th>Created at</th>
+      <th>Updated at</th>
+      <th>Author Id</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @books.each do |book| %>
+      <tr>
+        <td><%= book.id %></td>
+        <td><%= book.title %></td>
+        <td><%= book.isbn %></td>
+        <td><%= book.published_at %></td>
+        <td><%= book.created_at %></td>
+        <td><%= book.updated_at %></td>
+        <td><%= book.author_id %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</section>
+
+<div>
+  <%= link_to "Back to suppliers", admin_suppliers_path %>
+</div>

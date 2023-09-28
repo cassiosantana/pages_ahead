@@ -26,7 +26,7 @@ class Account < ApplicationRecord
   private
 
   def assign_check_digit
-    self.check_digit = AccountServices::CheckDigitCalculatorService.call(account_number)
+    self.check_digit = Accounts::CheckDigitCalculator.call(account_number)
   end
 
   def account_number_not_updated

@@ -22,7 +22,7 @@ RSpec.describe "Supplier filters", type: :feature do
     end
 
     before do
-      visit suppliers_path
+      visit admin_suppliers_path
     end
 
     context "when initializing the page" do

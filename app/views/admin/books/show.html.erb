@@ -1,0 +1,11 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render "admin/books/book", book: @book %>
+
+<div>
+  <%= link_to "Edit this book", edit_admin_book_path(@book) %> |
+  <%= link_to "Back to books", admin_books_path %> |
+  <%= link_to "Show report", report_admin_book_path(@book) %>
+
+  <%= button_to "Destroy this book", admin_book_path(@book), method: :delete %>
+</div>

@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render "admin/parts/part", part: @part %>
+
+<div>
+  <%= link_to "Edit this part", edit_admin_part_path(@part) %> |
+  <%= link_to "Back to parts", admin_parts_path %>
+
+  <%= button_to "Destroy this part", admin_part_path(@part), method: :delete %>
+</div>

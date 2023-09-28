@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render "admin/accounts/account", account: @account %>
+
+<div>
+  <%= link_to "Edit this account", edit_admin_account_path(@account) %> |
+  <%= link_to "Back to accounts", admin_accounts_path %>
+
+  <%= button_to "Destroy this account", admin_account_path(@account), method: :delete %>
+</div>
