@@ -4,13 +4,13 @@ require "rails_helper"
 
 RSpec.describe Account, type: :model do
   let!(:supplier) { create(:supplier) }
-  let!(:account) { create(:account, supplier: supplier) }
+  let!(:account) { create(:account, supplier:) }
 
   describe "validations" do
     context "when the account number is present" do
       it "it is created and the check digit assigned correctly" do
         expect(account).to be_valid
-        expect(account.check_digit).to eq(AccountServices::CheckDigitCalculatorService.call(account.account_number))
+        expect(account.check_digit).to eq(Accounts::CheckDigitCalculator.call(account.account_number))
       end
     end
 
@@ -35,7 +35,7 @@ RSpec.describe Account, type: :model do
 
   describe "editing" do
     let!(:supplier) { create(:supplier) }
-    let!(:account) { create(:account, supplier: supplier) }
+    let!(:account) { create(:account, supplier:) }
 
     context "when attempting to update account_number" do
       it "does not change the account_number" do

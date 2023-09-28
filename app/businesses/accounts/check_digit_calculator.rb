@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module AccountServices
-  class CheckDigitCalculatorService < ApplicationService
+module Accounts
+  class CheckDigitCalculator < BusinessApplication
     def initialize(account_number)
       super
       @account_number = account_number.to_i
