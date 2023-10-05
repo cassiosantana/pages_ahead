@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "home/index.html.erb", type: :view do
+RSpec.describe "admin/home/index.html.erb", type: :view do
   describe "index" do
     it "renders the correct home content" do
       render

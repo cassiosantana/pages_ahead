@@ -1,0 +1,103 @@
+<div class="container">
+  <h1>Welcome to Pages Ahead</h1>
+  <section>
+    <p>
+      Pages Ahead is an application that allows you to perform CRUD operations, searches and reports. With this
+      application you can manage resources related to a book publisher such as Authors, Accounts, Assemblies, Parts,
+      Books and Suppliers and their relationships.
+    </p>
+    <p>
+      It was built with the Ruby on Rails 7 framework, mainly following
+      the MVC architecture, but also exposes API endpoints to allow interaction with other systems.
+      This API follows REST principles, making it possible to manipulate our system's resources in a simple way through
+      the HTTP standard.
+    </p>
+    <p>
+      Development is not linear and simulates different releases, where each "battle" represents a development phase
+      with specific tasks to be completed.
+    </p>
+  </section>
+
+  <section style="margin-top: 50px;">
+    <h2>Battle 1: CRUD</h2>
+    <h3>Resource Registration and Management</h3>
+    <p>In this battle, the focus is on the creation and basic management of the main resources of the application:</p>
+    <ul>
+      <li>Register Authors</li>
+      <li>Register Books linking them with Author</li>
+      <li>Register Parts linking them with Supplier</li>
+      <li>Register Assemblies with several Parts and linking them with Book</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Battle 2: API</h2>
+    <h3>API Development</h3>
+    <p>In this battle, the project is expanded to include an API that will allow external interaction with the application's resources:</p>
+    <ul>
+      <li>Register Authors via API</li>
+      <li>Register Books via API, linking them with Author</li>
+      <li>Register Parts via API, linking them with Supplier</li>
+      <li>Register Assemblies via API, with several Parts and linking them with Book</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Battle 3: Business Rules</h2>
+    <h3>Alter, Calculate, Validate</h3>
+    <p>In this battle, the business rules begin to be applied to the system. Alterations and validations are introduced:</p>
+    <h4>Alter</h4>
+    <ul>
+      <li>Add CNPJ field in Supplier</li>
+      <li>Add Check Digit field in Account</li>
+      <li>Add ISBN field in Book</li>
+      <li>Add CPF field in Author</li>
+    </ul>
+    <h4>Calculate</h4>
+    <ul>
+      <li>Calculate Check Digit in Account</li>
+    </ul>
+    <h4>Validate</h4>
+    <ul>
+      <li>Validate CNPJ in Supplier</li>
+      <li>Validate ISBN in Book</li>
+      <li>Validate CPF in Author</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Battle 4: Filters and Queries</h2>
+    <h3>Add, Filter</h3>
+    <p>In this battle, the filtering and query functionality is implemented to facilitate the search and visualization of resources:</p>
+    <h4>Add</h4>
+    <ul>
+      <li>Add Title Field in Book</li>
+      <li>Add Name Field in Parts</li>
+    </ul>
+    <h4>Filter</h4>
+    <ul>
+      <li>Filter Supplier by Name</li>
+      <li>Filter Supplier by Account Number in Account</li>
+      <li>Filter Books by Title</li>
+      <li>Filter Books by Name in Author</li>
+      <li>Filter Assembly by Name in Parts</li>
+      <li>Filter Supplier by Author's Name</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Battle 5: Reports and Analyses</h2>
+    <h3>Add, Reports</h3>
+    <p>In this battle, the report and analysis functionality to extract meaningful information from the application's data:</p>
+    <h4>Add</h4>
+    <ul>
+      <li>Add Value Field in Parts</li>
+    </ul>
+    <h4>Reports</h4>
+    <ul>
+      <li>Generate Author Report (with all information), their Books (with all information) and the Total Books Published</li>
+      <li>Generate Supplier Report (with all information), with all Authors (with all information) and Books (with all information)</li>
+      <li>Generate Book Report with Assembly (with all information), its Parts (with all information), the Total Parts and the Total Cost of Assembly</li>
+    </ul>
+  </section>
+</div>

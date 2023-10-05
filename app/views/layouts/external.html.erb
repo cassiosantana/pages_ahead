@@ -11,18 +11,15 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="prose">
-    <nav>
-      <%= link_to "Home", admin_root_path %>
-      <%= link_to "Authors", admin_authors_path %>
-      <%= link_to "Accounts", admin_accounts_path %>
-      <%= link_to "Assemblies", admin_assemblies_path %>
-      <%= link_to "Parts", admin_parts_path %>
-      <%= link_to "Books", admin_books_path %>
-      <%= link_to "Suppliers", admin_suppliers_path %>
-    </nav>
+  <body class="bg-gray-100">
     <div>
-      <%= yield %>
+      <%= render "layouts/navbar" %>
+
+      <div>
+        <%= yield %>
+      </div>
+
+      <%= render "layouts/footer" %>
     </div>
   </body>
 </html>
