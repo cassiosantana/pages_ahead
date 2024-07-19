@@ -77,11 +77,3 @@ Nesta batalha, a funcionalidade de relatórios e análises para extrair informa�
 ## Contribuição
 
 Este projeto está em constante evolução e novas batalhas serão adicionadas à medida que o desenvolvimento progride. Sinta-se à vontade para contribuir, fornecer feedback e colaborar para tornar o PagesAhead uma aplicação robusta.
-
-## Live Application
-
-O Pages Ahead está atualmente online e pode ser acessado pelo seguinte link: [https://pages-ahead.onrender.com](https://pages-ahead.onrender.com)
-
-### Observações Sobre o Desempenho
-
-Como este aplicativo está hospedado em um plano gratuito, ele utiliza um mecanismo de "adormecimento" para preservar recursos quando inativo. Isso significa que quando o aplicativo não é acessado por um período prolongado, ele entra em um estado de "dormência" e pode levar alguns segundos para "despertar" e ficar novamente disponível quando acessado. Agradeço a compreensão.
