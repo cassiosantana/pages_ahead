@@ -21,8 +21,7 @@ jobs:
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/test
 
     steps:
-      - uses: actions/checkout@v3
-
+      - uses: actions/checkout@v2
       - name: Set up Ruby 3.2.2
         uses: ruby/setup-ruby@v1
         with:
@@ -33,21 +32,10 @@ jobs:
           gem install bundler
           bundle install --jobs 4 --retry 3
 
-      - name: Set up Node.js 18.17.1
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18.17.1
-
-      - name: Install Node.js dependencies
-        run: npm install
-
       - name: Setup test database
         run: |
           bundle exec rails db:create
           bundle exec rails db:schema:load
-
-      - name: Compile assets
-        run: bundle exec rake assets:precompile
 
       - name: Run tests
         env:
